@@ -6,7 +6,6 @@ use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\ExamenCategoriaAspiraController;
 use App\Http\Controllers\ExamenSegipController;
 use App\Http\Controllers\GrupoExamanController;
-use App\Http\Controllers\InscribeController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\NotificacioneController;
 use App\Http\Controllers\PagoController;
