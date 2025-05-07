@@ -63,8 +63,8 @@ class PagoController extends Controller
     public function edit($id): View
     {
         $pago = Pago::findOrFail($id); // Falla con 404 si no existe
-        $usuariosEstudiantes = User::where('id_rol', 2)->get();
-        $usuariosAdministrador = User::where('id_rol', 1)->get();
+        $usuariosEstudiantes = Usuario::where('id_rol', 2)->get();
+        $usuariosAdministrador = Usuario::where('id_rol', 1)->get();
         return view('pago.edit', compact('pago', 'usuariosEstudiantes', 'usuariosAdministrador'));
     }
 

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdministradorController;
-use App\Http\Controllers\ClaseController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\ExamenCategoriaAspiraController;
 use App\Http\Controllers\ExamenSegipController;
@@ -44,4 +43,3 @@ Route::resource('paquetes', PaqueteController::class);
 Route::resource('grupo-examen', GrupoExamanController::class);
 Route::resource('examen-segips', ExamenSegipController::class);
 Route::resource('inscribes', InscribeController::class);
-Route::resource('clases', ClaseController::class);

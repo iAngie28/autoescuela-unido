@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('examen_segip', function (Blueprint $table) {
-            $table->id();
+            $table->id()->first();
             $table->unsignedBigInteger('id_est');
             $table->unsignedBigInteger('id_grupo');
+            $table->primary(['id_est', 'id_grupo']);
             $table->integer('nro_intento');
             $table->integer('nota_Teorica')->nullable();
             $table->integer('nota_Practica')->nullable();
