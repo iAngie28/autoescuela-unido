@@ -40,4 +40,16 @@ Route::resource('vehiculos', VehiculoController::class);
 Route::resource('examen-categoria-aspiras', ExamenCategoriaAspiraController::class);
 Route::resource('paquetes', PaqueteController::class);
 Route::resource('grupo-examen', GrupoExamanController::class);
-Route::resource('examen-segips', ExamenSegipController::class);
+Route::delete(
+    'examen‑segips/{id_est}/{id_grupo}',
+    [ExamenSegipController::class,'destroy']
+  )->name('examen‑segips.destroy');
+  
+  Route::get    ('examen-segips',                    [ExamenSegipController::class,'index'])->name('examen-segips.index');
+  Route::get    ('examen-segips/create',             [ExamenSegipController::class,'create'])->name('examen-segips.create');
+  Route::post   ('examen-segips',                    [ExamenSegipController::class,'store'])->name('examen-segips.store');
+  Route::get    ('examen-segips/{id_est}/{id_grupo}',[ExamenSegipController::class,'show'])->name('examen-segips.show');
+  Route::get    ('examen-segips/{id_est}/{id_grupo}/edit',[ExamenSegipController::class,'edit'])->name('examen-segips.edit');
+  Route::put    ('examen-segips/{id_est}/{id_grupo}',[ExamenSegipController::class,'update'])->name('examen-segips.update');
+  Route::delete ('examen-segips/{id_est}/{id_grupo}',[ExamenSegipController::class,'destroy'])->name('examen-segips.destroy');
+  

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_est');
             $table->unsignedBigInteger('id_grupo');
+            $table->primary(['id_est', 'id_grupo']);
             $table->integer('nro_intento');
             $table->integer('nota_Teorica')->nullable();
             $table->integer('nota_Practica')->nullable();

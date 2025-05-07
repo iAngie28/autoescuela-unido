@@ -40,4 +40,9 @@ Route::resource('vehiculos', VehiculoController::class);
 Route::resource('examen-categoria-aspiras', ExamenCategoriaAspiraController::class);
 Route::resource('paquetes', PaqueteController::class);
 Route::resource('grupo-examen', GrupoExamanController::class);
+Route::delete(
+    'examen‑segips/{id_est}/{id_grupo}',
+    [ExamenSegipController::class,'destroy']
+  )->name('examen‑segips.destroy');
+  
 Route::resource('examen-segips', ExamenSegipController::class);
