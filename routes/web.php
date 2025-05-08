@@ -28,6 +28,11 @@ Route::get('/register', function () {
 
 Route::view('/', 'welcome');
 
+Route::get('/about', function () {
+    return view('paginas.about');
+})->name('about');
+
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

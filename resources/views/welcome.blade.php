@@ -81,7 +81,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
-                <a href="about.html" class="nav-item nav-link">Sobre Nosotros</a>
+                <a href="{{ url('/about') }}" class="nav-item nav-link">Sobre Nosotros</a>
                 <a href="courses.html" class="nav-item nav-link">CURSOS</a>
                 <a href="https://web.whatsapp.com/" class="nav-item nav-link">Contacto</a>
             </div>
@@ -97,12 +97,6 @@
             Log in<i class="fa fa-arrow-right ms-3"></i>
         </a>
 
-        <!-- Botón para Register (si la ruta existe) -->
-        @if (Route::has('register'))
-            <a href="{{ route('register') }}" class="btn py-4 px-lg-5 d-none d-lg-block" style="background-color: #33ebff; border-color: #FF5733; color: white;">
-                Register<i class="fa fa-arrow-right ms-3"></i>
-            </a>
-        @endif
     @endauth
 @endif
     </nav>
