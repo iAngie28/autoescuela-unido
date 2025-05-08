@@ -17,10 +17,10 @@
                 <a href="{{ url('/') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Inicio
                 </a>
-                <a href="{{ url('/admin/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="{{ url('/about') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Sobre Nosotros
                 </a>
-                <a href="{{ url('/admin/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="{{ url('/courses') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Cursos
                 </a>
                 <!-- Dropdown Button -->
@@ -31,7 +31,7 @@
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                         <a href="{{ url('/rols') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Roles</a>
                         <a href="{{ url('/register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Usuarios</a>
-                        <a href="{{ url('/clases') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Clases</a>
+                        <a href="{{ url('/clases') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros1</a>
                         <a href="{{ url('/otros2') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros2</a>
                     </div>
                 </div>

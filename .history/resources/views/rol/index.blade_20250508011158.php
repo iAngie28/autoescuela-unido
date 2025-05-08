@@ -1,21 +1,21 @@
 @extends('layouts.guest-bootstrap')
     @section('content')
-    <div class="container-fluid mt-5">
+    <div class="container-fluid mt-4">
         <div class="row">
             <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card ">
+                    <div class="card-header ">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
-                                {{ __('Volver') }}
+                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                {{ __('Create New') }}
                               </a>
-                              
+
                             <span id="card_title">
-                                {{ __('Clases') }}
+                                {{ __('Rols') }}
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('clases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                <a href="{{ route('rols.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
@@ -34,38 +34,24 @@
                                     <tr>
                                         <th>No</th>
                                         
-									<th >Fecha</th>
-									<th >Hora Inicio</th>
-									<th >Hora Fin</th>
-									<th >Estado</th>
-									<th >Comentario Inst</th>
-									<th >Reporte Estudiante</th>
-									<th >Id Paquete</th>
-									<th >Id Vehiculo</th>
-									<th >Id Inst</th>
+									<th >Nombre</th>
+									<th >Permisos</th>
 
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($clases as $clase)
+                                    @foreach ($rols as $rol)
                                         <tr>
                                             <td>{{ ++$i }}</td>
                                             
-										<td >{{ $clase->fecha }}</td>
-										<td >{{ $clase->hora_inicio }}</td>
-										<td >{{ $clase->hora_fin }}</td>
-										<td >{{ $clase->estado }}</td>
-										<td >{{ $clase->comentario_Inst }}</td>
-										<td >{{ $clase->reporte_estudiante }}</td>
-										<td >{{ $clase->id_paquete }}</td>
-										<td >{{ $clase->id_vehiculo }}</td>
-										<td >{{ $clase->id_inst }}</td>
+										<td >{{ $rol->nombre }}</td>
+										<td >{{ $rol->permisos }}</td>
 
                                             <td>
-                                                <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('clases.show', $clase->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('clases.edit', $clase->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                <form action="{{ route('rols.destroy', $rol->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('rols.show', $rol->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('rols.edit', $rol->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
@@ -78,8 +64,8 @@
                         </div>
                     </div>
                 </div>
-                {!! $clases->withQueryString()->links() !!}
+                {!! $rols->withQueryString()->links() !!}
             </div>
         </div>
     </div>
-@endsection
+    @endsection

@@ -90,7 +90,7 @@
                         <a href="{{ url('/') }}" class="dropdown-item">Appointment</a>
                         <a href="{{ url('/') }}" class="dropdown-item">Our Team</a>
                         <a href="{{ url('/') }}" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
+                        <a href="{{ url('/') }}" class="dropdown-item">404 Page</a>
                     </div>
                 </div>
                 <a href="https://web.whatsapp.com/" class="nav-item nav-link">Contacto</a>
