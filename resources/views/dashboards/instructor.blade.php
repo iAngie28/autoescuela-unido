@@ -14,7 +14,7 @@
 
             <!-- Navigation Links -->
             <div class="hidden sm:flex sm:items-center space-x-8">
-                <a href="{{ url('/') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="{{ url('/instructor/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Inicio
                 </a>
                 <a href="{{ url('/about') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
@@ -45,9 +45,19 @@
 
 
     <!-- Hero Section -->
-    <section class="bg-blue-500 text-white py-20">
+    <section class="bg-green-500 text-white py-20">
         <div class="container mx-auto text-center px-4">
-            <h2 class="text-4xl font-bold mb-4">Aprende a Conducir con los Mejores</h2>
+            <h2 class="text-4xl font-bold mb-4">
+                Bienvenido Instructor(a)
+                @auth
+                    @if (Auth::user()->id_rol === 3)
+                    {{ strtoupper(Auth::user()->name) }}
+
+                    @else
+                        "Nuestros Instructores"
+                    @endif
+                @endauth
+            </h2>
             <p class="text-lg mb-6">Cursos personalizados para todos los niveles. ¡Obtén tu licencia fácilmente!</p>
             <a href="#" class="bg-white text-blue-600 px-6 py-3 rounded shadow hover:bg-gray-100">Ver Cursos</a>
         </div>
