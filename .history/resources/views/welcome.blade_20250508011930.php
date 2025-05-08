@@ -33,11 +33,11 @@
 
 
 <body>
-    <!-- Spinner Start
+    <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
-     Spinner End -->
+    <!-- Spinner End -->
 
 
     <!-- Topbar Start -->
@@ -86,10 +86,10 @@
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Menu</a>
                     <div class="dropdown-menu bg-light m-0">
-                        <a href="{{ url('/') }}" class="dropdown-item">Features</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Appointment</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Our Team</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Testimonial</a>
+                        <a href="feature.html" class="dropdown-item">Features</a>
+                        <a href="appointment.html" class="dropdown-item">Appointment</a>
+                        <a href="team.html" class="dropdown-item">Our Team</a>
+                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                         <a href="404.html" class="dropdown-item">404 Page</a>
                     </div>
                 </div>
@@ -107,6 +107,12 @@
             Log in<i class="fa fa-arrow-right ms-3"></i>
         </a>
 
+        <!-- Botón para Register (si la ruta existe) -->
+        @if (Route::has('register'))
+            <a href="{{ route('register') }}" class="btn py-4 px-lg-5 d-none d-lg-block" style="background-color: #33ebff; border-color: #FF5733; color: white;">
+                Register<i class="fa fa-arrow-right ms-3"></i>
+            </a>
+        @endif
     @endauth
 @endif
     </nav>

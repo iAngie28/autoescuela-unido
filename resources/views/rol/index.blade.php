@@ -45,6 +45,9 @@
                 <div class="card ">
                     <div class="card-header ">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
+                                {{ __('Volver') }}
+                              </a>
 
                             <span id="card_title">
                                 {{ __('Rols') }}
@@ -52,7 +55,7 @@
 
                              <div class="float-right">
                                 <a href="{{ route('rols.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
+                                  {{ __('Crear usuario') }}
                                 </a>
                               </div>
                         </div>
