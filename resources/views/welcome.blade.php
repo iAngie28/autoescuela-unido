@@ -33,11 +33,11 @@
 
 
 <body>
-    <!-- Spinner Start -->
+    <!-- Spinner Start
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
-    <!-- Spinner End -->
+     Spinner End -->
 
 
     <!-- Topbar Start -->
@@ -83,16 +83,6 @@
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
                 <a href="about.html" class="nav-item nav-link">Sobre Nosotros</a>
                 <a href="courses.html" class="nav-item nav-link">CURSOS</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Menu</a>
-                    <div class="dropdown-menu bg-light m-0">
-                        <a href="feature.html" class="dropdown-item">Features</a>
-                        <a href="appointment.html" class="dropdown-item">Appointment</a>
-                        <a href="team.html" class="dropdown-item">Our Team</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
-                    </div>
-                </div>
                 <a href="https://web.whatsapp.com/" class="nav-item nav-link">Contacto</a>
             </div>
             @if (Route::has('login'))
