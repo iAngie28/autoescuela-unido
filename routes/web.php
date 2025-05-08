@@ -18,6 +18,14 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Middleware\IsAdmin;
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->middleware(['auth', IsAdmin::class])->name('register');
+
+
+
 Route::view('/', 'welcome');
 
 Route::view('dashboard', 'dashboard')
@@ -47,7 +55,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+
 });
+
+
 
 // Ruta para mostrar el calendario
 Route::get('/calendar', function () {

@@ -30,7 +30,7 @@
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                         <a href="{{ url('/rols') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Roles</a>
-                        <a href="{{ route('register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Usuarios</a>
+                        <a href="{{ route('register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Registar Usuarios</a>
                         <a href="{{ url('/otros1') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros1</a>
                         <a href="{{ url('/otros2') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros2</a>
                     </div>

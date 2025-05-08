@@ -3,10 +3,16 @@
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Middleware\IsAdmin;
+
+Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Volt::route('register', 'pages.auth.register')->name('register');
+});
+
+
 
 Route::middleware('guest')->group(function () {
-    Volt::route('register', 'pages.auth.register')
-        ->name('register');
+
 
     Volt::route('login', 'pages.auth.login')
         ->name('login');
