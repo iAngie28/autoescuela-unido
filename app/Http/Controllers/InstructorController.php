@@ -18,7 +18,7 @@ class InstructorController extends Controller
     {
         $instructors = Instructor::paginate();
 
-        return view('instructor.index', compact('instructors'))
+        return view('dashboards.instructor', compact('instructors'))
             ->with('i', ($request->input('page', 1) - 1) * $instructors->perPage());
     }
 

@@ -17,7 +17,17 @@ $login = function () {
 
     Session::regenerate();
 
-    $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
+    $user = auth()->user();
+
+    if ($user->tipo_usuario === 'A') {
+        $this->redirect(route('admin.dashboard', absolute: false), navigate: true);
+    } elseif ($user->tipo_usuario === 'E') {
+        $this->redirect(route('estudiante.dashboard', absolute: false), navigate: true);
+    } elseif ($user->tipo_usuario === 'I') {
+        $this->redirect(route('instructor.dashboard', absolute: false), navigate: true);
+    } else {
+        $this->redirect(route('dashboard', absolute: false), navigate: true);
+    }
 };
 
 ?>

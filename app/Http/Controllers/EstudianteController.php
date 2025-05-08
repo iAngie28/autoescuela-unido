@@ -18,7 +18,7 @@ class EstudianteController extends Controller
     {
         $estudiantes = Estudiante::paginate();
 
-        return view('estudiante.index', compact('estudiantes'))
+        return view('dashboards.estudiante', compact('estudiantes'))
             ->with('i', ($request->input('page', 1) - 1) * $estudiantes->perPage());
     }
 

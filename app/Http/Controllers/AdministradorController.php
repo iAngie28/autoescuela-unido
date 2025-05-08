@@ -18,7 +18,7 @@ class AdministradorController extends Controller
     {
         $administradors = Administrador::paginate();
 
-        return view('administrador.index', compact('administradors'))
+        return view('dashboards.admin', compact('administradors'))
             ->with('i', ($request->input('page', 1) - 1) * $administradors->perPage());
     }
 

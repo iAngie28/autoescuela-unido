@@ -29,7 +29,7 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                @yield('content') <!-- Aquí se renderiza el contenido de las vistas hijas -->
             </main>
         </div>
     </body>

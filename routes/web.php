@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\ClaseController;
@@ -17,6 +16,8 @@ use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VehiculoController;
+use Illuminate\Support\Facades\Auth;
+
 
 Route::view('/', 'welcome');
 
@@ -29,8 +30,25 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 require __DIR__.'/auth.php';
-//angie
-Route::resource('rols', \App\Http\Controllers\RolController::class); // Sin middleware
+
+// Rutas protegidas por autenticación
+Route::middleware(['auth'])->group(function () {
+    // Dashboard para diferentes roles
+    Route::get('/admin/dashboard', [AdministradorController::class, 'index'])->name('admin.dashboard');
+    Route::get('/estudiante/dashboard', [EstudianteController::class, 'index'])->name('estudiante.dashboard');
+    Route::get('/instructor/dashboard', [InstructorController::class, 'index'])->name('instructor.dashboard');
+
+    // Ruta para listar usuarios
+    Route::get('user', [UserController::class, 'index'])->name('user');
+
+// Ruta para registro de usuarios (accesible para todos, incluso no autenticados)
+
+});
+Route::get('/register', function () {
+    return view('livewire.pages.auth.register'); // Vista de registro
+})->name('register');
+// Recursos (CRUD) sin middleware adicional
+Route::resource('rols', RolController::class);
 Route::resource('notificaciones', NotificacioneController::class);
 Route::resource('users', UserController::class);
 Route::resource('administradors', AdministradorController::class);
