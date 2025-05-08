@@ -32,6 +32,10 @@ Route::get('/about', function () {
     return view('paginas.about');
 })->name('about');
 
+Route::get('/cursos', function () {
+    return view('paginas.cursos');
+})->name('cursos');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

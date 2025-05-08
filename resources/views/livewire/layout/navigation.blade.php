@@ -6,6 +6,7 @@ $logout = function (Logout $logout) {
     $logout();
 
     $this->redirect('/', navigate: true);
+    $this->dispatch('refresh');
 };
 
 ?>

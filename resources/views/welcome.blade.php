@@ -82,15 +82,31 @@
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
                 <a href="{{ url('/about') }}" class="nav-item nav-link">Sobre Nosotros</a>
-                <a href="courses.html" class="nav-item nav-link">CURSOS</a>
-                <a href="https://web.whatsapp.com/" class="nav-item nav-link">Contacto</a>
+                <a href="{{ url('/cursos') }}" class="nav-item nav-link">CURSOS</a>
+                <a href="https://web.whatsapp.com/" class="nav-item nav-link" target="_blank" rel="noopener noreferrer">
+                    Contacto
+                </a>
             </div>
             @if (Route::has('login'))
     @auth
-        <!-- Si el usuario está autenticado, muestra un botón para el Dashboard -->
-        <a href="{{ url('/dashboard') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
-            Dashboard<i class="fa fa-arrow-right ms-3"></i>
-        </a>
+    @php
+    // Definir la ruta del Dashboard según el rol del usuario
+    $dashboardRoute = '#'; // Valor por defecto
+
+    if (Auth::user()->id_rol === 1) {
+        $dashboardRoute = url('/admin/dashboard'); // Dashboard de Administrador
+    } elseif (Auth::user()->id_rol === 2) {
+        $dashboardRoute = url('/estudiante/dashboard'); // Dashboard de Estudiante
+    } elseif (Auth::user()->id_rol === 3) {
+        $dashboardRoute = url('/instructor/dashboard'); // Dashboard de Instructor
+    }
+@endphp
+
+<!-- Botón dinámico al dashboard según el rol -->
+<a href="{{ $dashboardRoute }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
+    Dashboard<i class="fa fa-arrow-right ms-3"></i>
+</a>
+
     @else
         <!-- Botón para Log in -->
         <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
