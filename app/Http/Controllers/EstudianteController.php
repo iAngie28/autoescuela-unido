@@ -14,12 +14,9 @@ class EstudianteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index()
     {
-        $estudiantes = Estudiante::paginate();
-
-        return view('estudiante.index', compact('estudiantes'))
-            ->with('i', ($request->input('page', 1) - 1) * $estudiantes->perPage());
+        return view('dashboards.estudiante');
     }
 
     /**

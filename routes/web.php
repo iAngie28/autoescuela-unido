@@ -15,10 +15,27 @@ use App\Http\Controllers\PaqueteController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VehiculoController;
+use Illuminate\Support\Facades\Auth;
+
+use App\Http\Middleware\IsAdmin;
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->middleware(['auth', IsAdmin::class])->name('register');
+
+
 
 Route::view('/', 'welcome');
+
+Route::get('/about', function () {
+    return view('paginas.about');
+})->name('about');
+
+Route::get('/cursos', function () {
+    return view('paginas.cursos');
+})->name('cursos');
+
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -29,8 +46,50 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 require __DIR__.'/auth.php';
-//angie
-Route::resource('rols', \App\Http\Controllers\RolController::class); // Sin middleware
+
+// Rutas protegidas por autenticación
+
+
+Route::middleware(['auth'])->group(function () {
+    // Dashboard para diferentes roles
+
+    Route::get('/admin/dashboard', [AdministradorController::class, 'index'])->name('admin.dashboard');
+
+    Route::get('/estudiante/dashboard', [EstudianteController::class, 'index'])->name('estudiante.dashboard');
+
+    Route::get('/instructor/dashboard', [InstructorController::class, 'index'])->name('instructor.dashboard');
+
+    // Ruta para listar usuarios
+    Route::get('user', [UserController::class, 'index'])->name('user');
+
+
+
+
+});
+
+
+
+// Ruta para mostrar el calendario
+Route::get('/calendar', function () {
+    return view('calendar');
+})->name('calendar');
+
+// Ruta para obtener eventos del calendario dinámicamente
+Route::get('/calendar/events', function () {
+    // Ejemplo de eventos estáticos
+    $events = [
+        ['title' => 'Clase de Manejo', 'start' => '2025-05-10', 'end' => '2025-05-10'],
+        ['title' => 'Clase Teórica', 'start' => '2025-05-12', 'end' => '2025-05-12'],
+    ];
+
+    // Si tienes una tabla en la base de datos, puedes obtener los eventos dinámicamente:
+    // $events = DB::table('clases')->select('titulo as title', 'fecha_inicio as start', 'fecha_fin as end')->get();
+
+    return response()->json($events);
+})->name('calendar.events');
+
+// Recursos (CRUD) sin middleware adicional
+Route::resource('rols', RolController::class);
 Route::resource('notificaciones', NotificacioneController::class);
 Route::resource('users', UserController::class);
 Route::resource('administradors', AdministradorController::class);

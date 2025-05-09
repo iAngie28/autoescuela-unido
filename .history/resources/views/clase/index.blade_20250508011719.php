@@ -6,13 +6,16 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-
+                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
+                                {{ __('Volver') }}
+                              </a>
+                              
                             <span id="card_title">
-                                {{ __('Users') }}
+                                {{ __('Clases') }}
                             </span>
 
                              <div class="float-right">
-                                <a href="{{ route('register') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
+                                <a href="{{ route('clases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
                                   {{ __('Create New') }}
                                 </a>
                               </div>
@@ -30,41 +33,39 @@
                                 <thead class="thead">
                                     <tr>
                                         <th>No</th>
-
-									<th >Name</th>
-									<th >Username</th>
-									<th >Email</th>
-									<th >Sexo</th>
-									<th >Telefono</th>
-									<th >Direccion</th>
-									<th >Fecha Registro</th>
-									<th >Ci</th>
-									<th >Tipo Usuario</th>
-									<th >Id Rol</th>
+                                        
+									<th >Fecha</th>
+									<th >Hora Inicio</th>
+									<th >Hora Fin</th>
+									<th >Estado</th>
+									<th >Comentario Inst</th>
+									<th >Reporte Estudiante</th>
+									<th >Id Paquete</th>
+									<th >Id Vehiculo</th>
+									<th >Id Inst</th>
 
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @foreach ($clases as $clase)
                                         <tr>
                                             <td>{{ ++$i }}</td>
-
-										<td >{{ $user->name }}</td>
-										<td >{{ $user->username }}</td>
-										<td >{{ $user->email }}</td>
-										<td >{{ $user->sexo }}</td>
-										<td >{{ $user->telefono }}</td>
-										<td >{{ $user->direccion }}</td>
-										<td >{{ $user->fecha_registro }}</td>
-										<td >{{ $user->ci }}</td>
-										<td >{{ $user->tipo_usuario }}</td>
-										<td >{{ $user->id_rol }}</td>
+                                            
+										<td >{{ $clase->fecha }}</td>
+										<td >{{ $clase->hora_inicio }}</td>
+										<td >{{ $clase->hora_fin }}</td>
+										<td >{{ $clase->estado }}</td>
+										<td >{{ $clase->comentario_Inst }}</td>
+										<td >{{ $clase->reporte_estudiante }}</td>
+										<td >{{ $clase->id_paquete }}</td>
+										<td >{{ $clase->id_vehiculo }}</td>
+										<td >{{ $clase->id_inst }}</td>
 
                                             <td>
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('users.show', $user->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('users.edit', $user->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                                                <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
+                                                    <a class="btn btn-sm btn-primary " href="{{ route('clases.show', $clase->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
+                                                    <a class="btn btn-sm btn-success" href="{{ route('clases.edit', $clase->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
@@ -77,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-                {!! $users->withQueryString()->links() !!}
+                {!! $clases->withQueryString()->links() !!}
             </div>
         </div>
     </div>
