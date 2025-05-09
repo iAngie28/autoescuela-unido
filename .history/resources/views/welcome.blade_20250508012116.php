@@ -33,11 +33,11 @@
 
 
 <body>
-    <!-- Spinner Start
+    <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
-     Spinner End -->
+    <!-- Spinner End -->
 
 
     <!-- Topbar Start -->
@@ -81,54 +81,38 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
-<<<<<<< HEAD
-                <a href="{{ url('/about') }}" class="nav-item nav-link">Sobre Nosotros</a>
-                <a href="{{ url('/cursos') }}" class="nav-item nav-link">CURSOS</a>
-                <a href="https://web.whatsapp.com/" class="nav-item nav-link" target="_blank" rel="noopener noreferrer">
-                    Contacto
-                </a>
-=======
                 <a href="{{ url('/') }}" class="nav-item nav-link">Sobre Nosotros</a>
                 <a href="{{ url('/') }}" class="nav-item nav-link">CURSOS</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Menu</a>
                     <div class="dropdown-menu bg-light m-0">
-                        <a href="{{ url('/') }}" class="dropdown-item">Features</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Appointment</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Our Team</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Testimonial</a>
+                        <a href="feature.html" class="dropdown-item">Features</a>
+                        <a href="appointment.html" class="dropdown-item">Appointment</a>
+                        <a href="team.html" class="dropdown-item">Our Team</a>
+                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                         <a href="404.html" class="dropdown-item">404 Page</a>
                     </div>
                 </div>
                 <a href="https://web.whatsapp.com/" class="nav-item nav-link">Contacto</a>
->>>>>>> 8576bc91381706c4eda4f5d0302ba5347bd3aba8
             </div>
             @if (Route::has('login'))
     @auth
-    @php
-    // Definir la ruta del Dashboard según el rol del usuario
-    $dashboardRoute = '#'; // Valor por defecto
-
-    if (Auth::user()->id_rol === 1) {
-        $dashboardRoute = url('/admin/dashboard'); // Dashboard de Administrador
-    } elseif (Auth::user()->id_rol === 2) {
-        $dashboardRoute = url('/estudiante/dashboard'); // Dashboard de Estudiante
-    } elseif (Auth::user()->id_rol === 3) {
-        $dashboardRoute = url('/instructor/dashboard'); // Dashboard de Instructor
-    }
-@endphp
-
-<!-- Botón dinámico al dashboard según el rol -->
-<a href="{{ $dashboardRoute }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
-    Dashboard<i class="fa fa-arrow-right ms-3"></i>
-</a>
-
+        <!-- Si el usuario está autenticado, muestra un botón para el Dashboard -->
+        <a href="{{ url('/dashboard') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
+            Dashboard<i class="fa fa-arrow-right ms-3"></i>
+        </a>
     @else
         <!-- Botón para Log in -->
         <a href="{{ route('login') }}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">
             Log in<i class="fa fa-arrow-right ms-3"></i>
         </a>
 
+        <!-- Botón para Register (si la ruta existe) -->
+        @if (Route::has('register'))
+            <a href="{{ route('register') }}" class="btn py-4 px-lg-5 d-none d-lg-block" style="background-color: #33ebff; border-color: #FF5733; color: white;">
+                Register<i class="fa fa-arrow-right ms-3"></i>
+            </a>
+        @endif
     @endauth
 @endif
     </nav>

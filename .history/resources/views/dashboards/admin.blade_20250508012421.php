@@ -14,13 +14,13 @@
 
             <!-- Navigation Links -->
             <div class="hidden sm:flex sm:items-center space-x-8">
-                <a href="{{ url('/estudiante/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="{{ url('/') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Inicio
                 </a>
-                <a href="{{ url('/estudiante/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="{{ url('/') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Sobre Nosotros
                 </a>
-                <a href="{{ url('/estudiante/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                <a href="{{ url('/') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Cursos
                 </a>
                 <!-- Dropdown Button -->
@@ -29,9 +29,9 @@
                         Más Opciones
                     </button>
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                        <a href="{{ url('/rols') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Clases</a>
-                        <a href="{{ route('calendar') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Calendario</a>
-                        <a href="{{ url('/otros1') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Clases</a>
+                        <a href="{{ url('/rols') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Roles</a>
+                        <a href="{{ url('/register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Usuarios</a>
+                        <a href="{{ url('/clases') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Clases</a>
                         <a href="{{ url('/otros2') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros2</a>
                     </div>
                 </div>
@@ -45,19 +45,9 @@
 
 
     <!-- Hero Section -->
-    <section class="bg-gray-500 text-white py-20">
+    <section class="bg-blue-500 text-white py-20">
         <div class="container mx-auto text-center px-4">
-            <h2 class="text-4xl font-bold mb-4">
-                Bienvenido(a) estudiante
-                @auth
-                    @if (Auth::user()->id_rol === 2)
-                    {{ strtoupper(Auth::user()->name) }}
-
-                    @else
-                        " Estudiante"
-                    @endif
-                @endauth
-            </h2>
+            <h2 class="text-4xl font-bold mb-4">Aprende a Conducir con los Mejores</h2>
             <p class="text-lg mb-6">Cursos personalizados para todos los niveles. ¡Obtén tu licencia fácilmente!</p>
             <a href="#" class="bg-white text-blue-600 px-6 py-3 rounded shadow hover:bg-gray-100">Ver Cursos</a>
         </div>
