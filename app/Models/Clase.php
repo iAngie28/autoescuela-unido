@@ -15,14 +15,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property $comentario_Inst
  * @property $reporte_estudiante
  * @property $id_paquete
- * @property $id_vehiculo
+ *
  * @property $id_inst
  * @property $created_at
  * @property $updated_at
  *
  * @property Instructor $instructor
  * @property Paquete $paquete
- * @property Vehiculo $vehiculo
+ *
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
@@ -37,7 +37,7 @@ class Clase extends Model
      * @var array<int, string>
      */
     protected $table = 'clase';
-    protected $fillable = ['fecha', 'hora_inicio', 'hora_fin', 'estado', 'comentario_Inst', 'reporte_estudiante', 'id_paquete', 'id_vehiculo', 'id_inst'];
+    protected $fillable = ['fecha', 'hora_inicio', 'hora_fin', 'estado', 'comentario_Inst', 'reporte_estudiante', 'id_paquete', 'id_inst'];
 
 
     /**
@@ -56,12 +56,6 @@ class Clase extends Model
         return $this->belongsTo(\App\Models\Paquete::class, 'id_paquete', 'id');
     }
     
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function vehiculo()
-    {
-        return $this->belongsTo(\App\Models\Vehiculo::class, 'id_vehiculo', 'id');
-    }
+    
     
 }
