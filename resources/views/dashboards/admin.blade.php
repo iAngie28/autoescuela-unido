@@ -20,11 +20,7 @@
                 <a href="{{ url('/admin/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                     Sobre Nosotros
                 </a>
-<<<<<<< HEAD
                 <a href="{{ url('/cursos') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-=======
-                <a href="{{ url('/admin/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
->>>>>>> 8576bc91381706c4eda4f5d0302ba5347bd3aba8
                     Cursos
                 </a>
                 <!-- Dropdown Button -->
@@ -35,14 +31,9 @@
                     <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                         <a href="{{ url('/rols') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Roles</a>
                         <a href="{{ route('register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Registar Usuarios</a>
-<<<<<<< HEAD
                         <a href="{{ url('/users') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Usuarios</a>
                         <a href="{{ url('/vehiculos') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Vehiculos</a>
                         <a href="{{ url('/clases') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Clases</a>
-=======
-                        <a href="{{ url('/clases') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Clases</a>
-                        <a href="{{ url('/otros2') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros2</a>
->>>>>>> 8576bc91381706c4eda4f5d0302ba5347bd3aba8
                     </div>
                 </div>
             </div>
