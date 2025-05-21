@@ -14,13 +14,21 @@ class TipoVehiculoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
-    {
-        $tipoVehiculos = TipoVehiculo::paginate();
+public function index(Request $request): View
+{
+    $search = $request->input('search');
 
-        return view('tipo-vehiculo.index', compact('tipoVehiculos'))
-            ->with('i', ($request->input('page', 1) - 1) * $tipoVehiculos->perPage());
-    }
+    // Filtrar tipos de vehículo si hay búsqueda
+    $tipoVehiculos = TipoVehiculo::query()
+        ->when($search, function ($query, $search) {
+            return $query->where('nombre', 'like', "%$search%");
+        })
+        ->paginate(20);
+
+    return view('tipo-vehiculo.index', compact('tipoVehiculos'))
+        ->with('i', ($request->input('page', 1) - 1) * $tipoVehiculos->perPage());
+}
+
 
     /**
      * Show the form for creating a new resource.

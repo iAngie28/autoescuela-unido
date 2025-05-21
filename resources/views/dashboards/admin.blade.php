@@ -8,10 +8,10 @@
 
             <aside class="hidden w-64 bg-gray-800 md:block min-h-screen">
                 <div class="py-3 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800 mb-8 flex items-center">
-                    <img class="rounded-lg" alt="Ronald image" src="https://pagedone.io/asset/uploads/1701235464.png" />
+                    <img class="rounded-lg" alt="Ismael image" src="https://pagedone.io/asset/uploads/1701235464.png" />
                     <div class="text-right">
-                        <p class="text-white font-semibold text-sm">Ronald</p>
-                        <p class="text-gray-400 text-xs text-center" style="padding-left: 15px;">Administrador</p>
+                        <p class="text-white font-semibold text-sm">{{ Auth::user()->name }}</p>
+                        <p class="text-gray-400 text-xs text-center" style="padding-left: 15px;">{{ Auth::user()->rol->nombre }}</p>
                     </div>
 
                 </div>
@@ -65,7 +65,7 @@
                         <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">GESTIÓN ACADEMICA</li>
                         </li>
                         <li class="px-4 cursor-pointer hover:bg-gray-700">
-                            <a class="py-3 flex items-center" href="/">
+                            <a class="py-3 flex items-center" href="{{ url('/clases') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -75,7 +75,17 @@
                             </a>
                         </li>
                         <li class="px-4 cursor-pointer hover:bg-gray-700">
-                            <a class="py-3 flex items-center" href="/">
+                            <a class="py-3 flex items-center" href="{{ url('/tipo-vehiculos') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                                </svg>
+                                Tipo de Vehiculo
+                            </a>
+                        </li>
+                        <li class="px-4 cursor-pointer hover:bg-gray-700">
+                            <a class="py-3 flex items-center" href="{{ url('/vehiculos') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -105,8 +115,7 @@
                                 Payments
                             </a>
                         </li>
-                        <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">INFORMATION
-                            MANAGEMENT</li>
+                        <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">GESTIÓN DE INFORMACIÓN</li>
                         <li class="px-4 hover:bg-gray-700">
                             <a href="#" class="py-3 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -114,7 +123,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
                                 </svg>
-                                Reports
+                                Bitácora
                             </a>
                         </li>
                         <li class="px-4 py-2 mt-2 text-xs uppercase tracking-wider text-gray-500 font-bold">Apps</li>
