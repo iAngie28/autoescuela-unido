@@ -9,6 +9,27 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+<<<<<<< HEAD
+    public function up(): void
+    {
+        Schema::create('bitacora', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('id_user')->nullable();
+            $table->string('accion'); 
+            $table->string('direccion_ip');
+            $table->date('fecha_entrada');
+            $table->time('hora_entrada');
+            $table->date('fecha_salida')->nullable();
+            $table->time('hora_salida')->nullable();
+            $table->timestamps();
+
+            $table->foreign('id_user')
+            ->references('id')->on('users')
+            ->onDelete('set null');
+            
+        });
+    }
+=======
    public function up(): void
 {
     Schema::create('bitacora', function (Blueprint $table) {
@@ -25,6 +46,7 @@ return new class extends Migration
     });
 }
 
+>>>>>>> origin/ismael
 
     /**
      * Reverse the migrations.

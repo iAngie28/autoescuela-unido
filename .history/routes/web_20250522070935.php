@@ -21,6 +21,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\BitacoraController;
 use App\Http\Controllers\AdminInstructorController;
+use App\Http\Controllers\BitacoraController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
@@ -142,25 +143,18 @@ Route::get('/calendar/events', function () {
 })->name('calendar.events');
 
 // Recursos (CRUD) sin middleware adicional
-Route::resources([
-    'rols' => RolController::class,
-    'notificaciones' => NotificacioneController::class,
-    'users' => UserController::class,
-    'administradors' => AdministradorController::class,
-    'estudiantes' => EstudianteController::class,
-    'instructors' => InstructorController::class,
-    'pagos' => PagoController::class,
-    'tipo-vehiculos' => TipoVehiculoController::class,
-    'vehiculos' => VehiculoController::class,
-    'examen-categoria-aspiras' => ExamenCategoriaAspiraController::class,
-    'paquetes' => PaqueteController::class,
-    'grupo-examen' => GrupoExamanController::class,
-    'examen-segips' => ExamenSegipController::class,
-    'inscribes' => InscribeController::class,
-    'clases' => ClaseController::class,
-]);
-// Registrar acciones
-Route::post('/bitacora/iniciar/{accion}', [BitacoraController::class, 'iniciarAccion']);
-Route::post('/bitacora/finalizar/{id}', [BitacoraController::class, 'finalizarAccion']);
-// Vista de registros
-Route::get('/bitacoras', [BitacoraController::class, 'index'])->name('bitacoras.index');
+Route::resource('rols', RolController::class);
+Route::resource('notificaciones', NotificacioneController::class);
+Route::resource('users', UserController::class);
+Route::resource('administradors', AdministradorController::class);
+Route::resource('estudiantes', EstudianteController::class);
+Route::resource('instructors', InstructorController::class);
+Route::resource('pagos', PagoController::class);
+Route::resource('tipo-vehiculos', TipoVehiculoController::class);
+Route::resource('vehiculos', VehiculoController::class);
+Route::resource('examen-categoria-aspiras', ExamenCategoriaAspiraController::class);
+Route::resource('paquetes', PaqueteController::class);
+Route::resource('grupo-examen', GrupoExamanController::class);
+Route::resource('examen-segips', ExamenSegipController::class);
+Route::resource('inscribes', InscribeController::class);
+Route::resource('clases', ClaseController::class);

@@ -159,8 +159,3 @@ Route::resources([
     'inscribes' => InscribeController::class,
     'clases' => ClaseController::class,
 ]);
-// Registrar acciones
-Route::post('/bitacora/iniciar/{accion}', [BitacoraController::class, 'iniciarAccion']);
-Route::post('/bitacora/finalizar/{id}', [BitacoraController::class, 'finalizarAccion']);
-// Vista de registros
-Route::get('/bitacoras', [BitacoraController::class, 'index'])->name('bitacoras.index');
