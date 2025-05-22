@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->append([LogActivity::class]); // ← Solución correcta (usar un array)
+        $middleware->append(LogActivity::class); //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
