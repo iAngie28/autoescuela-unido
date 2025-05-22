@@ -23,5 +23,6 @@
         <!-- Scripts -->
         @vite(['resources/js/app.js'])
         @livewireScripts <!-- Incluye los scripts de Livewire -->
+
     </body>
 </html>

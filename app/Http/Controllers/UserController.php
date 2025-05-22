@@ -15,9 +15,15 @@ class userController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+public function index(Request $request): View
     {
-        $users = User::paginate();
+        // Capturar el término de búsqueda desde el input
+        $search = $request->input('search');
+
+        // Filtrar usuarios si hay un término de búsqueda
+        $users = User::where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%")
+                    ->paginate();
 
         return view('user.index', compact('users'))
             ->with('i', ($request->input('page', 1) - 1) * $users->perPage());
@@ -45,10 +51,10 @@ class userController extends Controller
     {
         User::create($request->validated());
 
-        
+
         return Redirect::route('users.index')
             ->with('success', 'user created successfully.');
-            
+
     }
 
     /**

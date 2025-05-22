@@ -60,8 +60,10 @@ $register = function () {
 };
 
 ?>
+
+
 <div>
-    <form wire:submit="register">
+    <form wire:submit="register" style="margin-right: 200px;margin-left: 200px;padding-top: 100px;border-bottom-width: px;">
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
