@@ -54,15 +54,26 @@ $register = function () {
 
     event(new Registered($user = User::create($validated)));
 
-    Auth::login($user);
+    session()->flash('success', 'Usuario creado exitosamente.');
 
-    $this->redirect(route('dashboard', absolute: false), navigate: true);
+    return redirect()->route('register'); // Redirige a la misma página
 };
 
 ?>
 
 
 <div>
+    @if(session('success'))
+    <div id="success-message" class="fixed top-5 right-5 bg-green-500 text-white p-4 rounded-lg shadow-lg z-50">
+        <p>{{ session('success') }}</p>
+        <button onclick="document.getElementById('success-message').remove()" class="ml-2 bg-white text-black-500 px-2 py-1 rounded">
+            Aceptar
+        </button>
+    </div>
+@endif
+
+
+
     <form wire:submit="register" style="margin-right: 200px;margin-left: 200px;padding-top: 100px;border-bottom-width: px;">
         <!-- Name -->
         <div>

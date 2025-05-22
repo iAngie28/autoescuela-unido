@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+// Controladores
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\ClaseController;
 use App\Http\Controllers\EstudianteController;
@@ -16,26 +19,27 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\AdminInstructorController;
 
+// Middleware
 use App\Http\Middleware\IsAdmin;
 
-Route::get('/register', function () {
-    return view('auth.register');
-})->middleware(['auth', IsAdmin::class])->name('register');
-
-
+/*
+|--------------------------------------------------------------------------
+| Rutas Públicas
+|--------------------------------------------------------------------------
+*/
 
 Route::view('/', 'welcome');
+Route::view('/about', 'paginas.about')->name('about');
+Route::view('/cursos', 'paginas.cursos')->name('cursos');
 
-Route::get('/about', function () {
-    return view('paginas.about');
-})->name('about');
-
-Route::get('/cursos', function () {
-    return view('paginas.cursos');
-})->name('cursos');
-
+/*
+|--------------------------------------------------------------------------
+| Rutas de Autenticación
+|--------------------------------------------------------------------------
+*/
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -45,67 +49,117 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::get('/register', function () {
+    return view('auth.register');
+})->middleware(['auth', IsAdmin::class])->name('register');
+
 require __DIR__.'/auth.php';
 
-// Rutas protegidas por autenticación
-
+/*
+|--------------------------------------------------------------------------
+| Rutas Protegidas por Autenticación
+|--------------------------------------------------------------------------
+*/
 
 Route::middleware(['auth'])->group(function () {
-    // Dashboard para diferentes roles
 
+    // Dashboard por roles
     Route::get('/admin/dashboard', [AdministradorController::class, 'index'])->name('admin.dashboard');
-
     Route::get('/estudiante/dashboard', [EstudianteController::class, 'index'])->name('estudiante.dashboard');
-
     Route::get('/instructor/dashboard', [InstructorController::class, 'index'])->name('instructor.dashboard');
 
-    // Ruta para listar usuarios
-    Route::get('user', [UserController::class, 'index'])->name('user');
+    // Gestión de usuarios
+    Route::get('/user', [UserController::class, 'index'])->name('user');
 
-
+    // Recursos administrativos
     Route::resource('rol', RolController::class);
     Route::resource('tipo-vehiculo', TipoVehiculoController::class);
     Route::resource('vehiculo', VehiculoController::class);
+    Route::resource('admin-instructor', AdminInstructorController::class);
 
-
-
+    /*
+    |--------------------------------------------------------------------------
+    | Rutas de Bitácora
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('bitacora')->group(function () {
+        Route::post('/iniciar/{accion}', [BitacoraController::class, 'iniciarAccion']);
+        Route::post('/finalizar/{id}', [BitacoraController::class, 'finalizarAccion']);
+        Route::get('/', [BitacoraController::class, 'index'])->name('bitacora.index');
+    });
 
 });
 
+/*
+|--------------------------------------------------------------------------
+| Rutas de Inicio y Cierre de Sesión con Registro en Bitácora
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/login', function () {
+    $user = Auth::user();
+
+    \App\Models\Bitacora::create([
+        'id_user' => $user->id,
+        'direccion_ip' => request()->ip(),
+        'visitas' => 'Login',
+        'acciones' => 'Inicio de sesión'
+    ]);
+
+    return redirect()->route('dashboard');
+})->name('login');
+
+Route::post('/logout', function () {
+    \App\Models\Bitacora::where('id_user', Auth::id())->latest()->first()->update([
+        'acciones' => 'Cierre de sesión',
+        'updated_at' => now(),
+    ]);
+
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
 
 
-// Ruta para mostrar el calendario
+
+/*
+|--------------------------------------------------------------------------
+| Rutas del Calendario
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/calendar', function () {
     return view('calendar');
 })->name('calendar');
 
-// Ruta para obtener eventos del calendario dinámicamente
 Route::get('/calendar/events', function () {
-    // Ejemplo de eventos estáticos
     $events = [
         ['title' => 'Clase de Manejo', 'start' => '2025-05-10', 'end' => '2025-05-10'],
         ['title' => 'Clase Teórica', 'start' => '2025-05-12', 'end' => '2025-05-12'],
     ];
 
-    // Si tienes una tabla en la base de datos, puedes obtener los eventos dinámicamente:
-    // $events = DB::table('clases')->select('titulo as title', 'fecha_inicio as start', 'fecha_fin as end')->get();
-
     return response()->json($events);
 })->name('calendar.events');
 
-// Recursos (CRUD) sin middleware adicional
-Route::resource('rols', RolController::class);
-Route::resource('notificaciones', NotificacioneController::class);
-Route::resource('users', UserController::class);
-Route::resource('administradors', AdministradorController::class);
-Route::resource('estudiantes', EstudianteController::class);
-Route::resource('instructors', InstructorController::class);
-Route::resource('pagos', PagoController::class);
-Route::resource('tipo-vehiculos', TipoVehiculoController::class);
-Route::resource('vehiculos', VehiculoController::class);
-Route::resource('examen-categoria-aspiras', ExamenCategoriaAspiraController::class);
-Route::resource('paquetes', PaqueteController::class);
-Route::resource('grupo-examen', GrupoExamanController::class);
-Route::resource('examen-segips', ExamenSegipController::class);
-Route::resource('inscribes', InscribeController::class);
-Route::resource('clases', ClaseController::class);
+/*
+|--------------------------------------------------------------------------
+| Recursos CRUD sin Middleware Adicional
+|--------------------------------------------------------------------------
+*/
+
+Route::resources([
+    'rols' => RolController::class,
+    'notificaciones' => NotificacioneController::class,
+    'users' => UserController::class,
+    'administradors' => AdministradorController::class,
+    'estudiantes' => EstudianteController::class,
+    'instructors' => InstructorController::class,
+    'pagos' => PagoController::class,
+    'tipo-vehiculos' => TipoVehiculoController::class,
+    'vehiculos' => VehiculoController::class,
+    'examen-categoria-aspiras' => ExamenCategoriaAspiraController::class,
+    'paquetes' => PaqueteController::class,
+    'grupo-examen' => GrupoExamanController::class,
+    'examen-segips' => ExamenSegipController::class,
+    'inscribes' => InscribeController::class,
+    'clases' => ClaseController::class,
+]);
