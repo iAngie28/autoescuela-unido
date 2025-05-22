@@ -153,9 +153,9 @@
         <!-- Contenido principal -->
         <main class="flex-1 bg-gray-100 text-gray-800 p-6">
             <section class="bg-white-500 text-black py-10 text-center">
-                <h1 class="text-3xl font-bold text-left mb-"> Clases</h1>
+                <h1 class="text-3xl font-bold text-left mb-"> clases</h1>
 
-                <div class="flex flex-wrap items-center justify-between mb-6 " style="margin-top: 20px;">
+                <div class="flex flex-wrap items-center justify-between mb-6">
                     <select id="filtroEstado" class="form-select" onchange="filtrarPorEstado()">
                         <option value="">Todos</option>
                         <option value="programada">Programada</option>
@@ -227,7 +227,7 @@
                                     <div class="flex items-center justify-center space-x-2">
                                         <a href="{{ route('clases.edit', $clase->id) }}"
                                             class="text-blue-500 hover:scale-110">📝 Editar</a>
-                                        <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
+                                        <form action="{{ route('clases.destroy', $clases->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:scale-110" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑

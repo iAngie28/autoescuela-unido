@@ -155,7 +155,7 @@
             <section class="bg-white-500 text-black py-10 text-center">
                 <h1 class="text-3xl font-bold text-left mb-"> Clases</h1>
 
-                <div class="flex flex-wrap items-center justify-between mb-6 " style="margin-top: 20px;">
+                <div class="flex flex-wrap items-center justify-between mb-6 " style="margin-top: 30px;">
                     <select id="filtroEstado" class="form-select" onchange="filtrarPorEstado()">
                         <option value="">Todos</option>
                         <option value="programada">Programada</option>
