@@ -15,7 +15,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->string('categ_licencia', 10);
             $table->timestamps();
-            $table->unsignedBigInteger('id_vehiculo')->nullable();
+            $table->unsignedBigInteger('id_vehiculo');
             $table->foreign('id')
             ->references('id')
             ->on('users')

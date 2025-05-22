@@ -18,13 +18,9 @@
         </div>
         <div class="form-group mb-2 mb20">
             <label for="estado" class="form-label">{{ __('Estado') }}</label>
-             <select name="estado" id="estado" class="form-select @error('estado') is-invalid @enderror">
-            <option value="">Seleccione el estado de la clase</option>
-                <option value="programada" selected>Programada</option>
-                <option value="cancelada" selected>Cancelada</option>
-        </select>
+            <input type="text" name="estado" class="form-control @error('estado') is-invalid @enderror" value="{{ old('estado', $clase?->estado) }}" id="estado" placeholder="Estado">
+            {!! $errors->first('estado', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
-        
         
         <div class="form-group mb-2 mb20">
             <label for="comentario__inst" class="form-label">{{ __('Comentario Inst') }}</label>

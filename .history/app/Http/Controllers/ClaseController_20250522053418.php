@@ -65,7 +65,7 @@ class ClaseController extends Controller
         $paquetes = Paquete::all();
         $usuariosInstructor = User::where('id_rol', 3)->get();
 
-        return view('clase.edit', compact('clase', 'paquetes', 'usuariosInstructor'));
+        return view('clase.edit', compact('clase'));
     }
 
     /**

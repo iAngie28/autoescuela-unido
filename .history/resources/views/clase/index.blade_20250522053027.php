@@ -129,20 +129,4 @@
             </div>
         </div>
     </div>
-    <script>
-    function filtrarPorEstado() {
-        const estadoSeleccionado = document.getElementById('filtroEstado').value.toLowerCase();
-        const filas = document.querySelectorAll('table tbody tr');
-
-        filas.forEach(fila => {
-            const estado = fila.dataset.estado;
-            if (!estadoSeleccionado || estado === estadoSeleccionado) {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-        });
-    }
-</script>
-
 @endsection

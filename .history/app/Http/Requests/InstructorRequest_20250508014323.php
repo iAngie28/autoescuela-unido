@@ -23,7 +23,6 @@ class InstructorRequest extends FormRequest
     {
         return [
 			'categ_licencia' => 'required|string',
-            'id_vehiculo' => 'nullable'
         ];
     }
 }

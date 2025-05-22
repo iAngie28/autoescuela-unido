@@ -1,4 +1,4 @@
-@extends('layouts.guest-bootstrap')
+@extends('layouts.app')
     @section('content')
 
     <!-- Navbar Start -->
@@ -46,16 +46,10 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 10px;">
                             <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
                                 {{ __('Volver') }}
-                            </a>
-    <select id="filtroEstado" class="form-select" onchange="filtrarPorEstado()">
-        <option value="">Todos</option>
-        <option value="programada">Programada</option>
-        <option value="cancelada">Cancelada</option>
-    </select>
-                            </div>
+                              </a>
+                              
                             <span id="card_title">
                                 {{ __('Clases') }}
                             </span>
@@ -95,8 +89,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($clases as $clase)
-                                        <tr data-estado="{{ strtolower($clase->estado) }}">
-
+                                        <tr>
                                             <td>{{ ++$i }}</td>
 
 										<td >{{ $clase->fecha }}</td>
@@ -129,20 +122,4 @@
             </div>
         </div>
     </div>
-    <script>
-    function filtrarPorEstado() {
-        const estadoSeleccionado = document.getElementById('filtroEstado').value.toLowerCase();
-        const filas = document.querySelectorAll('table tbody tr');
-
-        filas.forEach(fila => {
-            const estado = fila.dataset.estado;
-            if (!estadoSeleccionado || estado === estadoSeleccionado) {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-        });
-    }
-</script>
-
 @endsection

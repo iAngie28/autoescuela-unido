@@ -39,7 +39,7 @@
         <select name="id_paquete" id="id_paquete" class="form-select @error('id_paquete') is-invalid @enderror">
             <option value="">Seleccione la cantidad de clases</option>
             @foreach ($paquetes as $paquete)
-                <option value="{{ $paquete->id }}" {{ old('id_paquete') == $paquete->id ? 'selected' : '' }}>
+                <option value="{{ $paquete->id }}" {{ old('id_paquete', $clase->paquete ?? '') == $paquete->id ? 'selected' : '' }}>
                     {{ $paquete->cant_class }}
                 </option>
             @endforeach

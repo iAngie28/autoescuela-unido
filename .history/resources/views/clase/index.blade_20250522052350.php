@@ -46,7 +46,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between;">
                             <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
                                 {{ __('Volver') }}
                             </a>
@@ -95,8 +95,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($clases as $clase)
-                                        <tr data-estado="{{ strtolower($clase->estado) }}">
-
+                                        <tr>
                                             <td>{{ ++$i }}</td>
 
 										<td >{{ $clase->fecha }}</td>
@@ -129,20 +128,4 @@
             </div>
         </div>
     </div>
-    <script>
-    function filtrarPorEstado() {
-        const estadoSeleccionado = document.getElementById('filtroEstado').value.toLowerCase();
-        const filas = document.querySelectorAll('table tbody tr');
-
-        filas.forEach(fila => {
-            const estado = fila.dataset.estado;
-            if (!estadoSeleccionado || estado === estadoSeleccionado) {
-                fila.style.display = '';
-            } else {
-                fila.style.display = 'none';
-            }
-        });
-    }
-</script>
-
 @endsection
