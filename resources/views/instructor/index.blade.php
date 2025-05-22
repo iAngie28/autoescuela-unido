@@ -32,6 +32,7 @@
                                         <th>No</th>
                                         
 									<th >Categ Licencia</th>
+                                    <th >Id Vehiculo</th>
 
                                         <th></th>
                                     </tr>
@@ -42,6 +43,7 @@
                                             <td>{{ ++$i }}</td>
                                             
 										<td >{{ $instructor->categ_licencia }}</td>
+                                        <td >{{ $clase->id_vehiculo }}</td>
 
                                             <td>
                                                 <form action="{{ route('instructors.destroy', $instructor->id) }}" method="POST">

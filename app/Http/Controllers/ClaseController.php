@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ClaseRequest;
 use App\Models\Paquete;
 use App\Models\User;
-use App\Models\Vehiculo;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -32,9 +31,8 @@ class ClaseController extends Controller
     {
         $clase = new Clase();
         $paquetes = Paquete::all();
-        $vehiculos = Vehiculo::all();
         $usuariosInstructor = User::where('id_rol', 3)->get();
-        return view('clase.create', compact('clase', 'paquetes', 'usuariosInstructor', 'vehiculos'));
+        return view('clase.create', compact('clase', 'paquetes', 'usuariosInstructor'));
     }
 
     /**

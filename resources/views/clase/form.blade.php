@@ -39,14 +39,7 @@
                 </option>
             @endforeach
         </select>
-        <select name="id_vehiculo" id="id_vehiculo" class="form-select @error('id_vehiculo') is-invalid @enderror">
-            <option value="">Seleccione la placa de su vehiculo</option>
-            @foreach ($vehiculos as $vehiculo)
-                <option value="{{ $vehiculo->id }}" {{ old('id_vehiculo') == $vehiculo->id ? 'selected' : '' }}>
-                    {{ $vehiculo->placa }}
-                </option>
-            @endforeach
-        </select>
+        
         <select name="id_inst" id="id_inst" class="form-select @error('id_inst') is-invalid @enderror">
             <option value="">Seleccione un instructor</option>
             @foreach ($usuariosInstructor as $usuario)

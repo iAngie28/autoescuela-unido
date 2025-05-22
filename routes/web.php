@@ -17,6 +17,7 @@ use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BitacoraController;
 
 use App\Http\Middleware\IsAdmin;
 
@@ -63,11 +64,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('user', [UserController::class, 'index'])->name('user');
 
 
+
     Route::resource('rol', RolController::class);
     Route::resource('tipo-vehiculo', TipoVehiculoController::class);
     Route::resource('vehiculo', VehiculoController::class);
-
-
 
 
 });
@@ -109,3 +109,9 @@ Route::resource('grupo-examen', GrupoExamanController::class);
 Route::resource('examen-segips', ExamenSegipController::class);
 Route::resource('inscribes', InscribeController::class);
 Route::resource('clases', ClaseController::class);
+
+// Registrar acciones
+Route::post('/bitacora/iniciar/{accion}', [BitacoraController::class, 'iniciarAccion']);
+Route::post('/bitacora/finalizar/{id}', [BitacoraController::class, 'finalizarAccion']);
+// Vista de registros
+Route::get('/bitacoras', [BitacoraController::class, 'index'])->name('bitacoras.index');

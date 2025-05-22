@@ -20,16 +20,10 @@ return new class extends Migration
             $table->string('comentario_Inst', 250)->nullable();
             $table->string('reporte_estudiante', 100)->nullable();
             $table->unsignedBigInteger('id_paquete');
-            $table->unsignedBigInteger('id_vehiculo');
             $table->unsignedBigInteger('id_inst');
 
             $table->foreign('id_paquete')
             ->references('id')->on('paquete')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
-
-            $table->foreign('id_vehiculo')
-            ->references('id')->on('vehiculo')
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
@@ -49,5 +43,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('clase');
+        
     }
 };

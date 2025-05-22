@@ -11,4 +11,12 @@
     <div class="col-md-12 mt20 mt-2">
         <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
     </div>
+    <select name="id_vehiculo" id="id_vehiculo" class="form-select @error('id_vehiculo') is-invalid @enderror">
+            <option value="">Seleccione la placa de su vehiculo</option>
+            @foreach ($vehiculos as $vehiculo)
+                <option value="{{ $vehiculo->id }}" {{ old('id_vehiculo') == $vehiculo->id ? 'selected' : '' }}>
+                    {{ $vehiculo->placa }}
+                </option>
+            @endforeach
+    </select>
 </div>
