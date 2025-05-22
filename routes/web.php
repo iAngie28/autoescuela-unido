@@ -62,6 +62,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Ruta para listar usuarios
     Route::get('user', [UserController::class, 'index'])->name('user');
+
+
+
+    Route::resource('rol', RolController::class);
+    Route::resource('tipo-vehiculo', TipoVehiculoController::class);
+    Route::resource('vehiculo', VehiculoController::class);
+
+
 });
 
 
