@@ -81,7 +81,7 @@
 									<th >Comentario Inst</th>
 									<th >Reporte Estudiante</th>
 									<th >Id Paquete</th>
-									<th >Id Vehiculo</th>
+									
 									<th >Id Inst</th>
 
                                         <th></th>
@@ -99,7 +99,7 @@
 										<td >{{ $clase->comentario_Inst }}</td>
 										<td >{{ $clase->reporte_estudiante }}</td>
 										<td >{{ $clase->id_paquete }}</td>
-										<td >{{ $clase->id_vehiculo }}</td>
+										
 										<td >{{ $clase->id_inst }}</td>
 
                                             <td>

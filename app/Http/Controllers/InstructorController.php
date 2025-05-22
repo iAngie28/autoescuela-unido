@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\InstructorRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Vehiculo;
 
 class InstructorController extends Controller
 {
@@ -28,8 +29,9 @@ class InstructorController extends Controller
     public function create(): View
     {
         $instructor = new Instructor();
+        $vehiculos = Vehiculo::all();
 
-        return view('instructor.create', compact('instructor'));
+        return view('instructor.create', compact('instructor', 'vehiculos'));
     }
 
     /**
