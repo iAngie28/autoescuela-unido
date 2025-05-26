@@ -45,19 +45,16 @@
                     </header>
                 @endif
 
-                <div class="flex-1 md:ml-64">
-                    <main>
-                        @yield('content')
-                    </main>
-                </div>
-            </div>
-        </div>
+            <!-- Contenido -->
+            <main class="flex-1 w-full overflow-x-auto h-full min-h-screen">
+                @yield('content')
+            </main>
 
-        <!-- Footer fijo en móviles -->
-        <footer class="bg-gray-900 text-white pt-12 pb-8 sticky bottom-0">
-            @include('layouts.footer')
-        </footer>
+            <!-- Footer -->
+            <footer class="bg-gray-900 text-white pt-1 pb-1 mt-auto">
+                @include('layouts.footer')
+            </footer>
+        </div>
     </div>
 </body>
-
 </html>
