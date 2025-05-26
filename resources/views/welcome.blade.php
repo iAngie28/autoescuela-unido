@@ -81,27 +81,11 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="{{ url('/') }}" class="nav-item nav-link active">Inicio</a>
-<<<<<<< HEAD
                 <a href="{{ url('/about') }}" class="nav-item nav-link">Sobre Nosotros</a>
                 <a href="{{ url('/cursos') }}" class="nav-item nav-link">CURSOS</a>
                 <a href="https://web.whatsapp.com/" class="nav-item nav-link" target="_blank" rel="noopener noreferrer">
                     Contacto
                 </a>
-=======
-                <a href="{{ url('/') }}" class="nav-item nav-link">Sobre Nosotros</a>
-                <a href="{{ url('/') }}" class="nav-item nav-link">CURSOS</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Menu</a>
-                    <div class="dropdown-menu bg-light m-0">
-                        <a href="{{ url('/') }}" class="dropdown-item">Features</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Appointment</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Our Team</a>
-                        <a href="{{ url('/') }}" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
-                    </div>
-                </div>
-                <a href="https://web.whatsapp.com/" class="nav-item nav-link">Contacto</a>
->>>>>>> 8576bc91381706c4eda4f5d0302ba5347bd3aba8
             </div>
             @if (Route::has('login'))
     @auth
