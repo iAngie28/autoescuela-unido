@@ -1,33 +1,42 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Registros de la Bitácora</h1>
-    <table class="table">
+<div class="container">
+    <h2>Registros de la Bitácora</h2>
+    
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Usuario</th>
-                <th>Acción</th>
                 <th>IP</th>
-                <th>Entrada</th>
-                <th>Salida</th>
+                <th>Fecha Entrada</th>
+                <th>Fecha Salida</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($bitacoras as $bitacora)
-                <tr>
-                    <td>{{ $bitacora->usuario->name ?? 'Invitado' }}</td>
-                    <td>{{ $bitacora->accion }}</td>
-                    <td>{{ $bitacora->direccion_ip }}</td>
-                    <td>{{ $bitacora->fecha_entrada }} {{ $bitacora->hora_entrada }}</td>
-                    <td>
-                        @if ($bitacora->fecha_salida)
-                            {{ $bitacora->fecha_salida }} {{ $bitacora->hora_salida }}
-                        @else
-                            En proceso...
-                        @endif
-                    </td>
-                </tr>
-            @endforeach
+            @forelse ($registros as $registro)
+            <tr>
+                <td>
+                    @if($registro->user)
+                        {{ $registro->user->name }} (ID: {{ $registro->user_id }})
+                    @else
+                        <span class="text-danger">Usuario Eliminado</span>
+                    @endif
+                </td>
+                <td>{{ $registro->ip_address }}</td>
+                <td>{{ $registro->entry_date->format('d/m/Y H:i') }}</td>
+                <td>{{ $registro->exit_date?->format('d/m/Y H:i') ?? 'N/A' }}</td>
+                <td><pre>{{ $registro->actions }}</pre></td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="5" class="text-center">No hay registros.</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
+
+    {{ $registros->links() }} <!-- Paginación -->
+</div>
 @endsection

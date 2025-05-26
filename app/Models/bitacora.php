@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User; 
 
 /**
  * Class bitacora
@@ -11,32 +12,33 @@ use Illuminate\Database\Eloquent\Model;
  * @property $accion
  * @property $direccion_ip
  * @property $fecha_entrada
- * @property $hora_entrada
  * @property $fecha_salida
- * @property $hora_salida
  * @property $id_user
  * 
- * @property Usuario $usuario
+ * @property User $user
  * @package App
  * @mixin \Illuminate\Database\Eloquent\Builder
  */
-class bitacora extends Model
+class Bitacora extends Model
 {
-    protected $perPage = 20;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $table = 'bitacora';
-    protected $fillable = ['id_user','id','direccion_ip','fecha_entrada','hora_entrada','fecha_salida','hora_salida'];
+    protected $table = 'Bitacora';
+    protected $fillable = [
+        'id_user',
+        'direccion_ip',
+        'fecha_entrada',
+        'accion',
+        'fecha_salida'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function usuario()
+    public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'id_user', 'id');
+        return $this->belongsTo(User::class, 'id_user')->withTrashed();
     }
 }

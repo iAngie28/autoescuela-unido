@@ -17,7 +17,7 @@ use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\BitacoraController;
+use App\Models\Bitacora;
 
 use App\Http\Middleware\IsAdmin;
 
@@ -85,6 +85,20 @@ Route::get('/calendar/events', function () {
     return response()->json($events);
 })->name('calendar.events');
 
+Route::get('/bitacora', function () {
+    // Verificar si el usuario está autenticado y tiene permiso (opcional)
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+
+    // Obtener todos los registros de la bitácora
+    $registros = Bitacora::with(['user' => function($query) {
+        $query->withTrashed();
+    }])->latest()->paginate(10);
+
+    return view('bitacora.index', compact('registros'));
+})->middleware('auth'); // Aplica el middleware de autenticación
+
 // Recursos (CRUD) sin middleware adicional
 Route::resource('rols', RolController::class);
 Route::resource('notificaciones', NotificacioneController::class);
@@ -102,8 +116,3 @@ Route::resource('examen-segips', ExamenSegipController::class);
 Route::resource('inscribes', InscribeController::class);
 Route::resource('clases', ClaseController::class);
 
-// Registrar acciones
-Route::post('/bitacora/iniciar/{accion}', [BitacoraController::class, 'iniciarAccion']);
-Route::post('/bitacora/finalizar/{id}', [BitacoraController::class, 'finalizarAccion']);
-// Vista de registros
-Route::get('/bitacoras', [BitacoraController::class, 'index'])->name('bitacoras.index');
