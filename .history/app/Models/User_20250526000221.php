@@ -64,7 +64,7 @@ class User extends Authenticatable
      */
     public function administrador()
     {
-        return $this->hasOne(\App\Models\Administrador::class, 'id', 'id');
+        return $this->hasOne(\App\Models\Administrador::class, 'id');
     }
     
     /**
@@ -72,7 +72,7 @@ class User extends Authenticatable
      */
     public function estudiante()
     {
-        return $this->hasOne(\App\Models\Estudiante::class, 'id', 'id');
+        return $this->hasOne(\App\Models\Estudiante::class, 'id');
     }
     
     /**
@@ -80,7 +80,7 @@ class User extends Authenticatable
      */
     public function instructor()
     {
-        return $this->hasOne(\App\Models\Instructor::class,  'id', 'id');
+        return $this->hasOne(\App\Models\Instructor::class, 'id');
     }
     
     /**
@@ -96,7 +96,7 @@ class User extends Authenticatable
      */
     public function pagosAdministrador()
     {
-        return $this->hasMany(\App\Models\Pago::class, 'id');
+        return $this->hasMany(\App\Models\Pago::class, 'id', 'id');
     }
     
     /**
@@ -104,7 +104,7 @@ class User extends Authenticatable
      */
     public function pagosEstudiante()
     {
-        return $this->hasMany(\App\Models\Pago::class,  'id_est');
+        return $this->hasMany(\App\Models\Pago::class, 'id', 'id_est');
     }
     protected static function booted()
     {
@@ -125,7 +125,8 @@ class User extends Authenticatable
             if ($usuario->id_rol  == 3){
                 $usuario->instructor()->create([
                     'id' => $usuario->id,
-                    'categ_licencia' => 'A'
+                    'categ_licencia' => 'A',
+                    'id_vehiculo' => 'null'
                 ]);
             }
         });

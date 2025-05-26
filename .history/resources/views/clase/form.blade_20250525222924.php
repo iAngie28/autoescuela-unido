@@ -16,7 +16,7 @@
             <input type="time" name="hora_fin" class="form-control @error('hora_fin') is-invalid @enderror" value="{{ old('hora_fin', $clase?->hora_fin) }}" id="hora_fin" placeholder="Hora Fin">
             {!! $errors->first('hora_fin', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
         </div>
-        <div class="form-group mb-2 mb20">
+        <!--<div class="form-group mb-2 mb20">
             <label for="estado" class="form-label">{{ __('Estado') }}</label>
              <select name="estado" id="estado" class="form-select @error('estado') is-invalid @enderror">
             <option value="">Seleccione el estado de la clase</option>
@@ -35,7 +35,7 @@
             <label for="reporte_estudiante" class="form-label">{{ __('Reporte Estudiante') }}</label>
             <input type="text" name="reporte_estudiante" class="form-control @error('reporte_estudiante') is-invalid @enderror" value="{{ old('reporte_estudiante', $clase?->reporte_estudiante) }}" id="reporte_estudiante" placeholder="Reporte Estudiante">
             {!! $errors->first('reporte_estudiante', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
+        </div>-->
         <select name="id_paquete" id="id_paquete" class="form-select @error('id_paquete') is-invalid @enderror">
             <option value="">Seleccione la cantidad de clases</option>
             @foreach ($paquetes as $paquete)
@@ -48,14 +48,10 @@
         <select name="id_inst" id="id_inst" class="form-select @error('id_inst') is-invalid @enderror">
             <option value="">Seleccione un instructor</option>
             @foreach ($usuariosInstructor as $usuario)
-    @if ($usuario->instructor)
-        <option value="{{ $usuario->instructor->id }}"
-            {{ old('id_inst', $clase->id_inst ?? '') == $usuario->instructor->id ? 'selected' : '' }}>
-            {{ $usuario->name }}
-        </option>
-    @endif
-@endforeach
-
+                <option value="{{ $usuario->instructor->id }}" {{ old('id_inst', $clase->id_inst ?? '') == $usuario->instructor->id ? 'selected' : '' }}>
+                    {{ $usuario->name }}
+                </option>
+            @endforeach
         </select>
 
     </div>
