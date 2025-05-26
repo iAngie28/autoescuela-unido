@@ -23,30 +23,31 @@
             @include('layouts.sidebarr')
         </aside>
 
-        <!-- Contenido principal -->
-        <div class="flex-1 flex flex-col">
-            <!-- Navbar -->
+        <!-- Contenido Principal -->
+        <div class="flex flex-col flex-1 min-h-screen">
+            <!-- Nav superior -->
             <livewire:layout.navigation />
 
-            <!-- Encabezado opcional -->
+            <!-- Header -->
             @if (isset($header))
                 <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <div class="px-4 py-6 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
             @endif
 
-            <!-- Contenido -->
-            <main class="flex-1 w-full overflow-x-auto h-full min-h-screen">
+            <!-- Main contenido -->
+            <main class="flex-1 w-full">
                 @yield('content')
             </main>
 
             <!-- Footer -->
-            <footer class="bg-gray-900 text-white pt-1 pb-1 mt-auto">
+            <footer class="bg-gray-900 text-white pt-12 pb-8">
                 @include('layouts.footer')
             </footer>
         </div>
     </div>
 </body>
+
 </html>

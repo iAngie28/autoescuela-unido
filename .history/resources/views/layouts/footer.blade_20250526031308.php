@@ -3,7 +3,7 @@
         <footer class="bg-gray-900 text-white pt-3 pb-3">
             <div class="w-full px-6">
                 <div
-                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-12 gap-y-8 mb-8 justify-items-start md:justify-items-center">
+                    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols3 gap-x-12 gap-y-8 mb-8 justify-items-start md:justify-items-center">
                     <!-- Company Info -->
                     <div class="space-y-4" style="padding-top: 15px;">
                         <div class="flex items-center">

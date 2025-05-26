@@ -43,7 +43,7 @@
             </main>
 
             <!-- Footer -->
-            <footer class="bg-gray-900 text-white pt-1 pb-1 mt-auto">
+            <footer class="bg-gray-900 text-white pt-1 pb-8 mt-auto">
                 @include('layouts.footer')
             </footer>
         </div>

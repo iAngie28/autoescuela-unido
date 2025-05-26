@@ -38,14 +38,12 @@
             @endif
 
             <!-- Contenido -->
-            <main class="flex-1 w-full overflow-x-auto h-full min-h-screen">
+            <main class="flex-1 w-full overflow-x-auto">
                 @yield('content')
             </main>
 
             <!-- Footer -->
-            <footer class="bg-gray-900 text-white pt-1 pb-1 mt-auto">
                 @include('layouts.footer')
-            </footer>
         </div>
     </div>
 </body>

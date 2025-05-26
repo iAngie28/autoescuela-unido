@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex flex-col min-h-screen">
+<div class="flex flex-col w-full">
+
     <div class="flex flex-1">
         <!-- Contenido principal -->
         <main class="flex-1 bg-gray-100 text-gray-800 p-6">

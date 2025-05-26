@@ -3,6 +3,8 @@
 @section('content')
 <div class="flex flex-col min-h-screen">
     <div class="flex flex-1">
+
+
         <!-- Contenido principal -->
         <main class="flex-1 bg-gray-100 text-gray-800 p-6">
             <section class="bg-white-500 text-black py-10 text-center">
@@ -103,4 +105,6 @@
         </main>
 
     </div>
+
+
 @endsection
