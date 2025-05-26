@@ -80,7 +80,7 @@ class User extends Authenticatable
      */
     public function instructor()
     {
-        return $this->hasOne(\App\Models\Instructor::class,  'id', 'id');
+        return $this->hasOne(\App\Models\Instructor::class, 'id', 'id');
     }
     
     /**
