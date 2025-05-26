@@ -23,7 +23,16 @@
         <div class="flex flex-1">
             <!-- Sidebar -->
             <aside class="w-64 bg-gray-800 min-h-screen sticky top-16 md:static">
-                @include('layouts.sidebarr')
+                @if (Auth::user()->tipo_usuario === 'A')
+                    @include('layouts.sidebarAdmin')
+                @elseif (Auth::user()->tipo_usuario === 'E')
+                    @include('layouts.sidebarStudent')
+                @elseif (Auth::user()->tipo_usuario === 'I')
+                    @include('layouts.sidebarInstructor')
+                @else
+                    @include('layouts.sidebar-default')
+                @endif
+
             </aside>
 
             <!-- Contenido Principal -->
