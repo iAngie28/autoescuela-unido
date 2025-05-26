@@ -16,5 +16,8 @@ class Logout
 
         Session::invalidate();
         Session::regenerateToken();
+        redirect('/')->with('reload', true);
+
+
     }
 }

@@ -6,7 +6,7 @@ php artisan vendor:publish --tag=crud //publicar
 ```
 # Comando para crear CRUD
 ```
-php artisan make:crud NombreTabla 1
+php artisan make:crud NombreTabla
 ```
 
 ## La primera vez se deben correr los siguientes comandos:
@@ -26,4 +26,8 @@ npm run build
 npm run dev // debe correr de fondo en una segunda terminal
 php artisan serve
 
+```
+## En caso de error con el vite
+```
+npm install --save-dev vite laravel-vite-plugin
 ```

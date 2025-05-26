@@ -14,13 +14,21 @@ class RolController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
-    {
-        $rols = Rol::paginate();
+public function index(Request $request): View
+{
+    $search = $request->input('search');
 
-        return view('rol.index', compact('rols'))
-            ->with('i', ($request->input('page', 1) - 1) * $rols->perPage());
-    }
+    // Filtrar roles si hay búsqueda
+    $rols = Rol::query()
+        ->when($search, function ($query, $search) {
+            return $query->where('nombre', 'like', "%$search%");
+        })
+        ->paginate(20);
+
+    return view('rol.index', compact('rols'))
+        ->with('i', ($request->input('page', 1) - 1) * $rols->perPage());
+}
+
 
     /**
      * Show the form for creating a new resource.

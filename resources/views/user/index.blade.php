@@ -1,84 +1,98 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
-    <div class="container-fluid mt-5">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
+@extends('layouts.app')
 
-                            <span id="card_title">
-                                {{ __('Users') }}
-                            </span>
+@section('content')
+    <div class="flex flex-col min-h-screen">
+        <div class="flex flex-1">
 
-                             <div class="float-right">
-                                <a href="{{ route('register') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
-                                </a>
-                              </div>
-                        </div>
+            <!-- Sidebar -->
+
+
+
+            <!-- Contenido principal -->
+            <main class="flex-1 bg-gray-100 text-gray-800 p-6">
+                <section class="bg-white-500 text-black py-10 text-center">
+                    <h1 class="text-3xl font-bold text-left mb-"> Lista de Usuarios</h1>
+
+                    <div class="flex flex-wrap items-center justify-between mb-6">
+                        <form id="searchForm" method="GET" action="{{ route('users.index') }}">
+                            <input type="text" name="search" placeholder="Buscar usuarios..."
+                                class="w-full px-4 py-2 rounded-md border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="searchInput" value="{{ request('search') }}">
+                        </form>
+
+                        <a href="{{ route('register') }}" target="_blank">
+                            <button
+                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                                Agregar Nuevo Usuario
+                            </button>
+                        </a>
                     </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success m-4">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
 
-                    <div class="card-body bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
+                    <script>
+                        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+                            if (event.key === "Enter") {
+                                event.preventDefault();
+                                let searchValue = this.value.trim();
 
-									<th >Name</th>
-									<th >Username</th>
-									<th >Email</th>
-									<th >Sexo</th>
-									<th >Telefono</th>
-									<th >Direccion</th>
-									<th >Fecha Registro</th>
-									<th >Ci</th>
-									<th >Tipo Usuario</th>
-									<th >Id Rol</th>
+                                if (searchValue === "") {
+                                    window.location.href = "{{ route('users.index') }}"; // Solo recargar si el campo está vacío
+                                } else {
+                                    document.getElementById("searchForm").submit(); // Realizar búsqueda
+                                }
+                            }
+                        });
+                    </script>
 
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
 
-										<td >{{ $user->name }}</td>
-										<td >{{ $user->username }}</td>
-										<td >{{ $user->email }}</td>
-										<td >{{ $user->sexo }}</td>
-										<td >{{ $user->telefono }}</td>
-										<td >{{ $user->direccion }}</td>
-										<td >{{ $user->fecha_registro }}</td>
-										<td >{{ $user->ci }}</td>
-										<td >{{ $user->tipo_usuario }}</td>
-										<td >{{ $user->id_rol }}</td>
 
-                                            <td>
+                    <!-- User Table -->
+                    <div class="overflow-x-auto bg-white rounded-lg shadow">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                    <th class="py-3 px-6 text-left">ID</th>
+                                    <th class="py-3 px-6 text-left">Nombre</th>
+                                    <th class="py-3 px-6 text-left">Email</th>
+                                    <th class="py-3 px-6 text-left">Rol</th>
+                                    <th class="py-3 px-6 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 text-sm">
+                                @foreach ($users as $user)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                        <td class="py-3 px-6 text-left">{{ $user->id }}</td>
+                                        <td class="py-3 px-6 text-left">{{ $user->name }}</td>
+                                        <td class="py-3 px-6 text-left">{{ $user->email }}</td>
+                                        <td class="py-3 px-6 text-left">{{ $user->tipo_usuario }}</td>
+                                        <td class="py-3 px-6 text-center">
+                                            <div class="flex items-center justify-center space-x-2">
+                                                <a href="{{ route('users.edit', $user->id) }}"
+                                                    class="text-blue-500 hover:scale-110">📝 Editar</a>
                                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('users.show', $user->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('users.edit', $user->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
+                                                    <button type="submit" class="text-red-500 hover:scale-110">🗑
+                                                        Eliminar</button>
                                                 </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                {!! $users->withQueryString()->links() !!}
-            </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-6">
+                        {{ $users->links() }}
+                    </div>
+                </section>
+            </main>
+
         </div>
+
+        <!-- Footer -->
+
+
     </div>
 @endsection

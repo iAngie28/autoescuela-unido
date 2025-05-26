@@ -1,67 +1,93 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
-    <div class="container-fluid mt-5">
+@extends('layouts.app')
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
+@section('content')
+    <div class="flex flex-col min-h-screen">
+        <div class="flex flex-1">
 
-                            <span id="card_title">
-                                {{ __('Tipo Vehiculos') }}
-                            </span>
+            <!-- Sidebar -->
 
-                             <div class="float-right">
-                                <a href="{{ route('tipo-vehiculos.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
-                                </a>
-                              </div>
-                        </div>
-                    </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success m-4">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
+            <!-- Contenido principal -->
+            <main class="flex-1 bg-gray-100 text-gray-800 p-6">
+                <section class="bg-white-500 text-black py-10 text-center">
+                    <h1 class="text-3xl font-bold text-left mb-"> Tipo de Vehiculo </h1>
 
-                    <div class="card-body bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-                                        
-									<th >Nombre</th>
+                    <!-- Search and Add Tipo Vehículo -->
+            <div class="flex flex-wrap items-center justify-between mb-6">
+                <form id="searchForm" method="GET" action="{{ route('tipo-vehiculo.index') }}">
+                    <input type="text" name="search" placeholder="Buscar tipos de vehículo..."
+                        class="w-full px-4 py-2 rounded-md border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        id="searchInput" value="{{ request('search') }}">
+                </form>
 
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($tipoVehiculos as $tipoVehiculo)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-                                            
-										<td >{{ $tipoVehiculo->nombre }}</td>
-
-                                            <td>
-                                                <form action="{{ route('tipo-vehiculos.destroy', $tipoVehiculo->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('tipo-vehiculos.show', $tipoVehiculo->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('tipo-vehiculos.edit', $tipoVehiculo->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                {!! $tipoVehiculos->withQueryString()->links() !!}
+                <a href="{{ route('tipo-vehiculo.create') }}">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                        Agregar Nuevo Tipo de Vehículo
+                    </button>
+                </a>
             </div>
+
+
+            <!-- Script para búsqueda con Enter -->
+            <script>
+                document.getElementById("searchInput").addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        let searchValue = this.value.trim();
+
+                        if (searchValue === "") {
+                            window.location.href = "{{ route('tipo-vehiculo.index') }}"; // Solo recargar si el campo está vacío
+                        } else {
+                            document.getElementById("searchForm").submit(); // Realizar búsqueda
+                        }
+                    }
+                });
+            </script>
+
+
+<!-- Tabla de Tipos de Vehículo -->
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">ID</th>
+                            <th class="py-3 px-6 text-left">Nombre</th>
+                            <th class="py-3 px-6 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm">
+                        @foreach ($tipoVehiculos as $tipoVehiculo)
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left">{{ $tipoVehiculo->id }}</td>
+                                <td class="py-3 px-6 text-left">{{ $tipoVehiculo->nombre }}</td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <a href="{{ route('tipo-vehiculo.edit', $tipoVehiculo->id) }}" class="text-blue-500 hover:scale-110">📝 Editar</a>
+                                        <form action="{{ route('tipo-vehiculo.destroy', $tipoVehiculo->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:scale-110">🗑 Eliminar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Paginación -->
+            <div class="mt-6">
+                {{ $tipoVehiculos->links() }}
+            </div>
+        </section>
+
+
+            </main>
+
         </div>
+
+        <!-- Footer -->
+
+
     </div>
 @endsection

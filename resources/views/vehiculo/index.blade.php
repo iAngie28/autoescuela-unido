@@ -1,113 +1,94 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
+@extends('layouts.app')
 
-    <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top" style="background-color: #111827;">
-    <div class="container-fluid">
-        <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center">
-            <h2 class="m-0 text-primary"><i class="fa fa-car me-2"></i>WUILLANS</h2>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a href="{{ url('/admin/dashboard') }}" class="nav-link active text-white">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a href="about.html" class="nav-link text-white">Sobre Nosotros</a>
-                </li>
-                <li class="nav-item">
-                    <a href="courses.html" class="nav-link text-white">Cursos</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle text-white" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>
-                    <ul class="dropdown-menu" aria-labelledby="menuDropdown">
-                        <li><a href="feature.html" class="dropdown-item">Features</a></li>
-                        <li><a href="appointment.html" class="dropdown-item">Appointment</a></li>
-                        <li><a href="team.html" class="dropdown-item">Our Team</a></li>
-                        <li><a href="testimonial.html" class="dropdown-item">Testimonial</a></li>
-                        <li><a href="404.html" class="dropdown-item">404 Page</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="https://web.whatsapp.com/" class="nav-link text-white">Contacto</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<!-- Navbar End -->
-<!-- Navbar End -->
-    <div class="container-fluid mt-5">
+@section('content')
+    <div class="flex flex-col min-h-screen">
+        <div class="flex flex-1">
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <!-- Sidebar -->
 
-                            <span id="card_title">
-                                {{ __('Vehiculos') }}
-                            </span>
+            <!-- Contenido principal -->
+            <main class="flex-1 bg-gray-100 text-gray-800 p-6">
+                <section class="bg-white-500 text-black py-10 text-center">
+                    <h1 class="text-3xl font-bold text-left mb-"> Lista de Vehiculos</h1>
 
-                             <div class="float-right">
-                                <a href="{{ route('vehiculos.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
-                                </a>
-                              </div>
-                        </div>
+                    <div class="flex flex-wrap items-center justify-between mb-6">
+                        <form id="searchForm" method="GET" action="{{ route('vehiculo.index') }}">
+                            <input type="text" name="search" placeholder="Buscar Vehiculo..."
+                                class="w-full px-4 py-2 rounded-md border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="searchInput" value="{{ request('search') }}">
+                        </form>
+
+                        <a href="{{ route('vehiculo.create') }}" target="_blank">
+                            <button
+                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                                Agregar Nuevo Vehiculo
+                            </button>
+                        </a>
                     </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success m-4">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
+<!-- Script para búsqueda con Enter -->
+            <script>
+                document.getElementById("searchInput").addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        let searchValue = this.value.trim();
 
-                    <div class="card-body bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
+                        if (searchValue === "") {
+                            window.location.href = "{{ route('vehiculo.index') }}";
+                        } else {
+                            document.getElementById("searchForm").submit();
+                        }
+                    }
+                });
+            </script>
 
-									<th >Placa</th>
-									<th >Modelo</th>
-									<th >Caracteristicas</th>
-									<th >Tipo</th>
-
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($vehiculos as $vehiculo)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-
-										<td >{{ $vehiculo->placa }}</td>
-										<td >{{ $vehiculo->modelo }}</td>
-										<td >{{ $vehiculo->caracteristicas }}</td>
-										<td >{{ $vehiculo->tipo }}</td>
-
-                                            <td>
-                                                <form action="{{ route('vehiculos.destroy', $vehiculo->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('vehiculos.show', $vehiculo->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('vehiculos.edit', $vehiculo->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                {!! $vehiculos->withQueryString()->links() !!}
+            <!-- Tabla de Vehículos -->
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">ID</th>
+                            <th class="py-3 px-6 text-left">Placa</th>
+                            <th class="py-3 px-6 text-left">Modelo</th>
+                            <th class="py-3 px-6 text-left">Características</th>
+                            <th class="py-3 px-6 text-left">Tipo de Vehículo</th>
+                            <th class="py-3 px-6 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm">
+                        @foreach ($vehiculos as $vehiculo)
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left">{{ $vehiculo->id }}</td>
+                                <td class="py-3 px-6 text-left">{{ $vehiculo->placa }}</td>
+                                <td class="py-3 px-6 text-left">{{ $vehiculo->modelo }}</td>
+                                <td class="py-3 px-6 text-left">{{ $vehiculo->caracteristicas }}</td>
+                                <td class="py-3 px-6 text-left">{{ $vehiculo->tipoVehiculo->nombre }}</td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <a href="{{ route('vehiculo.edit', $vehiculo->id) }}" class="text-blue-500 hover:scale-110">📝 Editar</a>
+                                        <form action="{{ route('vehiculo.destroy', $vehiculo->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:scale-110">🗑 Eliminar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
+
+            <!-- Paginación -->
+            <div class="mt-6">
+                {{ $vehiculos->links() }}
+            </div>
+        </section>
+            </main>
+
         </div>
+
+        <!-- Footer -->
+
+
     </div>
 @endsection
