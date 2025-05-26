@@ -35,19 +35,15 @@ use App\Http\Middleware\IsAdmin;
 Route::view('/', 'welcome');
 Route::view('/about', 'paginas.about')->name('about');
 Route::view('/cursos', 'paginas.cursos')->name('cursos');
-
-
-
+Route::get('/reprogramar', function () {
+    return view('clase.reprogramar');
+})->name('reprogramar');
 
 /*
 |--------------------------------------------------------------------------
 | Rutas de Autenticación
 |--------------------------------------------------------------------------
 */
-Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
-    ->middleware('auth')
-    ->name('clase.reprogramar');
-
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -158,5 +154,3 @@ Route::resources([
     'inscribes' => InscribeController::class,
     'clases' => ClaseController::class,
 ]);
-
-

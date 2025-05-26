@@ -48,7 +48,7 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
     ->middleware('auth')
     ->name('clase.reprogramar');
 
-
+    
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -158,5 +158,3 @@ Route::resources([
     'inscribes' => InscribeController::class,
     'clases' => ClaseController::class,
 ]);
-
-

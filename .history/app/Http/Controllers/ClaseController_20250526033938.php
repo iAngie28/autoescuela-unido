@@ -23,11 +23,6 @@ class ClaseController extends Controller
         return view('clase.index', compact('clases'))
             ->with('i', ($request->input('page', 1) - 1) * $clases->perPage());
     }
-    public function reprogramar(Request $request): View 
-    {
-    $clases = Clase::paginate();
-    return view('clase.reprogramar', compact('clases'));
-}
 
     /**
      * Show the form for creating a new resource.
@@ -61,7 +56,10 @@ class ClaseController extends Controller
         return view('clase.show', compact('clase'));
     }
 
-    
+    public function reprogramar() {
+    $clases = Clase::paginate(10); // O la cantidad que prefieras
+    return view('clase.reprogramar', compact('clases'));
+}
 
 
     /**
