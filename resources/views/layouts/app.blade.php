@@ -20,9 +20,10 @@
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
         <livewire:layout.navigation />
 
+        <!-- Contenedor principal con Sidebar y contenido -->
         <div class="flex flex-1">
             <!-- Sidebar -->
-            <aside class="w-64 bg-gray-800 min-h-screen sticky top-16 md:static">
+            <aside class="w-64 bg-gray-800 h-auto sticky top-16 md:static">
                 @if (Auth::user()->tipo_usuario === 'A')
                     @include('layouts.sidebarAdmin')
                 @elseif (Auth::user()->tipo_usuario === 'E')
@@ -32,7 +33,6 @@
                 @else
                     @include('layouts.sidebar-default')
                 @endif
-
             </aside>
 
             <!-- Contenido Principal -->
@@ -45,16 +45,17 @@
                     </header>
                 @endif
 
-            <!-- Contenido -->
-            <main class="flex-1 w-full overflow-x-auto h-full min-h-screen">
-                @yield('content')
-            </main>
-
-            <!-- Footer -->
-            <footer class="bg-gray-900 text-white pt-1 pb-1 mt-auto">
-                @include('layouts.footer')
-            </footer>
+                <main class="flex-1 w-full overflow-x-auto h-auto">
+                    @yield('content')
+                </main>
+            </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white pt-4 pb-4">
+            @include('layouts.footer')
+        </footer>
     </div>
 </body>
+
 </html>
