@@ -55,32 +55,33 @@
                     <table class="w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-3 text-center">ID</th>
-                                <th class="py-3 px-3 text-center">Fecha</th>
-                                <th class="py-3 px-3 text-center">Hora Inicio</th>
-                                <th class="py-3 px-3 text-center">Hora Fin</th>
-                                <th class="py-3 px-3 text-center">Estado</th>
-                                <th class="py-3 px-3 text-center">Comentario Instructor</th>
-                                <th class="py-3 px-3 text-center">Reporte</th>
-                                <th class="py-3 px-3 text-center">Id Paquete</th>
-                                <th class="py-3 px-3 text-center">Id Instructor</th>
-                                <th class="py-3 px-3 text-center">Acciones</th>
+                                <th class="py-3 px-6 text-left">ID</th>
+                                <th class="py-3 px-6 text-left">Fecha</th>
+                                <th class="py-3 px-6 text-left">Hora Inicio</th>
+                                <th class="py-3 px-6 text-center">Hora Fin</th>
+                                <th class="py-3 px-6 text-center">Estado</th>
+                                <th class="py-3 px-6 text-center">Comentario Instructor</th>
+                                <th class="py-3 px-6 text-center">Reporte</th>
+                                <th class="py-3 px-6 text-center">Id Paquete</th>
+                                <th class="py-3 px-6 text-center">Id Instructor</th>
+                                <th class="py-3 px-6 text-center">Accion</th>
+
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm">
                             @foreach ($clases as $clase)
                             <tr data-estado="{{ strtolower($clase->estado) }}" class="border-b border-gray-200 hover:bg-gray-100">
-                                <td class="py-3 px-3 text-center">{{ $clase->id }}</td>
-                                <td class="py-3 px-3 text-center">{{ $clase->fecha }}</td>
-                                <td class="py-3 px-3 text-center">{{ $clase->hora_inicio}}</td>
-                                <td class="py-3 px-3 text-center">{{  $clase->hora_fin}}</td>
-                                <td class="py-3 px-3 text-center">{{ $clase->estado}}</td>
-                                <td class="py-3 px-3 text-center">{{$clase->comentario_Inst }}</td>
-                                <td class="py-3 px-3 text-center">{{ $clase->reporte_estudiante }}</td>
-                                <td class="py-3 px-3 text-center">{{  $clase->id_paquete }}</td>
-                                <td class="py-3 px-3 text-center">{{ $clase->id_inst }}</td>
+                                <td class="py-3 px-6 text-left">{{ $clase->id }}</td>
+                                <td class="py-3 px-6 text-left">{{ $clase->fecha }}</td>
+                                <td class="py-3 px-6 text-left">{{ $clase->hora_inicio}}</td>
+                                <td class="py-3 px-6 text-center">{{  $clase->hora_fin}}</td>
+                                <td class="py-3 px-6 text-center">{{ $clase->estado}}</td>
+                                <td class="py-3 px-6 text-center">{{$clase->comentario_Inst }}</td>
+                                <td class="py-3 px-6 text-center">{{ $clase->reporte_estudiante }}</td>
+                                <td class="py-3 px-6 text-center">{{  $clase->id_paquete }}</td>
+                                <td class="py-3 px-6 text-center">{{ $clase->id_inst }}</td>
 
-                                <td class="py-3 px-3 text-center">
+                                <td class="py-3 px-6 text-center">
                                     <div class="flex items-center justify-center space-x-2">
                                         <a href="{{ route('clases.edit', $clase->id) }}"
                                             class="text-blue-500 hover:scale-110">📝 Editar</a>
@@ -90,15 +91,6 @@
                                             <button type="submit" class="text-red-500 hover:scale-110" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
                                                 Eliminar</button>
                                         </form>
-                                        <form action="{{ route('clases.cancelar', $clase->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit"
-                                                        class="text-red-500 hover:scale-110 hover:text-red-700"
-                                                        onclick="return confirm('¿Cancelar esta clase?')">
-                                                        ❌ Cancelar
-                                                    </button>
-                                                </form>
                                     </div>
                                 </td>
                             </tr>

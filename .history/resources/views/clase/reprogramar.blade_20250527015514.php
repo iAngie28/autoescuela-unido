@@ -43,28 +43,64 @@
                                         class="border-b border-gray-200 hover:bg-gray-100">
                                         <td class="py-3 px-6 text-center">{{ $clase->id }}</td>
 
-
+                                        
 
                                         <td class="py-3 px-6 text-center">{{ $clase->hora_inicio }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->hora_fin }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->id_inst }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->estado }}</td>
-                                        <form action="{{ route('clases.reprogramar', $clase->id) }}" method="POST"
-                                            class="flex items-center gap-2">
-                                            @csrf
-                                            @method('PUT')
-                                            <td class="py-3 px-6 text-center">
+
+                                        <td class="py-3 px-6 text-center">
+                                            <form action="{{ route('clases.reprogramar', $clase->id) }}" method="POST"
+                                                class="inline">
+                                                @csrf
+                                                @method('PUT')
                                                 <input type="date" name="nueva_fecha"
                                                     value="{{ old('nueva_fecha', $clase->fecha) }}"
-                                                    min="{{ date('Y-m-d') }}" class="border rounded p-1 text-sm">
-                                            </td>
-                                            <td class="py-3 px-6 text-center">
-                                                <button type="submit" class="ml-2 text-blue-500 hover:scale-110"
-                                                    onclick="return confirm('Seguro que desea reprogramar?');">
-                                                    🔄 Reprogramar
-                                                </button>
-                                            </td>
-                                        </form>
+                                                    min="{{ date('Y-m-d') }}" class="border rounded p-1 text-sm w-full"
+                                                    onchange="this.form.submit()">
+                                            </form>
+                                        </td>
+
+                                        <td class="py-3 px-3 text-center">
+                                            <div class="flex items-center justify-center space-x-2">
+                                                <form action="{{ route('clases.reprogramar', $clase->id) }}" method="POST"
+                                                    class="inline">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="submit"
+                                                        class="text-blue-500 hover:scale-110" onclick="event.preventDefault(); confirm('Seguro que desea reprogramar?') ? this.closest('form').submit() : false;">
+                                                        🔄 Reprogramar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+
+
+                                        //
+                                        
+        <form action="{{ route('clases.reprogramar', $clase->id) }}" method="POST" class="flex items-center gap-2">
+            @csrf
+            @method('PUT')
+            <td class="py-3 px-6 text-center">
+            <input 
+                type="date"
+                name="nueva_fecha"
+                value="{{ old('nueva_fecha', $clase->fecha) }}"
+                min="{{ date('Y-m-d') }}"
+                class="border rounded p-1 text-sm"
+            >
+                </td>
+                <td class="py-3 px-6 text-center">
+            <button type="submit" 
+                    class="ml-2 text-blue-500 hover:scale-110"
+                    onclick="return confirm('Seguro que desea reprogramar?');">
+                🔄 Reprogramar
+            </button>
+                </td>
+        </form>
+
+
                                     </tr>
                                 @endforeach
                             </tbody>

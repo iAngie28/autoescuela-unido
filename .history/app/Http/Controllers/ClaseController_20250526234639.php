@@ -23,11 +23,11 @@ class ClaseController extends Controller
         return view('clase.index', compact('clases'))
             ->with('i', ($request->input('page', 1) - 1) * $clases->perPage());
     }
-    public function reprogramar(Request $request): View
+    public function reprogramar(Request $request): View 
     {
-        $clases = Clase::where('estado', 'cancelada')->paginate();
-        return view('clase.reprogramar', compact('clases'));
-    }
+    $clases = Clase::where('estado', 'cancelada')->paginate();
+    return view('clase.reprogramar', compact('clases'));
+}
 
     /**
      * Show the form for creating a new resource.
@@ -48,7 +48,7 @@ class ClaseController extends Controller
         Clase::create($request->validated());
 
         return Redirect::route('clases.index')
-            ->with('success', 'Clase creada correctamente');
+            ->with('success', 'Clase created successfully.');
     }
 
     /**
@@ -61,7 +61,7 @@ class ClaseController extends Controller
         return view('clase.show', compact('clase'));
     }
 
-
+    
 
 
     /**
@@ -75,60 +75,6 @@ class ClaseController extends Controller
 
         return view('clase.edit', compact('clase', 'paquetes', 'usuariosInstructor'));
     }
-    public function cancelarClase($id): RedirectResponse
-    {
-        try {
-            // 1. Buscar la clase (falla si no existe)
-            $clase = Clase::findOrFail($id);
-            // 3. Actualizar estado
-            $clase->update([
-                'estado' => 'cancelada'
-            ]);
-
-            // 4. Redirigir con mensaje de éxito
-            return back()->with('success', 'Clase cancelada correctamente.');
-        } catch (\Exception $e) {
-            // 5. Manejar errores inesperados
-            return back()->with('error', 'Error al cancelar la clase: ' . $e->getMessage());
-        }
-    }
-
-    public function reprogramarClase(Request $request, $id)
-{
-    $request->validate([
-        'nueva_fecha' => 'required|date|after_or_equal:today' // Validación básica
-    ]);
-
-    try {
-        $clase = Clase::findOrFail($id);
-        
-        // --- Validación de conflicto por instructor y estudiante ---
-        $conflicto = Clase::where('fecha', $request->nueva_fecha)
-            ->where('id', '!=', $clase->id) // Excluir la clase actual
-            ->where(function($query) use ($clase) {
-                $query->where('id_inst', $clase->id_inst);
-                if ($clase->id_estudiante) {
-                    $query->orWhere('id_estudiante', $clase->id_estudiante);
-                }
-            })
-            ->exists();
-
-        if ($conflicto) {
-            return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
-        }
-        
-        // Si no hay conflicto, actualizar la clase
-        $clase->update([
-            'fecha' => $request->nueva_fecha,
-            'estado' => 'programada'
-        ]);
-
-        return back()->with('success', 'Clase reprogramada correctamente');
-
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error al reprogramar: '.$e->getMessage());
-    }
-}
 
     /**
      * Update the specified resource in storage.

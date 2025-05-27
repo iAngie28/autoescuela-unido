@@ -44,19 +44,13 @@ Route::view('/cursos', 'paginas.cursos')->name('cursos');
 | Rutas de Autenticación
 |--------------------------------------------------------------------------
 */
-/* Clases*/
 Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
     ->middleware('auth')
     ->name('clase.reprogramar');
-
 Route::put('/clases/{id}/cancelar', [ClaseController::class, 'cancelarClase'])
     ->name('clases.cancelar')
-    ->middleware('auth'); 
+    ->middleware('auth'); // Opcional: Protege la ruta
 
-Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClase'])
-    ->name('clases.reprogramar')
-    ->middleware('auth');
-/* Clases*/
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

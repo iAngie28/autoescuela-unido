@@ -75,7 +75,7 @@ class ClaseController extends Controller
 
         return view('clase.edit', compact('clase', 'paquetes', 'usuariosInstructor'));
     }
-    public function cancelarClase($id): RedirectResponse
+    public function cancelar($id): RedirectResponse
     {
         try {
             // 1. Buscar la clase (falla si no existe)
@@ -92,43 +92,6 @@ class ClaseController extends Controller
             return back()->with('error', 'Error al cancelar la clase: ' . $e->getMessage());
         }
     }
-
-    public function reprogramarClase(Request $request, $id)
-{
-    $request->validate([
-        'nueva_fecha' => 'required|date|after_or_equal:today' // Validación básica
-    ]);
-
-    try {
-        $clase = Clase::findOrFail($id);
-        
-        // --- Validación de conflicto por instructor y estudiante ---
-        $conflicto = Clase::where('fecha', $request->nueva_fecha)
-            ->where('id', '!=', $clase->id) // Excluir la clase actual
-            ->where(function($query) use ($clase) {
-                $query->where('id_inst', $clase->id_inst);
-                if ($clase->id_estudiante) {
-                    $query->orWhere('id_estudiante', $clase->id_estudiante);
-                }
-            })
-            ->exists();
-
-        if ($conflicto) {
-            return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
-        }
-        
-        // Si no hay conflicto, actualizar la clase
-        $clase->update([
-            'fecha' => $request->nueva_fecha,
-            'estado' => 'programada'
-        ]);
-
-        return back()->with('success', 'Clase reprogramada correctamente');
-
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error al reprogramar: '.$e->getMessage());
-    }
-}
 
     /**
      * Update the specified resource in storage.

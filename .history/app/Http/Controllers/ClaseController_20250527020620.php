@@ -92,43 +92,47 @@ class ClaseController extends Controller
             return back()->with('error', 'Error al cancelar la clase: ' . $e->getMessage());
         }
     }
-
-    public function reprogramarClase(Request $request, $id)
+public function reprogramarClase(Request $request, $id)
 {
+    // Buscar la clase que se quiere reprogramar
+    $clase = Clase::findOrFail($id);
+
+    // Obtener la nueva fecha desde el formulario
+    $nuevaFecha = $request->input('nueva_fecha');
+
+    // Validar que la fecha esté presente, sea válida y no sea en el pasado
     $request->validate([
-        'nueva_fecha' => 'required|date|after_or_equal:today' // Validación básica
+        'nueva_fecha' => 'required|date|after_or_equal:today',
     ]);
 
-    try {
-        $clase = Clase::findOrFail($id);
-        
-        // --- Validación de conflicto por instructor y estudiante ---
-        $conflicto = Clase::where('fecha', $request->nueva_fecha)
-            ->where('id', '!=', $clase->id) // Excluir la clase actual
-            ->where(function($query) use ($clase) {
-                $query->where('id_inst', $clase->id_inst);
-                if ($clase->id_estudiante) {
-                    $query->orWhere('id_estudiante', $clase->id_estudiante);
-                }
-            })
-            ->exists();
+    // Verificar si ya existe una clase ese mismo día para el mismo instructor o estudiante
+    $claseConflicto = Clase::where('fecha', $nuevaFecha)
+        ->where('id', '!=', $clase->id) // Excluir la clase que estamos editando
+        ->where(function($query) use ($clase) {
+            // Verificar por instructor
+            $query->where('id_inst', $clase->id_inst);
 
-        if ($conflicto) {
-            return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
-        }
-        
-        // Si no hay conflicto, actualizar la clase
-        $clase->update([
-            'fecha' => $request->nueva_fecha,
-            'estado' => 'programada'
-        ]);
+            // Si tu clase tiene estudiante, verificar también por estudiante
+            if ($clase->id_estudiante) {
+                $query->orWhere('id_estudiante', $clase->id_estudiante);
+            }
+        })
+        ->first();
 
-        return back()->with('success', 'Clase reprogramada correctamente');
-
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error al reprogramar: '.$e->getMessage());
+    if ($claseConflicto) {
+        // Si hay conflicto, redirigir con mensaje de error
+        return back()->with('error', 'No se puede reprogramar porque el instructor o el estudiante ya tienen una clase en esa fecha.');
     }
+
+    // Si no hay conflicto, actualizar la fecha
+    $clase->fecha = $nuevaFecha;
+    $clase->save();
+
+    // Mensaje de éxito
+    return back()->with('success', 'Clase reprogramada correctamente.');
 }
+
+
 
     /**
      * Update the specified resource in storage.

@@ -80,7 +80,7 @@
                                 <td class="py-3 px-3 text-center">{{  $clase->id_paquete }}</td>
                                 <td class="py-3 px-3 text-center">{{ $clase->id_inst }}</td>
 
-                                <td class="py-3 px-3 text-center">
+                                <td class="py-3 px-6 text-center">
                                     <div class="flex items-center justify-center space-x-2">
                                         <a href="{{ route('clases.edit', $clase->id) }}"
                                             class="text-blue-500 hover:scale-110">📝 Editar</a>
@@ -90,15 +90,6 @@
                                             <button type="submit" class="text-red-500 hover:scale-110" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
                                                 Eliminar</button>
                                         </form>
-                                        <form action="{{ route('clases.cancelar', $clase->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit"
-                                                        class="text-red-500 hover:scale-110 hover:text-red-700"
-                                                        onclick="return confirm('¿Cancelar esta clase?')">
-                                                        ❌ Cancelar
-                                                    </button>
-                                                </form>
                                     </div>
                                 </td>
                             </tr>

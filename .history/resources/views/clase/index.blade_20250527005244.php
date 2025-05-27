@@ -90,15 +90,6 @@
                                             <button type="submit" class="text-red-500 hover:scale-110" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
                                                 Eliminar</button>
                                         </form>
-                                        <form action="{{ route('clases.cancelar', $clase->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit"
-                                                        class="text-red-500 hover:scale-110 hover:text-red-700"
-                                                        onclick="return confirm('¿Cancelar esta clase?')">
-                                                        ❌ Cancelar
-                                                    </button>
-                                                </form>
                                     </div>
                                 </td>
                             </tr>
