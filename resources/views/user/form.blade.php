@@ -1,4 +1,4 @@
-<div class="bg-white p-10 rounded-lg shadow mx-auto max-w-xl">
+<div class="p-10 rounded-lg  mx-auto max-w-xl">
     <form method="POST" action="{{ route('users.update', $user->id) }}" class="space-y-6">
         {{ method_field('PATCH') }}
         @csrf

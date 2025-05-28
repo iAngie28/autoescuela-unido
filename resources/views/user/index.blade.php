@@ -68,7 +68,8 @@
                                             <div class="flex items-center justify-center space-x-2">
                                                 <a href="{{ route('users.edit', $user->id) }}"
                                                     class="text-blue-500 hover:scale-110">📝 Editar</a>
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="text-red-500 hover:scale-110">🗑
