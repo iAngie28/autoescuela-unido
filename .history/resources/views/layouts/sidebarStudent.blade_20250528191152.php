@@ -51,7 +51,7 @@
                         </li>
                         </li>
                         <li class="px-4 cursor-pointer hover:bg-gray-700">
-                            <a class="py-3 flex items-center" href="{{ url('/clase-est') }}">
+                            <a class="py-3 flex items-center" href="{{ url('/clases') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -60,6 +60,37 @@
                                 Clases
                             </a>
                         </li>
+<<<<<<< HEAD:resources/views/layouts/sidebarr.blade.php
+                        <li class="px-4 cursor-pointer hover:bg-gray-700">
+                            <a class="py-3 flex items-center" href="{{ url('/clase-reprogramar') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3" class="w-4 mr-3"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
+                                 Reprogramar Clase
+                            </a>
+                        </li>
+                        <li class="px-4 cursor-pointer hover:bg-gray-700">
+                            <a class="py-3 flex items-center" href="{{ url('/tipo-vehiculos') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                                </svg>
+                                Tipo de Vehiculo
+                            </a>
+                        </li>
+                        <li class="px-4 cursor-pointer hover:bg-gray-700">
+                            <a class="py-3 flex items-center" href="{{ url('/vehiculos') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                                </svg>
+                                Vehiculos
+                            </a>
+                        </li>
+=======
+
+
+>>>>>>> 0094d3ef2e9342b62f10a985ded7bafb66f297a9:resources/views/layouts/sidebarStudent.blade.php
                         <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">ecommerce</li>
                         <li class="px-4 hover:bg-gray-700">
                             <a href="#" class="py-3 flex items-center">
