@@ -49,7 +49,6 @@ class Estudiante extends Model
     
     public function clase()
     {
-        return $this->hasMany(\App\Models\Clase::class, 'id_est', 'id');
-
+        return $this->hasMany(\App\Models\Clase::class, 'id', 'id_est');
     }
 }
