@@ -59,7 +59,7 @@ Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClas
 
 Route::delete('clases/{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');
 
-Route::get('/clase-est', [ClaseController::class, 'clase_est'])
+Route::get('/clase-est', [ClaseController::class, 'clase-est'])
     ->middleware('auth')
     ->name('clase.clase-est');
 

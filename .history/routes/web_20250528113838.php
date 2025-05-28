@@ -58,11 +58,6 @@ Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClas
     ->middleware('auth');
 
 Route::delete('clases/{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');
-
-Route::get('/clase-est', [ClaseController::class, 'clase_est'])
-    ->middleware('auth')
-    ->name('clase.clase-est');
-
 /* Clases*/
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

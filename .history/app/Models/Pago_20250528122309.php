@@ -40,9 +40,10 @@ class Pago extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function administrador()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'id_adm', 'id');
-    }
+{
+    return $this->hasOne(\App\Models\Administrador::class, 'id_user', 'id');
+}
+
     
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

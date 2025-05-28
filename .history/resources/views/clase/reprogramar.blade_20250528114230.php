@@ -58,35 +58,37 @@
                                                     value="{{ old('nueva_fecha', $clase->fecha) }}"
                                                     min="{{ date('Y-m-d') }}" class="border rounded p-1 text-sm">
                                             </td>
+                                            <td>
                                             <td class="py-3 px-6 text-center">
-                                                <div class="flex items-center justify-center space-x-2">
-                                                    <button type="submit" class="ml-2 text-blue-500 hover:scale-110"
-                                                        onclick="return confirm('Seguro que desea reprogramar?');">
-                                                        🔄 <br> Reprogramar
-                                                    </button>
-                                        </form>
-                                        <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:scale-110"
-                                                onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
-                                                <br>Eliminar</button>
-                                        </form>
+                                                <button type="submit" class="ml-2 text-blue-500 hover:scale-110"
+                                                    onclick="return confirm('Seguro que desea reprogramar?');">
+                                                    🔄 Reprogramar
+                                                </button>
+                                                </form>
+                                            
+                                            <td>
+                                                <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-500 hover:scale-110"
+                                                        onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
+                                                        Eliminar</button>
+                                                </form>
+                                            </td>
+                                            </tr>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    </td>
-                    </tr>
-                    @endforeach
-                    </tbody>
-                    </table>
+
+                    <!-- Pagination -->
+                    <div class="mt-6">
+                        {{ $clases->withQueryString()->links() }}
+                    </div>
+                </section>
+
+            </main>
+
         </div>
-
-        <!-- Pagination -->
-        <div class="mt-6">
-            {{ $clases->withQueryString()->links() }}
-        </div>
-        </section>
-
-        </main>
-
-    </div>
-@endsection
+    @endsection

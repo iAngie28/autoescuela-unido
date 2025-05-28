@@ -62,7 +62,7 @@
                                                 <div class="flex items-center justify-center space-x-2">
                                                     <button type="submit" class="ml-2 text-blue-500 hover:scale-110"
                                                         onclick="return confirm('Seguro que desea reprogramar?');">
-                                                        🔄 <br> Reprogramar
+                                                        🔄 Reprogramar
                                                     </button>
                                         </form>
                                         <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
@@ -70,7 +70,7 @@
                                             @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:scale-110"
                                                 onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
-                                                <br>Eliminar</button>
+                                                Eliminar</button>
                                         </form>
                     </div>
                     </td>

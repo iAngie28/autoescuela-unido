@@ -28,14 +28,11 @@
         <select name="id_adm" id="id_adm" class="form-select @error('id_adm') is-invalid @enderror">
             <option value="">Seleccione un administrador</option>
             @foreach ($usuariosAdministrador as $usuario)
-                @if ($usuario->administrador)
-                    <option value="{{ $usuario->administrador->id }}"
-                        {{ old('id_adm', $pago->id_adm ?? '') == $usuario->administrador->id ? 'selected' : '' }}>
-                        {{ $usuario->name }}
-                    </option>
-                @endif
+                <option value="{{ $usuario->administrador->id }}"
+                    {{ old('id_adm', $pago->id_adm ?? '') == $usuario->administrador->id ? 'selected' : '' }}>
+                    {{ $usuario->name }}
+                </option>
             @endforeach
-
         </select>
 
     </div>

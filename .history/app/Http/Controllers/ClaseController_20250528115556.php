@@ -29,12 +29,6 @@ class ClaseController extends Controller
         return view('clase.reprogramar', compact('clases'));
     }
 
-    public function clase_est(Request $request): View
-    {
-        $clases = Clase::where('estado', 'programada')->paginate();
-        return view('clase.clase_est', compact('clases'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
