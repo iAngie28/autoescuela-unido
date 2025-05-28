@@ -23,8 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id_inst');
 
             $table->unsignedBigInteger('id_est')->nullable();
+
             $table->foreign('id_est')
-            ->references('id')->on('estudiante')
+            ->references('id')->on('vehiculo')
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
@@ -34,7 +35,7 @@ return new class extends Migration
             ->onDelete('cascade');
 
             $table->foreign('id_inst')
-            ->references('id')->on('instructor')
+            ->references('id')->on('estudiante')
             ->onUpdate('cascade')
             ->onDelete('cascade');
 

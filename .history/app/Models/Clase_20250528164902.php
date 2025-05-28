@@ -55,12 +55,6 @@ class Clase extends Model
         return $this->belongsTo(\App\Models\Paquete::class, 'id_paquete', 'id');
     }
     
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function estudiante()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'id_est', 'id');
-    }
+    
     
 }

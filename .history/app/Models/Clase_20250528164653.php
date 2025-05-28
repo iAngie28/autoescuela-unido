@@ -39,6 +39,7 @@ class Clase extends Model
     protected $table = 'clase';
     protected $fillable = ['fecha', 'hora_inicio', 'hora_fin', 'estado', 'comentario_Inst', 'reporte_estudiante', 'id_paquete', 'id_inst', 'id_est'];
 
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -55,12 +56,6 @@ class Clase extends Model
         return $this->belongsTo(\App\Models\Paquete::class, 'id_paquete', 'id');
     }
     
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function estudiante()
-    {
-        return $this->belongsTo(\App\Models\User::class, 'id_est', 'id');
-    }
+    
     
 }

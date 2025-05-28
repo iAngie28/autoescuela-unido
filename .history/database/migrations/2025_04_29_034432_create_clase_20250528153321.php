@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_inst');
 
             $table->unsignedBigInteger('id_est')->nullable();
+
             $table->foreign('id_est')
             ->references('id')->on('estudiante')
             ->onUpdate('cascade')

@@ -47,9 +47,9 @@ class Estudiante extends Model
         return $this->hasMany(\App\Models\ExamenSegip::class, 'id', 'id_est');
     }
     
-    public function clase()
+    return $this->hasMany(\App\Models\Clase::class, 'id_est', 'id');
+public function clase()
     {
-        return $this->hasMany(\App\Models\Clase::class, 'id_est', 'id');
-
+        return $this->hasMany(\App\Models\Clase::class, 'id', 'id_est');
     }
 }

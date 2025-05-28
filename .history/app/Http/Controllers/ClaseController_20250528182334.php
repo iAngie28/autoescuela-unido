@@ -31,21 +31,14 @@ class ClaseController extends Controller
 
     public function clase_est(Request $request): View
 {
-    $user = auth()->user();
+    $userId = auth()->user()->id;
 
-    // Validar que el usuario sea tipo estudiante
-    if ($user->tipo_usuario !== 'E') {
-        abort(403, 'Acceso no autorizado');
-    }
-
-    // Obtener solo clases programadas del estudiante actual
     $clases = Clase::where('estado', 'programada')
-                   ->where('id_est', $user->id)
-                   ->paginate();
+                    ->where('id_est', $userId)
+                    ->paginate();
 
     return view('clase.clase_est', compact('clases'));
 }
-
 
 
     /**
