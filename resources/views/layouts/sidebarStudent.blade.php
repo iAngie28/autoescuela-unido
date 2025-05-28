@@ -12,7 +12,7 @@
                 <nav class="text-sm text-gray-300">
                     <ul class="flex flex-col">
                         <li class="px-4 cursor-pointer bg-gray-500 text-gray-800 hover:bg-gray-700  hover:text-white">
-                            <a class="py-3 flex items-center" href="{{ url('/admin/dashboard') }}">
+                            <a class="py-3 flex items-center" href="{{ url('/estudiante/dashboard') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -22,7 +22,7 @@
                                 Inicio
                             </a>
                         </li>
-                        <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">GESTIÓN DE USUARIOS
+                        <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">GESTIÓN DE USUARIO
                         </li>
                         <li class="px-4 cursor-pointer hover:bg-gray-700">
                             <a class="py-3 flex items-center" href="{{ url('/users') }}">
@@ -31,7 +31,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                                 </svg>
-                                Usuarios
+                                Visualizar Perfil
                             </a>
                         </li>
                         <li class="px-4 cursor-pointer hover:bg-gray-700">
@@ -46,17 +46,7 @@
                                 Roles
                             </a>
                         </li>
-                        <li class="px-4 cursor-pointer hover:bg-gray-700">
-                            <a class="py-3 flex items-center" href="{{ route('register') }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-4 mr-3">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
-                                </svg>
 
-                                Registrar Usuarios
-                            </a>
-                        </li>
                         <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">GESTIÓN ACADEMICA
                         </li>
                         </li>
@@ -70,6 +60,7 @@
                                 Clases
                             </a>
                         </li>
+<<<<<<< HEAD:resources/views/layouts/sidebarr.blade.php
                         <li class="px-4 cursor-pointer hover:bg-gray-700">
                             <a class="py-3 flex items-center" href="{{ url('/clase-reprogramar') }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3" class="w-4 mr-3"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v200h-80v-40H200v400h280v80H200Zm0-560h560v-80H200v80Zm0 0v-80 80ZM560-80v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T903-300L683-80H560Zm300-263-37-37 37 37ZM620-140h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>
@@ -96,6 +87,10 @@
                                 Vehiculos
                             </a>
                         </li>
+=======
+
+
+>>>>>>> 0094d3ef2e9342b62f10a985ded7bafb66f297a9:resources/views/layouts/sidebarStudent.blade.php
                         <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">ecommerce</li>
                         <li class="px-4 hover:bg-gray-700">
                             <a href="#" class="py-3 flex items-center">

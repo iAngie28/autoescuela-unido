@@ -5,10 +5,9 @@ use App\Livewire\Actions\Logout;
 $logout = function (Logout $logout) {
     $logout();
 
-    $this->redirect('/', navigate: true);
+    $this->redirect(url('/'), ['navigate' => true]);
     $this->dispatch('refresh');
 };
-
 ?>
 
 <nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
