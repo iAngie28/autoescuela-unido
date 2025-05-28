@@ -1,45 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- Navbar Start -->
-<nav class="bg-white border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <!-- Logo -->
-            <div class="shrink-0 flex items-center">
-                <a href="{{ url('/') }}">
-                    <h1 class="text-xl font-bold text-gray-800">WUILLANS</h1>
-                </a>
-            </div>
-
-            <!-- Navigation Links -->
-            <div class="hidden sm:flex sm:items-center space-x-8">
-                <a href="{{ url('/instructor/dashboard') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                    Inicio
-                </a>
-                <a href="{{ url('/about') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                    Sobre Nosotros
-                </a>
-                <a href="{{ url('/courses') }}" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                    Cursos
-                </a>
-                <!-- Dropdown Button -->
-                <div class="relative" x-data="{ open: false }">
-                    <button @click="open = !open" class="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium focus:outline-none">
-                        Más Opciones
-                    </button>
-                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                        <a href="{{ url('/rols') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Roles</a>
-                        <a href="{{ url('/register') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Usuarios</a>
-                        <a href="{{ url('/otros1') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros1</a>
-                        <a href="{{ url('/otros2') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Otros2</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-<!-- Navbar End -->
 
 <body class="bg-gray-100 text-gray-800">
 
@@ -97,11 +58,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-blue-600 text-white py-6">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2025 Autoescuela Unido. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+
+
 </body>
 @endsection

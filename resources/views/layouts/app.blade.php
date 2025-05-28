@@ -14,18 +14,14 @@
 
     <!-- Material Symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap">
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         .material-symbols-outlined {
-            font-variation-settings:
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 20;
-
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
             font-size: 20px;
             padding-right: 5px;
         }
@@ -34,12 +30,36 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col">
-        <livewire:layout.navigation />
+        <livewire:layout.navigation class="relative z-40" />
 
-        <!-- Contenedor principal con Sidebar y contenido -->
+
+        <!-- Botón de menú para móvil SIEMPRE visible arriba -->
+        <div class="md:hidden flex items-center bg-gray-800 px-4 py-2">
+            <label for="menu-toggle" class="text-white cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </label>
+        </div>
         <div class="flex flex-1">
+            <input type="checkbox" id="menu-toggle" class="hidden peer" />
             <!-- Sidebar -->
-            <aside class="w-64 bg-gray-800 h-auto sticky top-16 md:static">
+            <aside
+                class="hidden peer-checked:flex md:flex flex-col left-0 top-0 min-h-screen w-64 bg-gray-800 transition-all duration-300 ease-in-out z-30">
+                <!-- Botón de cierre para móvil -->
+                <div class="flex items-center justify-between bg-gray-900 px-4 py-3">
+                    <span class="text-white font-bold uppercase">Menú</span>
+                    <label for="menu-toggle" class="text-white cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l-12 12" />
+                        </svg>
+                    </label>
+                </div>
+
+                <!-- Contenido del Sidebar -->
                 @if (Auth::user()->tipo_usuario === 'A')
                     @include('layouts.sidebarAdmin')
                 @elseif (Auth::user()->tipo_usuario === 'E')
@@ -52,7 +72,7 @@
             </aside>
 
             <!-- Contenido Principal -->
-            <div class="flex-1 md:ml-64">
+            <div class="flex-1 bg-gray-100">
                 @if (isset($header))
                     <header class="bg-white dark:bg-gray-800 shadow">
                         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -66,7 +86,6 @@
                 </main>
             </div>
         </div>
-
         <!-- Footer -->
         <footer class="bg-gray-900 text-white pt-4 pb-4">
             @include('layouts.footer')

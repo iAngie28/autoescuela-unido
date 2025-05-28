@@ -1,6 +1,5 @@
-     <aside class="w-64 bg-gray-800 min-h-screen pt-16">
          <div
-             class="py-3 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800 mb-8 flex items-center">
+             class="py-3 mt-2 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800 mb-2 flex items-center">
              <img class="rounded-lg" alt="Ismael image" src="https://pagedone.io/asset/uploads/1701235464.png" />
              <div class="text-right">
                  <p class="text-white font-semibold text-sm">{{ Auth::user()->name }}</p>
@@ -115,4 +114,3 @@
                  </li>
              </ul>
          </nav>
-     </aside>
