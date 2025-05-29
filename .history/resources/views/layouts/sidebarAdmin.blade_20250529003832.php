@@ -66,7 +66,7 @@
                          <span class="material-symbols-outlined">
                              auto_transmission
                          </span>
-                         Asignar Estudiante
+                        Asignar Clase
                      </a>
                  </li>
                  <li class="px-4 cursor-pointer hover:bg-gray-700">
@@ -91,12 +91,6 @@
                      <a class="py-3 flex items-center" href="{{ url('/vehiculos') }}">
                          <span class="material-symbols-outlined mr-3">directions_car</span>
                          Vehículos
-                     </a>
-                 </li>
-                <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ url('/asignar_vehiculo') }}">
-                         <span class="material-symbols-outlined mr-3">directions_car</span>
-                        Asignar Vehículos
                      </a>
                  </li>
 

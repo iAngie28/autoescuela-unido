@@ -96,7 +96,7 @@
                 <li class="px-4 cursor-pointer hover:bg-gray-700">
                      <a class="py-3 flex items-center" href="{{ url('/asignar_vehiculo') }}">
                          <span class="material-symbols-outlined mr-3">directions_car</span>
-                        Asignar Vehículos
+                         Vehículos
                      </a>
                  </li>
 

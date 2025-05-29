@@ -93,12 +93,6 @@
                          Vehículos
                      </a>
                  </li>
-                <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ url('/asignar_vehiculo') }}">
-                         <span class="material-symbols-outlined mr-3">directions_car</span>
-                        Asignar Vehículos
-                     </a>
-                 </li>
 
                  <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">SEGUIMIENTO DEL PROGRESO
                  </li>
