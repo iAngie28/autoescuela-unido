@@ -62,6 +62,7 @@
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200"> Clases </a>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200"> Proximamente </a>
                 </div>
+
             </div>
 
 
