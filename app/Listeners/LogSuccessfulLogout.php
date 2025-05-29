@@ -11,17 +11,16 @@ class LogSuccessfulLogout
 {
     public function handle(Logout $event)
     {
-        
-        $lastEntry = Bitacora::where('id_user', $event->user->id)
-        ->whereNull('fecha_salida')
-        ->latest()
-        ->first();
+        $bitacora = Bitacora::where('id_user', $event->user->id)
+            ->whereNull('fecha_salida')
+            ->latest()
+            ->first();
 
-        if ($lastEntry) {
-        $lastEntry->update([
-            'fecha_salida' => now(),
-            'accion' => $lastEntry->actions . "\nCierre de sesión"
-        ]);
-    }
+        if ($bitacora) {
+            $bitacora->update([
+                'fecha_salida' => now(),
+                'accion' => $bitacora->accion . "\n" . now()->format('Y-m-d H:i:s') . ': Cierre de sesión'
+            ]);
+        }
     }
 }

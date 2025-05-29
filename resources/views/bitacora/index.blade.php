@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="container">
-    <h2>Registros de la Bitácora</h2>
+    <h1>Registros de Bitácora</h1>
     
-    <table class="table table-bordered table-striped">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Usuario</th>
                 <th>IP</th>
-                <th>Fecha Entrada</th>
-                <th>Fecha Salida</th>
+                <th>Entrada</th>
+                <th>Salida</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -18,25 +18,35 @@
             @forelse ($registros as $registro)
             <tr>
                 <td>
-                    @if($registro->user)
-                        {{ $registro->user->name }} (ID: {{ $registro->user_id }})
-                    @else
-                        <span class="text-danger">Usuario Eliminado</span>
-                    @endif
-                </td>
-                <td>{{ $registro->ip_address }}</td>
-                <td>{{ $registro->entry_date->format('d/m/Y H:i') }}</td>
-                <td>{{ $registro->exit_date?->format('d/m/Y H:i') ?? 'N/A' }}</td>
-                <td><pre>{{ $registro->actions }}</pre></td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="5" class="text-center">No hay registros.</td>
-            </tr>
-            @endforelse
-        </tbody>
+            @if($registro->relacionUsuario)
+                {{ $registro->relacionUsuario->name }}
+            @else
+                <span class="text-danger">Usuario Eliminado</span>
+            @endif
+            </td>
+            <td>{{ $registro->direccion_ip }}</td>
+            <td>{{ $registro->fecha_entrada->format('d/m/Y H:i:s') }}</td>
+            <td>
+            @if($registro->fecha_salida)
+                {{ $registro->fecha_salida->format('d/m/Y H:i:s') }}
+            @else
+                <span class="text-success">Sesión Activa</span>
+            @endif
+            </td>
+        <td>
+            <pre>{{ $registro->accion }}</pre>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="5" class="text-center">No hay registros en la bitácora</td>
+    </tr>
+    @endforelse
+</tbody>
     </table>
-
-    {{ $registros->links() }} <!-- Paginación -->
+    
+    <div class="d-flex justify-content-center">
+        {{ $registros->links() }}
+    </div>
 </div>
 @endsection

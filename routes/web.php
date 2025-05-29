@@ -16,7 +16,12 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
+<<<<<<< Updated upstream
 use Illuminate\Support\Facades\Auth;
+=======
+use App\Http\Controllers\AdminInstructorController;
+//Bitacora
+>>>>>>> Stashed changes
 use App\Models\Bitacora;
 
 use App\Http\Middleware\IsAdmin;
@@ -85,19 +90,17 @@ Route::get('/calendar/events', function () {
     return response()->json($events);
 })->name('calendar.events');
 
+//Bitacora
 Route::get('/bitacora', function () {
-    // Verificar si el usuario está autenticado y tiene permiso (opcional)
     if (!Auth::check()) {
         return redirect()->route('login');
     }
 
-    // Obtener todos los registros de la bitácora
-    $registros = Bitacora::with(['user' => function($query) {
-        $query->withTrashed();
-    }])->latest()->paginate(10);
+    // Usar el nuevo nombre de relación
+    $registros = Bitacora::with('relacionUsuario')->latest()->paginate(10);
 
     return view('bitacora.index', compact('registros'));
-})->middleware('auth'); // Aplica el middleware de autenticación
+})->name('bitacora.index')->middleware('auth');
 
 // Recursos (CRUD) sin middleware adicional
 Route::resource('rols', RolController::class);

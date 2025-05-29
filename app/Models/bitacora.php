@@ -14,10 +14,6 @@ use App\Models\User;
  * @property $fecha_entrada
  * @property $fecha_salida
  * @property $id_user
- * 
- * @property User $user
- * @package App
- * @mixin \Illuminate\Database\Eloquent\Builder
  */
 class Bitacora extends Model
 {
@@ -34,11 +30,15 @@ class Bitacora extends Model
         'accion',
         'fecha_salida'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+        // Convertir automáticamente estos campos a instancias Carbon
+        protected $casts = [
+            'fecha_entrada' => 'datetime',
+            'fecha_salida' => 'datetime',
+        ];
+
+    public function relacionUsuario()
     {
-        return $this->belongsTo(User::class, 'id_user')->withTrashed();
+        return $this->belongsTo(User::class, 'id_user');
     }
+
 }
