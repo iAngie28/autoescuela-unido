@@ -42,7 +42,7 @@
                      </a>
                  </li>
                  <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ route('bitacora.index') }}">
+                     <a class="py-3 flex items-center" href="{{ route('/bitacora') }}">
                          <span class="material-symbols-outlined">
                              storage
                          </span>
