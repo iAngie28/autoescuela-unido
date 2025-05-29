@@ -165,19 +165,11 @@ public function store(ClaseRequest $request): RedirectResponse
                 return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
             }
 
-            if ($clase->id_est != null){
-                $clase->update([
-                'fecha' => $request->nueva_fecha,
-                'estado' => 'inscrita'
-            ]);
-            }else{
-                // Si no hay conflicto, actualizar la clase
+            // Si no hay conflicto, actualizar la clase
             $clase->update([
                 'fecha' => $request->nueva_fecha,
                 'estado' => 'programada'
             ]);
-            }
-            
 
             return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
