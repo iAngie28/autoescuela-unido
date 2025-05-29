@@ -11,7 +11,7 @@
          <nav class="text-sm text-gray-300">
              <ul class="flex flex-col">
                  <li class="px-4 cursor-pointer bg-gray-500 text-gray-800 hover:bg-gray-700  hover:text-white">
-                     <a class="py-3 flex items-center" href="{{ url('/admin/dashboard') }}">
+                     <a class="py-3 flex items-center" href="{{ url('/admin/dashboard') }} ">
                          <span class="material-symbols-outlined">
                              emoji_transportation
                          </span>
@@ -35,7 +35,7 @@
                      </a>
                  </li>
                  <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ route('register') }}">
+                     <a class="py-3 flex items-center" href="{{ route('register') }}" target="_blank">
                          <span class="material-symbols-outlined">person_add</span>
 
                          Registrar Usuarios
@@ -70,7 +70,7 @@
                      </a>
                  </li>
                  <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ url('/tipo-vehiculos') }}">
+                     <a class="py-3 flex items-center" href="{{ url('/vehiculos') }}">
                          <span class="material-symbols-outlined mr-3">directions_car</span>
                          Vehículos
                      </a>
