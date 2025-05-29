@@ -29,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unsignedBigInteger('id_rol');
-$table->foreign('id_rol')->references('id')->on('rols')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('id_rol')->references('id')->on('rols')->onDelete('cascade')->onUpdate('cascade');
         });
         DB::statement('ALTER TABLE users AUTO_INCREMENT = 2001;');
         Schema::create('password_reset_tokens', function (Blueprint $table) {
