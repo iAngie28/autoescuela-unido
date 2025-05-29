@@ -78,6 +78,7 @@ class ClaseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    /*
     public function store(ClaseRequest $request): RedirectResponse
     {
         Clase::create($request->validated());
@@ -85,16 +86,28 @@ class ClaseController extends Controller
         return Redirect::route('clases.index')
             ->with('success', 'Clase creada correctamente');
     }
+            */
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id): View
-    {
-        $clase = Clase::find($id);
 
-        return view('clase.show', compact('clase'));
+    //Modificando la funcion store (Jhenn)
+public function store(ClaseRequest $request): RedirectResponse
+{
+    // Validar si ya existe una clase con misma fecha y hora
+    $existeClase = Clase::where('fecha', $request->fecha)
+                    ->where('hora_inicio', $request->hora_inicio)
+                    ->exists();
+
+    if ($existeClase) {
+        // Volver con mensaje de conflicto y datos previos
+            return back()->with('error', 'No se puede crear: el instructor o el estudiante ya tienen una clase en esa fecha.');
     }
+
+    // Si no hay conflicto, s
+    Clase::create($request->validated());
+
+    return Redirect::route('clases.index')
+        ->with('success', 'Clase creada correctamente');
+}
 
 
 
