@@ -8,12 +8,12 @@
                         <div style="display: flex; justify-content: space-between; align-items: center;">
 
                             <span id="card_title">
-                                {{ __('Inscribes') }}
+                                {{ __('Inscribe') }}
                             </span>
 
                              <div class="float-right">
                                 <a href="{{ route('inscribes.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
+                                  {{ __('Crear New') }}
                                 </a>
                               </div>
                         </div>
