@@ -172,12 +172,12 @@ class ClaseController extends Controller
             // Si no hay conflicto, actualizar la clase
             $clase->update([
                 'id_est' => $request->nid_est,
-                'estado' => 'inscrita'
+                'estado' => 'programada'
             ]);
 
-            return back()->with('success', 'Clase asignada correctamente');
+            return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al asignar: ' . $e->getMessage());
+            return back()->with('error', 'Error al reprogramar: ' . $e->getMessage());
         }
     }
 

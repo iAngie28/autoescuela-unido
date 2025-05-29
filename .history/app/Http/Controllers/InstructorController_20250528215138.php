@@ -6,7 +6,6 @@ use App\Models\Instructor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\InstructorRequest;
-use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Vehiculo;
@@ -37,28 +36,10 @@ class InstructorController extends Controller
 
     public function asingar_vehiculo_instructor(Request $request): View
     {
-        $nombre = User::where('id_rol', 3)->with('instructor')->get();
-        $instructors = Instructor::paginate();
-        $vehiculo = Vehiculo::all();
-        return view('instructores.asignar_vehiculo', compact('nombre', 'vehiculo', 'instructors'));
+        $clases = Clase::where('estado', 'programada')->paginate();
+        $usuariosEstudiante = User::where('id_rol', 2)->with('estudiante')->get();
+        return view('clase.asignar_clase', compact('clases', 'usuariosEstudiante'));
     }
-
-   
-    public function asignar_vehiculo(Request $request, $id)
-{
-    try {
-        $instructor = Instructor::findOrFail($id);
-
-        $instructor->update([
-            'id_vehiculo' => $request->vehiculo
-        ]);
-
-        return back()->with('success', 'Vehículo asignado correctamente');
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error al asignar: ' . $e->getMessage());
-    }
-}
-
 
     /**
      * Store a newly created resource in storage.

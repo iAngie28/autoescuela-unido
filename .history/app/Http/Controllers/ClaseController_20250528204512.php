@@ -29,13 +29,6 @@ class ClaseController extends Controller
         return view('clase.reprogramar', compact('clases'));
     }
 
-    public function asingar_estudiante_clase(Request $request): View
-    {
-        $clases = Clase::where('estado', 'programada')->paginate();
-        $usuariosEstudiante = User::where('id_rol', 2)->with('estudiante')->get();
-        return view('clase.asignar_clase', compact('clases', 'usuariosEstudiante'));
-    }
-
     public function clase_est(Request $request): View
     {
         $user = auth()->user();
@@ -166,18 +159,37 @@ class ClaseController extends Controller
 
     public function asignar_clase(Request $request, $id)
     {
+        $request->validate([
+            'nueva_fecha' => 'required|date|after_or_equal:today' // Validación básica
+        ]);
+
         try {
             $clase = Clase::findOrFail($id);
 
+            // --- Validación de conflicto por instructor y estudiante ---
+            $conflicto = Clase::where('fecha', $request->nueva_fecha)
+                ->where('id', '!=', $clase->id) // Excluir la clase actual
+                ->where(function ($query) use ($clase) {
+                    $query->where('id_inst', $clase->id_inst);
+                    if ($clase->id_estudiante) {
+                        $query->orWhere('id_estudiante', $clase->id_estudiante);
+                    }
+                })
+                ->exists();
+
+            if ($conflicto) {
+                return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
+            }
+
             // Si no hay conflicto, actualizar la clase
             $clase->update([
-                'id_est' => $request->nid_est,
-                'estado' => 'inscrita'
+                'fecha' => $request->nueva_fecha,
+                'estado' => 'programada'
             ]);
 
-            return back()->with('success', 'Clase asignada correctamente');
+            return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al asignar: ' . $e->getMessage());
+            return back()->with('error', 'Error al reprogramar: ' . $e->getMessage());
         }
     }
 

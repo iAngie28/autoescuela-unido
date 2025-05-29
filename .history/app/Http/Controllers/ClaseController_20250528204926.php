@@ -29,13 +29,6 @@ class ClaseController extends Controller
         return view('clase.reprogramar', compact('clases'));
     }
 
-    public function asingar_estudiante_clase(Request $request): View
-    {
-        $clases = Clase::where('estado', 'programada')->paginate();
-        $usuariosEstudiante = User::where('id_rol', 2)->with('estudiante')->get();
-        return view('clase.asignar_clase', compact('clases', 'usuariosEstudiante'));
-    }
-
     public function clase_est(Request $request): View
     {
         $user = auth()->user();
@@ -172,12 +165,12 @@ class ClaseController extends Controller
             // Si no hay conflicto, actualizar la clase
             $clase->update([
                 'id_est' => $request->nid_est,
-                'estado' => 'inscrita'
+                'estado' => 'programada'
             ]);
 
-            return back()->with('success', 'Clase asignada correctamente');
+            return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al asignar: ' . $e->getMessage());
+            return back()->with('error', 'Error al reprogramar: ' . $e->getMessage());
         }
     }
 

@@ -58,7 +58,7 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
     ->middleware('auth')
     ->name('instructores.asignar_vehiculo');
 
-    Route::put('/instructor/{id}/asignar_vehiculo', [InstructorController::class, 'asignar_vehiculo'])
+    Route::put('/instructor/{id}/asignar_vehiculo', [ClaseController::class, 'asignar_vehiculo'])
     ->name('instructor.asignar_vehiculo')
     ->middleware('auth');
 

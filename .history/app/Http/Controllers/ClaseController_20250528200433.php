@@ -29,39 +29,38 @@ class ClaseController extends Controller
         return view('clase.reprogramar', compact('clases'));
     }
 
-    public function asingar_estudiante_clase(Request $request): View
-    {
-        $clases = Clase::where('estado', 'programada')->paginate();
-        $usuariosEstudiante = User::where('id_rol', 2)->with('estudiante')->get();
-        return view('clase.asignar_clase', compact('clases', 'usuariosEstudiante'));
-    }
-
     public function clase_est(Request $request): View
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        // Validar que el usuario sea tipo estudiante
-        if ($user->tipo_usuario !== 'E') {
-            abort(403, 'Acceso no autorizado');
-        }
-
-        // Obtener solo clases programadas del estudiante actual
-        $clases = Clase::where('estado', 'inscrita')
-            ->where('id_est', $user->id)
-            ->paginate();
-
-        return view('clase.clase_est', compact('clases'));
+    // Validar que el usuario sea tipo estudiante
+    if ($user->tipo_usuario !== 'E') {
+        abort(403, 'Acceso no autorizado');
     }
+
+    // Obtener solo clases programadas del estudiante actual
+    $clases = Clase::where('estado', 'programada')
+                   ->where('id_est', $user->id)
+                   ->paginate();
+
+    return view('clase.clase_est', compact('clases'));
+}
     public function clase_inst(Request $request): View
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        // Validar que el usuario sea tipo instructor
-        if ($user->tipo_usuario !== 'I') {
-            abort(403, 'Acceso no autorizado');
-        }
-        return view('clase.clase_int', compact('clases'));
+    // Validar que el usuario sea tipo instructor
+    if ($user->tipo_usuario !== 'I') {
+        abort(403, 'Acceso no autorizado');
     }
+
+    // Obtener solo clases programadas del estudiante actual
+    $clases = Clase::where('estado', 'programada')
+                   ->where('id_inst', $user->id)
+                   ->paginate();
+
+    return view('clase.clase_int', compact('clases'));
+}
 
 
     /**
@@ -129,57 +128,41 @@ class ClaseController extends Controller
     }
 
     public function reprogramarClase(Request $request, $id)
-    {
-        $request->validate([
-            'nueva_fecha' => 'required|date|after_or_equal:today' // Validación básica
+{
+    $request->validate([
+        'nueva_fecha' => 'required|date|after_or_equal:today' // Validación básica
+    ]);
+
+    try {
+        $clase = Clase::findOrFail($id);
+        
+        // --- Validación de conflicto por instructor y estudiante ---
+        $conflicto = Clase::where('fecha', $request->nueva_fecha)
+            ->where('id', '!=', $clase->id) // Excluir la clase actual
+            ->where(function($query) use ($clase) {
+                $query->where('id_inst', $clase->id_inst);
+                if ($clase->id_estudiante) {
+                    $query->orWhere('id_estudiante', $clase->id_estudiante);
+                }
+            })
+            ->exists();
+
+        if ($conflicto) {
+            return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
+        }
+        
+        // Si no hay conflicto, actualizar la clase
+        $clase->update([
+            'fecha' => $request->nueva_fecha,
+            'estado' => 'programada'
         ]);
 
-        try {
-            $clase = Clase::findOrFail($id);
+        return back()->with('success', 'Clase reprogramada correctamente');
 
-            // --- Validación de conflicto por instructor y estudiante ---
-            $conflicto = Clase::where('fecha', $request->nueva_fecha)
-                ->where('id', '!=', $clase->id) // Excluir la clase actual
-                ->where(function ($query) use ($clase) {
-                    $query->where('id_inst', $clase->id_inst);
-                    if ($clase->id_estudiante) {
-                        $query->orWhere('id_estudiante', $clase->id_estudiante);
-                    }
-                })
-                ->exists();
-
-            if ($conflicto) {
-                return back()->with('error', 'No se puede reprogramar: el instructor o el estudiante ya tienen una clase en esa fecha.');
-            }
-
-            // Si no hay conflicto, actualizar la clase
-            $clase->update([
-                'fecha' => $request->nueva_fecha,
-                'estado' => 'programada'
-            ]);
-
-            return back()->with('success', 'Clase reprogramada correctamente');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error al reprogramar: ' . $e->getMessage());
-        }
+    } catch (\Exception $e) {
+        return back()->with('error', 'Error al reprogramar: '.$e->getMessage());
     }
-
-    public function asignar_clase(Request $request, $id)
-    {
-        try {
-            $clase = Clase::findOrFail($id);
-
-            // Si no hay conflicto, actualizar la clase
-            $clase->update([
-                'id_est' => $request->nid_est,
-                'estado' => 'inscrita'
-            ]);
-
-            return back()->with('success', 'Clase asignada correctamente');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error al asignar: ' . $e->getMessage());
-        }
-    }
+}
 
     /**
      * Update the specified resource in storage.
@@ -194,6 +177,6 @@ class ClaseController extends Controller
     public function destroy($id): RedirectResponse
     {
         Clase::find($id)->delete();
-        return back()->with('success', 'Clase eliminada correctamente.');
+            return back()->with('success', 'Clase eliminada correctamente.');
     }
 }

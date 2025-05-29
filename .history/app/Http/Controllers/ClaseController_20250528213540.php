@@ -175,9 +175,9 @@ class ClaseController extends Controller
                 'estado' => 'inscrita'
             ]);
 
-            return back()->with('success', 'Clase asignada correctamente');
+            return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
-            return back()->with('error', 'Error al asignar: ' . $e->getMessage());
+            return back()->with('error', 'Error al reprogramar: ' . $e->getMessage());
         }
     }
 

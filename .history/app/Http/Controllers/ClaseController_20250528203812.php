@@ -29,13 +29,6 @@ class ClaseController extends Controller
         return view('clase.reprogramar', compact('clases'));
     }
 
-    public function asingar_estudiante_clase(Request $request): View
-    {
-        $clases = Clase::where('estado', 'programada')->paginate();
-        $usuariosEstudiante = User::where('id_rol', 2)->with('estudiante')->get();
-        return view('clase.asignar_clase', compact('clases', 'usuariosEstudiante'));
-    }
-
     public function clase_est(Request $request): View
     {
         $user = auth()->user();
@@ -60,6 +53,12 @@ class ClaseController extends Controller
         if ($user->tipo_usuario !== 'I') {
             abort(403, 'Acceso no autorizado');
         }
+
+        // Obtener solo clases programadas del estudiante actual
+        $clases = Clase::where('estado', 'inscrita')
+            ->where('id_inst', $user->id)
+            ->paginate();
+
         return view('clase.clase_int', compact('clases'));
     }
 
@@ -161,23 +160,6 @@ class ClaseController extends Controller
             return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
             return back()->with('error', 'Error al reprogramar: ' . $e->getMessage());
-        }
-    }
-
-    public function asignar_clase(Request $request, $id)
-    {
-        try {
-            $clase = Clase::findOrFail($id);
-
-            // Si no hay conflicto, actualizar la clase
-            $clase->update([
-                'id_est' => $request->nid_est,
-                'estado' => 'inscrita'
-            ]);
-
-            return back()->with('success', 'Clase asignada correctamente');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Error al asignar: ' . $e->getMessage());
         }
     }
 

@@ -25,7 +25,6 @@ use App\Http\Controllers\AdminInstructorController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
-use App\Models\Vehiculo;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,17 +49,9 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
     ->middleware('auth')
     ->name('clase.reprogramar');
 
-    Route::get('/asignar_clase', [ClaseController::class, 'asingar_estudiante_clase'])
+    Route::get('/asignar_clase', [ClaseController::class, 'asignar_clase'])
     ->middleware('auth')
     ->name('clase.asignar_clase');
-
-    Route::get('/asignar_vehiculo', [InstructorController::class, 'asingar_vehiculo_instructor'])
-    ->middleware('auth')
-    ->name('instructores.asignar_vehiculo');
-
-    Route::put('/instructor/{id}/asignar_vehiculo', [InstructorController::class, 'asignar_vehiculo'])
-    ->name('instructor.asignar_vehiculo')
-    ->middleware('auth');
 
 Route::put('/clases/{id}/cancelar', [ClaseController::class, 'cancelarClase'])
     ->name('clases.cancelar')
@@ -68,10 +59,6 @@ Route::put('/clases/{id}/cancelar', [ClaseController::class, 'cancelarClase'])
 
 Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClase'])
     ->name('clases.reprogramar')
-    ->middleware('auth');
-
-    Route::put('/clases/{id}/asignar_clase', [ClaseController::class, 'asignar_clase'])
-    ->name('clases.asignar_clase')
     ->middleware('auth');
 
 Route::delete('clases/{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');

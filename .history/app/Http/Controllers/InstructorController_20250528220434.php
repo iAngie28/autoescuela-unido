@@ -43,23 +43,6 @@ class InstructorController extends Controller
         return view('instructores.asignar_vehiculo', compact('nombre', 'vehiculo', 'instructors'));
     }
 
-   
-    public function asignar_vehiculo(Request $request, $id)
-{
-    try {
-        $instructor = Instructor::findOrFail($id);
-
-        $instructor->update([
-            'id_vehiculo' => $request->vehiculo
-        ]);
-
-        return back()->with('success', 'Vehículo asignado correctamente');
-    } catch (\Exception $e) {
-        return back()->with('error', 'Error al asignar: ' . $e->getMessage());
-    }
-}
-
-
     /**
      * Store a newly created resource in storage.
      */
