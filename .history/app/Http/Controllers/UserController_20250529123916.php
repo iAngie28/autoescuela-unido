@@ -30,7 +30,7 @@ class userController extends Controller
             ->with('i', ($request->input('page', 1) - 1) * $users->perPage());
     }*/
 
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $query = \App\Models\User::query();
 
@@ -52,7 +52,7 @@ class userController extends Controller
         // Pasa la lista de roles al blade
         $roles = \App\Models\Rol::all();
 
-        return view('user.index', compact('users', 'roles'));
+        return view('users.index', compact('users', 'roles'));
     }
 
 
