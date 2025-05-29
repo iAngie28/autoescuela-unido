@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
+// Controladores
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\ClaseController;
 use App\Http\Controllers\EstudianteController;
@@ -16,20 +19,16 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
-<<<<<<< Updated upstream
-use Illuminate\Support\Facades\Auth;
-=======
-use App\Http\Controllers\AdminInstructorController;
 //Bitacora
->>>>>>> Stashed changes
 use App\Models\Bitacora;
+use App\Http\Controllers\AdminInstructorController;
 
+// Middleware
 use App\Http\Middleware\IsAdmin;
 
 Route::get('/register', function () {
     return view('auth.register');
 })->middleware(['auth', IsAdmin::class])->name('register');
-
 
 
 Route::view('/', 'welcome');
