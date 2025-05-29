@@ -1,24 +1,24 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
-    <div class="container-fluid mt-5">
-        <div class="">
-            <div class="col-md-12">
+@extends('layouts.app')
 
-                <div class="card card-default">
-                    <div class="card-header">
-                        <span class="card-title">{{ __('Update') }} User</span>
-                    </div>
-                    <div class="card-body bg-white">
-                        <form method="POST" action="{{ route('users.update', $user->id) }}"  role="form" enctype="multipart/form-data">
-                            {{ method_field('PATCH') }}
-                            @csrf
+@section('content')
+    <div class="flex flex-col min-h-screen">
+        <div class="flex flex-1">
 
-                            @include('user.form')
 
-                        </form>
-                    </div>
-                </div>
-            </div>
+
+            <!-- Contenido principal -->
+            <main class="flex-1 bg-gray-100 text-gray-800 p-6">
+                <section class="bg-white-500 text-black py-10 text-center">
+                    <h1 class="text-3xl font-bold text-left mb-"> Editar Usuario </h1>
+
+                    @include('user.form')
+                </section>
+            </main>
+
         </div>
-    </section>
+
+        <!-- Footer -->
+
+
+    </div>
 @endsection

@@ -1,110 +1,96 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
-<!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top" style="background-color: #111827;">
-    <div class="container-fluid">
-        <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center">
-            <h2 class="m-0 text-primary"><i class="fa fa-car me-2"></i>WUILLANS</h2>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a href="{{ url('/admin/dashboard') }}" class="nav-link active text-white">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a href="about.html" class="nav-link text-white">Sobre Nosotros</a>
-                </li>
-                <li class="nav-item">
-                    <a href="courses.html" class="nav-link text-white">Cursos</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle text-white" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>
-                    <ul class="dropdown-menu" aria-labelledby="menuDropdown">
-                        <li><a href="feature.html" class="dropdown-item">Features</a></li>
-                        <li><a href="appointment.html" class="dropdown-item">Appointment</a></li>
-                        <li><a href="team.html" class="dropdown-item">Our Team</a></li>
-                        <li><a href="testimonial.html" class="dropdown-item">Testimonial</a></li>
-                        <li><a href="404.html" class="dropdown-item">404 Page</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="https://web.whatsapp.com/" class="nav-link text-white">Contacto</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<!-- Navbar End -->
-<!-- Navbar End -->
-    <div class="container-fluid mt-4">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card ">
-                    <div class="card-header ">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
-                                {{ __('Volver') }}
-                              </a>
+@extends('layouts.app')
 
-                            <span id="card_title">
-                                {{ __('Rols') }}
-                            </span>
+@section('content')
+    <div class="flex flex-col min-h-screen">
+        <div class="flex flex-1">
 
-                             <div class="float-right">
-                                <a href="{{ route('rols.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Crear usuario') }}
-                                </a>
-                              </div>
-                        </div>
+            <!-- Sidebar -->
+
+
+            <!-- Contenido principal -->
+            <main class="flex-1 bg-gray-100 text-gray-800 p-6">
+                <section class="bg-white-500 text-black py-10 text-center">
+                    <h1 class="text-3xl font-bold text-left mb-"> Roles</h1>
+
+                    <div class="flex flex-wrap items-center justify-between mb-6">
+                        <form id="searchForm" method="GET" action="{{ route('rol.index') }}">
+                            <input type="text" name="search" placeholder="Buscar roles..."
+                                class="w-full px-4 py-2 rounded-md border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                id="searchInput" value="{{ request('search') }}">
+                        </form>
+
+                        <a href="{{ route('rol.create') }}" target="_blank">
+                            <button
+                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                                Agregar Nuevo Rol
+                            </button>
+                        </a>
                     </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success m-4">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
 
-                    <div class="card-body bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
+                    <script>
+                        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+                            if (event.key === "Enter") {
+                                event.preventDefault();
+                                let searchValue = this.value.trim();
 
-									<th >Nombre</th>
-									<th >Permisos</th>
+                                if (searchValue === "") {
+                                    window.location.href = "{{ route('rol.index') }}"; // Solo recargar si el campo está vacío
+                                } else {
+                                    document.getElementById("searchForm").submit(); // Realizar búsqueda
+                                }
+                            }
+                        });
+                    </script>
 
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($rols as $rol)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
 
-										<td >{{ $rol->nombre }}</td>
-										<td >{{ $rol->permisos }}</td>
 
-                                            <td>
-                                                <form action="{{ route('rols.destroy', $rol->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('rols.show', $rol->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('rols.edit', $rol->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
+                    <!-- Roles Table -->
+                    <div class="overflow-x-auto bg-white rounded-lg shadow">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                    <th class="py-3 px-6 text-left">ID</th>
+                                    <th class="py-3 px-6 text-left">Nombre</th>
+                                    <th class="py-3 px-6 text-left">Permisos</th>
+                                    <th class="py-3 px-6 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 text-sm">
+                                @foreach ($rols as $rol)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                        <td class="py-3 px-6 text-left">{{ $rol->id }}</td>
+                                        <td class="py-3 px-6 text-left">{{ $rol->nombre }}</td>
+                                        <td class="py-3 px-6 text-left">{{ $rol->permisos }}</td>
+                                        <td class="py-3 px-6 text-center">
+                                            <div class="flex items-center justify-center space-x-2">
+                                                <a href="{{ route('rol.edit', $rol->id) }}"
+                                                    class="text-blue-500 hover:scale-110">📝 Editar</a>
+                                                <form action="{{ route('rol.destroy', $rol->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
+                                                    <button type="submit" class="text-red-500 hover:scale-110">🗑
+                                                        Eliminar</button>
                                                 </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                {!! $rols->withQueryString()->links() !!}
-            </div>
+
+                    <!-- Pagination -->
+                    <div class="mt-6">
+                        {{ $rols->links() }}
+                    </div>
+                </section>
+
+            </main>
+
         </div>
+
+        <!-- Footer -->
+
+
     </div>
-    @endsection
+@endsection

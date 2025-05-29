@@ -1,58 +1,89 @@
-<div class="row padding-1 p-1">
-    <div class="col-md-12">
-        
-        <div class="form-group mb-2 mb20">
-            <label for="name" class="form-label">{{ __('Name') }}</label>
-            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $user?->name) }}" id="name" placeholder="Name">
-            {!! $errors->first('name', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="username" class="form-label">{{ __('Username') }}</label>
-            <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username', $user?->username) }}" id="username" placeholder="Username">
-            {!! $errors->first('username', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="password" class="form-label">{{ __('Fecha Registro') }}</label>
-            <input type="text" name="password" class="form-control @error('password') is-invalid @enderror" value="{{ old('password', $user?->password) }}" id="password" placeholder="Password">
-            {!! $errors->first('password', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="email" class="form-label">{{ __('Email') }}</label>
-            <input type="text" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $user?->email) }}" id="email" placeholder="Email">
-            {!! $errors->first('email', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="sexo" class="form-label">{{ __('Sexo') }}</label>
-            <input type="text" name="sexo" class="form-control @error('sexo') is-invalid @enderror" value="{{ old('sexo', $user?->sexo) }}" id="sexo" placeholder="Sexo">
-            {!! $errors->first('sexo', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="telefono" class="form-label">{{ __('Telefono') }}</label>
-            <input type="text" name="telefono" class="form-control @error('telefono') is-invalid @enderror" value="{{ old('telefono', $user?->telefono) }}" id="telefono" placeholder="Telefono">
-            {!! $errors->first('telefono', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <div class="form-group mb-2 mb20">
-            <label for="direccion" class="form-label">{{ __('Direccion') }}</label>
-            <input type="text" name="direccion" class="form-control @error('direccion') is-invalid @enderror" value="{{ old('direccion', $user?->direccion) }}" id="direccion" placeholder="Direccion">
-            {!! $errors->first('direccion', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        
-        <div class="form-group mb-2 mb20">
-            <label for="ci" class="form-label">{{ __('Ci') }}</label>
-            <input type="text" name="ci" class="form-control @error('ci') is-invalid @enderror" value="{{ old('ci', $user?->ci) }}" id="ci" placeholder="Ci">
-            {!! $errors->first('ci', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
-        </div>
-        <select name="id_rol" id="id_rol" class="form-select @error('id_rol') is-invalid @enderror">
-            <option value="">Seleccione un rol</option>
-            @foreach ($roles as $rol)
-                <option value="{{ $rol->id }}" {{ old('id_rol') == $rol->id ? 'selected' : '' }}>
-                    {{ $rol->nombre }}
-                </option>
-            @endforeach
-        </select>
+<div class="p-10 rounded-lg  mx-auto max-w-xl">
+    <form method="POST" action="{{ route('users.update', $user->id) }}" class="space-y-6">
+        {{ method_field('PATCH') }}
+        @csrf
 
-    </div>
-    <div class="col-md-12 mt20 mt-2">
-        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-    </div>
+        <!-- Nombre -->
+        <div class="mb-5">
+            <label for="name" class="block text-gray-700 font-bold text-left mb-2">Nombre</label>
+            <input type="text" id="name" name="name" value="{{ $user->name }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+
+        <!-- Nombre de usuario -->
+        <div class="mb-5">
+            <label for="username" class="block text-gray-700 font-bold text-left mb-2">Nombre de Usuario</label>
+            <input type="text" id="username" name="username" value="{{ $user->username }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-5">
+            <label for="email" class="block text-gray-700 font-bold text-left mb-2">Email</label>
+            <input type="email" id="email" name="email" value="{{ $user->email }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="mb-5">
+            <label for="telefono" class="block text-gray-700 font-bold text-left mb-2">Teléfono</label>
+            <input type="text" id="telefono" name="telefono" value="{{ $user->telefono }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Dirección -->
+        <div class="mb-5">
+            <label for="direccion" class="block text-gray-700 font-bold text-left mb-2">Dirección</label>
+            <input type="text" id="direccion" name="direccion" value="{{ $user->direccion }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Fecha de Registro -->
+        <div class="mb-5">
+            <label for="fecha_registro" class="block text-gray-700 font-bold text-left mb-2">Fecha de Registro</label>
+            <input type="date" id="fecha_registro" name="fecha_registro" value="{{ $user->fecha_registro }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- CI -->
+        <div class="mb-5">
+            <label for="ci" class="block text-gray-700 font-bold text-left mb-2">Cédula de Identidad</label>
+            <input type="text" id="ci" name="ci" value="{{ $user->ci }}"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Tipo de Usuario -->
+        <div class="mb-5">
+            <label for="tipo_usuario" class="block text-gray-700 font-bold text-left mb-2">Tipo de Usuario</label>
+            <select id="tipo_usuario" name="tipo_usuario"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="A" {{ $user->tipo_usuario == 'A' ? 'selected' : '' }}>Administrador</option>
+                <option value="E" {{ $user->tipo_usuario == 'E' ? 'selected' : '' }}>Estudiante</option>
+                <option value="I" {{ $user->tipo_usuario == 'I' ? 'selected' : '' }}>Instructor</option>
+            </select>
+        </div>
+
+        <!-- Rol -->
+        <div class="mb-5">
+            <label for="id_rol" class="block text-gray-700 font-bold text-left mb-2">Rol</label>
+            <select id="id_rol" name="id_rol"
+                class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                @foreach ($roles as $rol)
+                    <option value="{{ $rol->id }}" {{ $user->id_rol == $rol->id ? 'selected' : '' }}>
+                        {{ $rol->nombre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex justify-end">
+            <a href="{{ route('users.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 mr-2">
+                Cancelar
+            </a>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                Guardar cambios
+            </button>
+        </div>
+    </form>
 </div>

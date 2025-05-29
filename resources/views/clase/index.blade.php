@@ -1,125 +1,134 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
+@extends('layouts.app')
 
-    <!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top" style="background-color: #111827;">
-    <div class="container-fluid">
-        <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center">
-            <h2 class="m-0 text-primary"><i class="fa fa-car me-2"></i>WUILLANS</h2>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a href="{{ url('/admin/dashboard') }}" class="nav-link active text-white">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a href="about.html" class="nav-link text-white">Sobre Nosotros</a>
-                </li>
-                <li class="nav-item">
-                    <a href="courses.html" class="nav-link text-white">Cursos</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle text-white" id="menuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Menú</a>
-                    <ul class="dropdown-menu" aria-labelledby="menuDropdown">
-                        <li><a href="feature.html" class="dropdown-item">Features</a></li>
-                        <li><a href="appointment.html" class="dropdown-item">Appointment</a></li>
-                        <li><a href="team.html" class="dropdown-item">Our Team</a></li>
-                        <li><a href="testimonial.html" class="dropdown-item">Testimonial</a></li>
-                        <li><a href="404.html" class="dropdown-item">404 Page</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="https://web.whatsapp.com/" class="nav-link text-white">Contacto</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<!-- Navbar End -->
-<!-- Navbar End -->
-    <div class="container-fluid mt-5">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-sm float-left"  data-placement="left">
-                                {{ __('Volver') }}
-                              </a>
-                              
-                            <span id="card_title">
-                                {{ __('Clases') }}
-                            </span>
+@section('content')
+<div class="flex flex-col min-h-screen">
+    <div class="flex flex-1">
 
-                             <div class="float-right">
-                                <a href="{{ route('clases.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
-                                </a>
-                              </div>
-                        </div>
-                    </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success m-4">
-                            <p>{{ $message }}</p>
+
+        <!-- Contenido principal -->
+        <main class="flex-1 bg-gray-100 text-gray-800 p-6">
+            <section class="bg-white-500 text-black py-10 text-center">
+                <h1 class="text-3xl font-bold text-left mb-"> Clases</h1>
+
+                <div class="flex flex-wrap items-center justify-between mb-6 " style="margin-top: 20px;">
+                    <select id="filtroEstado" class="form-select" onchange="filtrarPorEstado()">
+                        <option value="">Todos</option>
+                        <option value="programada">Programada</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+
+                    <a href="{{ route('clases.create') }}" target="_blank">
+                        <button
+                            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                            Agregar Nueva Clase
+                        </button>
+                    </a>
+                </div>
+
+                    @if (session('success'))
+                        <div class="bg-green-100 text-green-800 p-4 mb-4">
+                            {{ session('success') }}
                         </div>
                     @endif
 
-                    <div class="card-body bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-
-									<th >Fecha</th>
-									<th >Hora Inicio</th>
-									<th >Hora Fin</th>
-									<th >Estado</th>
-									<th >Comentario Inst</th>
-									<th >Reporte Estudiante</th>
-									<th >Id Paquete</th>
-									
-									<th >Id Inst</th>
-
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($clases as $clase)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-
-										<td >{{ $clase->fecha }}</td>
-										<td >{{ $clase->hora_inicio }}</td>
-										<td >{{ $clase->hora_fin }}</td>
-										<td >{{ $clase->estado }}</td>
-										<td >{{ $clase->comentario_Inst }}</td>
-										<td >{{ $clase->reporte_estudiante }}</td>
-										<td >{{ $clase->id_paquete }}</td>
-										
-										<td >{{ $clase->id_inst }}</td>
-
-                                            <td>
-                                                <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('clases.show', $clase->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('clases.edit', $clase->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                    @if (session('error'))
+                        <div class="bg-red-100 text-red-800 p-4 mb-4">
+                            {{ session('error') }}
                         </div>
-                    </div>
+                    @endif
+
+                <!--
+                @if ($message = Session::get('success'))
+                <div class="alert alert-success m-4">
+                    <p>{{ $message }}</p>
                 </div>
-                {!! $clases->withQueryString()->links() !!}
-            </div>
-        </div>
+                @endif
+                 -->
+
+                <script>
+                    function filtrarPorEstado() {
+                        const estadoSeleccionado = document.getElementById('filtroEstado').value.toLowerCase();
+                        const filas = document.querySelectorAll('table tbody tr');
+
+                        filas.forEach(fila => {
+                            const estado = fila.dataset.estado;
+                            if (!estadoSeleccionado || estado === estadoSeleccionado) {
+                                fila.style.display = '';
+                            } else {
+                                fila.style.display = 'none';
+                            }
+                        });
+                    }
+                </script>
+
+
+
+                <!-- Roles Table -->
+                <div class="overflow-x-auto bg-white rounded-lg shadow">
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                <th class="py-3 px-3 text-center">ID</th>
+                                <th class="py-3 px-3 text-center">Fecha</th>
+                                <th class="py-3 px-3 text-center">Hora Inicio</th>
+                                <th class="py-3 px-3 text-center">Hora Fin</th>
+                                <th class="py-3 px-3 text-center">Estado</th>
+                                <th class="py-3 px-3 text-center">Comentario Instructor</th>
+                                <th class="py-3 px-3 text-center">Reporte</th>
+                                <th class="py-3 px-3 text-center">Id Paquete</th>
+                                <th class="py-3 px-3 text-center">Id Instructor</th>
+                                <th class="py-3 px-3 text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm">
+                            @foreach ($clases as $clase)
+                            <tr data-estado="{{ strtolower($clase->estado) }}" class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-3 text-center">{{ $clase->id }}</td>
+                                <td class="py-3 px-3 text-center">{{ $clase->fecha }}</td>
+                                <td class="py-3 px-3 text-center">{{ $clase->hora_inicio}}</td>
+                                <td class="py-3 px-3 text-center">{{  $clase->hora_fin}}</td>
+                                <td class="py-3 px-3 text-center">{{ $clase->estado}}</td>
+                                <td class="py-3 px-3 text-center">{{$clase->comentario_Inst }}</td>
+                                <td class="py-3 px-3 text-center">{{ $clase->reporte_estudiante }}</td>
+                                <td class="py-3 px-3 text-center">{{  $clase->id_paquete }}</td>
+                                <td class="py-3 px-3 text-center">{{ $clase->id_inst }}</td>
+
+                                <td class="py-3 px-3 text-center">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <a href="{{ route('clases.edit', $clase->id) }}"
+                                            class="text-blue-500 hover:scale-110">📝 Editar</a>
+                                        <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:scale-110" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
+                                                Eliminar</button>
+                                        </form>
+                                        <form action="{{ route('clases.cancelar', $clase->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button type="submit"
+                                                        class="text-red-500 hover:scale-110 hover:text-red-700"
+                                                        onclick="return confirm('¿Cancelar esta clase?')">
+                                                        ❌ Cancelar
+                                                    </button>
+                                                </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-6">
+                    {{ $clases->withQueryString()->links() }}
+                </div>
+            </section>
+
+        </main>
+
     </div>
+
+
 @endsection
