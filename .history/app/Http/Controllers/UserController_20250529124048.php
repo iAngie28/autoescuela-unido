@@ -52,7 +52,7 @@ class userController extends Controller
         // Pasa la lista de roles al blade
         $roles = \App\Models\Rol::all();
 
-        return view('user.index', compact('users', 'roles'));
+        return view('users.index', compact('users', 'roles'));
     }
 
 
