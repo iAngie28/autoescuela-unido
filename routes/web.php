@@ -19,6 +19,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
+use App\Http\Controllers\TomarExamenController;
 //Bitacora
 use App\Models\Bitacora;
 use App\Http\Controllers\AdminInstructorController;
@@ -26,6 +27,8 @@ use App\Http\Controllers\AdminInstructorController;
 // Middleware
 use App\Http\Middleware\IsAdmin;
 use App\Models\Vehiculo;
+
+use App\Http\Livewire\Pages\Auth\Register;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,7 +67,7 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
 
 Route::put('/clases/{id}/cancelar', [ClaseController::class, 'cancelarClase'])
     ->name('clases.cancelar')
-    ->middleware('auth'); 
+    ->middleware('auth');
 
 Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClase'])
     ->name('clases.reprogramar')
@@ -116,6 +119,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user', [UserController::class, 'index'])->name('user');
 
 
+    // CASO DE ESTUDIO EVALUAR
+
+     Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
+    Route::get('/examen/{user}/evaluar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.evaluar');
+    Route::post('/examen/{user}/guardar', [TomarExamenController::class, 'guardarEvaluacion'])->name('examen.guardar');
+    Route::get('/examen/{user}/tomar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.tomar');
+    Route::get('/instructor/historial-evaluaciones', [TomarExamenController::class, 'historial'])->name('instructor.historial');
+
+
+
+
+
     // Recursos administrativos
     Route::resource('rol', RolController::class);
     Route::resource('tipo-vehiculo', TipoVehiculoController::class);
@@ -142,27 +157,6 @@ Route::post('/logout', function () {
 })->name('logout');
 
 
-
-/*
-|--------------------------------------------------------------------------
-| Rutas del Calendario
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/calendar', function () {
-    return view('calendar');
-})->name('calendar');
-
-Route::get('/calendar/events', function () {
-    $events = [
-        ['title' => 'Clase de Manejo', 'start' => '2025-05-10', 'end' => '2025-05-10'],
-        ['title' => 'Clase Teórica', 'start' => '2025-05-12', 'end' => '2025-05-12'],
-    ];
-
-    return response()->json($events);
-})->name('calendar.events');
-
-//
 
 
 Route::get('/bitacora', function () {

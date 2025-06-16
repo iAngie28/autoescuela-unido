@@ -14,24 +14,11 @@
                     <h1 class="text-3xl font-bold text-left mb-"> Lista de Usuarios</h1>
 
                     <div class="flex flex-wrap items-center justify-between mb-6">
-                        <form id="searchForm" method="GET" action="{{ route('users.index') }}"
-                            class="flex items-center gap-2">
+                        <form id="searchForm" method="GET" action="{{ route('users.index') }}">
                             <input type="text" name="search" placeholder="Buscar usuarios..."
                                 class="w-full px-4 py-2 rounded-md border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 id="searchInput" value="{{ request('search') }}">
-
-                            <!-- Select para filtrar por rol -->
-                            <select name="id_rol" class="px-2 py-2 border rounded-md" onchange="this.form.submit()">
-                                <option value="">Todos los roles</option>
-                                @foreach ($roles as $rol)
-                                    <option value="{{ $rol->id }}"
-                                        {{ request('id_rol') == $rol->id ? 'selected' : '' }}>
-                                        {{ $rol->nombre }}
-                                    </option>
-                                @endforeach
-                            </select>
                         </form>
-
 
                         <a href="{{ route('register') }}" target="_blank">
                             <button
@@ -76,7 +63,7 @@
                                         <td class="py-3 px-6 text-left">{{ $user->id }}</td>
                                         <td class="py-3 px-6 text-left">{{ $user->name }}</td>
                                         <td class="py-3 px-6 text-left">{{ $user->email }}</td>
-                                        <td class="py-3 px-6 text-left">{{ $user->rol->nombre ?? 'Sin rol' }}</td>
+                                        <td class="py-3 px-6 text-left">{{ $user->tipo_usuario }}</td>
                                         <td class="py-3 px-6 text-center">
                                             <div class="flex items-center justify-center space-x-2">
                                                 <a href="{{ route('users.edit', $user->id) }}"

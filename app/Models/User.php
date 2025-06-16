@@ -58,7 +58,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(\App\Models\Rol::class, 'id_rol', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -66,7 +66,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Administrador::class, 'id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -74,7 +74,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Estudiante::class, 'id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -82,7 +82,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(\App\Models\Instructor::class,  'id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -90,7 +90,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\NotiEnviada::class, 'id', 'id_user');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -98,7 +98,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Pago::class, 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -137,4 +137,15 @@ class User extends Authenticatable
             $usuario->instructor?->delete();
         });
     }
+
+
+    public function evaluaciones()
+{
+    return $this->hasMany(Evaluacion::class, 'estudiante_id');
+}
+
+public function evaluaciones_realizadas()
+{
+    return $this->hasMany(Evaluacion::class, 'instructor_id');
+}
 }

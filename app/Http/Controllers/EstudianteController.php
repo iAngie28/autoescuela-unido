@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\EstudianteRequest;
@@ -18,6 +19,18 @@ class EstudianteController extends Controller
     {
         return view('dashboards.estudiante');
     }
+
+    public function listForInstructor()
+{
+    // Filtra los usuarios que tienen el rol de 'Estudiante'
+    $estudiantes = User::whereHas('rol', function ($query) {
+        $query->where('nombre', 'Estudiante');
+    })->paginate(10);
+
+    return view('estudiante.inscritos', compact('estudiantes'));
+}
+
+
 
     /**
      * Show the form for creating a new resource.
