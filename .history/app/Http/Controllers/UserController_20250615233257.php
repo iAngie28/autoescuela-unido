@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -77,9 +76,7 @@ class userController extends Controller
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-        $data['password'] = Hash::make($request->password);
-        User::create($data);
+        User::create($request->validated());
 
 
         return Redirect::route('users.index')
@@ -109,20 +106,16 @@ class userController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, User $usuario)
+    public function update(UserRequest $request, User $user)
     {
-        $data = $request->validated();
+        // Debug: Mostrar todo lo que llega y lo que valida
+        dd(request()->all(), $request->validated());
 
-        if (!empty($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        $usuario->update($data);
-
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
+        // Código real (actívalo cuando termines de probar):
+        // $user->update($request->validated());
+        // return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
+
 
 
 

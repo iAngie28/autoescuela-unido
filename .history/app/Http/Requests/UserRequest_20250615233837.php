@@ -19,16 +19,12 @@ class UserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-public function rules(): array
+    public function rules(): array
 {
-    $id = $this->route('usuario');
-    if (is_object($id)) {
-        $id = $id->id;
-    }
     return [
         'name' => 'required|string|max:255',
         'username' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $id,
+        'email' => 'required|email|max:255|unique:users,email,' . $this->route('usuario'),
         'sexo' => 'required|in:masculino,femenino,otro',
         'telefono' => 'required|numeric',
         'direccion' => 'required|string|max:255',
@@ -38,6 +34,4 @@ public function rules(): array
         'id_rol' => 'required|exists:rols,id',
     ];
 }
-
-
 }

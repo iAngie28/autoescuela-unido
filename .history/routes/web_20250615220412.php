@@ -181,7 +181,7 @@ Route::resources([
     'rols' => RolController::class,
     'notificaciones' => NotificacioneController::class,
     'users' => UserController::class,
-    'usuarios' => UserController::class,
+    Route::resource('usuarios', UserController::class),
     'administradors' => AdministradorController::class,
     'estudiantes' => EstudianteController::class,
     'instructors' => InstructorController::class,

@@ -78,8 +78,8 @@ class userController extends Controller
     public function store(UserRequest $request): RedirectResponse
     {
         $data = $request->validated();
-        $data['password'] = Hash::make($request->password);
-        User::create($data);
+    $data['password'] = Hash::make($request->password);
+    User::create($data);
 
 
         return Redirect::route('users.index')
@@ -109,20 +109,20 @@ class userController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserRequest $request, User $usuario)
-    {
-        $data = $request->validated();
+public function update(UserRequest $request, User $usuario)
+{
+    $data = $request->validated();
 
-        if (!empty($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        } else {
-            unset($data['password']);
-        }
-
-        $usuario->update($data);
-
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
+    if (!empty($data['password'])) {
+        $data['password'] = bcrypt($data['password']);
+    } else {
+        unset($data['password']);
     }
+
+    $usuario->update($data);
+
+    return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
+}
 
 
 
