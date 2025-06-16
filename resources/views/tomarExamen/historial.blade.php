@@ -19,10 +19,18 @@
                         <tbody class="text-gray-600 text-sm">
                             @forelse($evaluaciones as $eva)
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">{{ $eva->estudiante->name ?? '-' }}</td>
-                                    <td class="py-3 px-6 text-left">{{ $eva->fecha_evaluacion ? \Carbon\Carbon::parse($eva->fecha_evaluacion)->format('d/m/Y H:i') : '-' }}</td>
-                                    <td class="py-3 px-6 text-center">{{ $eva->nota_final }}</td>
-                                    <td class="py-3 px-6 text-left">{{ $eva->instructor->name ?? '-' }}</td>
+                                    <td class="py-3 px-6 text-left" >
+                                        {{ $eva->estudiante->name ?? '-' }}
+                                    </td>
+                                    <td class="py-3 px-6 text-left" >
+                                        {{ $eva->fecha_evaluacion ? \Carbon\Carbon::parse($eva->fecha_evaluacion)->format('d/m/Y H:i') : '-' }}
+                                    </td>
+                                    <td class="py-3 px-6 text-center" >
+                                        {{ $eva->nota_final }}
+                                    </td>
+                                    <td class="py-3 px-6 text-left" >
+                                        {{ $eva->instructor->name ?? '-' }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -39,4 +47,43 @@
         </main>
     </div>
 </div>
+
+<style>
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+    thead tr {
+        display: none;
+    }
+    tr {
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e5e7eb;
+    }
+    td {
+        position: relative;
+        padding-left: 45%;
+        text-align: left;
+        border: none;
+        min-height: 2.5rem;
+        word-break: break-word;
+        vertical-align: top;
+    }
+    td:before {
+        position: absolute;
+        left: 1rem;
+        top: 0.75rem;
+        width: 40%;
+        min-width: 80px;
+        white-space: nowrap;
+        font-weight: bold;
+        color: #6b7280;
+        content: attr(data-label);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: top;
+    }
+}
+</style>
 @endsection
