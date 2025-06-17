@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\TipoVehiculo;
+use App\Models\Bitacora;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\TipoVehiculoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TipoVehiculoController extends Controller
 {
@@ -45,11 +49,30 @@ public function index(Request $request): View
      */
     public function store(TipoVehiculoRequest $request): RedirectResponse
     {
-        TipoVehiculo::create($request->validated());
-
-        return Redirect::route('tipo-vehiculos.index')
-            ->with('success', 'TipoVehiculo created successfully.');
+        DB::beginTransaction();
+        
+        try {
+            $tipoVehiculo = TipoVehiculo::create($request->validated());
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Creación de tipo de vehículo',
+                'ID: ' . $tipoVehiculo->id . ' | Nombre: ' . $tipoVehiculo->nombre,
+                $request->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('tipo-vehiculos.index')
+                ->with('success', 'Tipo de vehículo creado correctamente.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear tipo de vehículo: ' . $e->getMessage());
+            return back()->with('error', 'Error al crear tipo de vehículo: ' . $e->getMessage());
+        }
     }
+
 
     /**
      * Display the specified resource.
@@ -76,17 +99,90 @@ public function index(Request $request): View
      */
     public function update(TipoVehiculoRequest $request, TipoVehiculo $tipoVehiculo): RedirectResponse
     {
-        $tipoVehiculo->update($request->validated());
-
-        return Redirect::route('tipo-vehiculos.index')
-            ->with('success', 'TipoVehiculo updated successfully');
+        DB::beginTransaction();
+        
+        try {
+            // Guardar datos originales para bitácora
+            $originalNombre = $tipoVehiculo->nombre;
+            
+            $tipoVehiculo->update($request->validated());
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Actualización de tipo de vehículo',
+                'ID: ' . $tipoVehiculo->id . 
+                ' | Nombre original: ' . $originalNombre . 
+                ' | Nuevo nombre: ' . $tipoVehiculo->nombre,
+                $request->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('tipo-vehiculos.index')
+                ->with('success', 'Tipo de vehículo actualizado correctamente');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar tipo de vehículo: ' . $e->getMessage());
+            return back()->with('error', 'Error al actualizar: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id): RedirectResponse
     {
-        TipoVehiculo::find($id)->delete();
+        DB::beginTransaction();
+        
+        try {
+            $tipoVehiculo = TipoVehiculo::findOrFail($id);
+            $tipoData = $tipoVehiculo->toArray();
+            
+            $tipoVehiculo->delete();
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Eliminación de tipo de vehículo',
+                'ID: ' . $tipoVehiculo->id . ' | Nombre: ' . $tipoVehiculo->nombre,
+                request()->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('tipo-vehiculos.index')
+                ->with('success', 'Tipo de vehículo eliminado correctamente');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar tipo de vehículo: ' . $e->getMessage());
+            return back()->with('error', 'Error al eliminar: ' . $e->getMessage());
+        }
+    }
 
-        return Redirect::route('tipo-vehiculos.index')
-            ->with('success', 'TipoVehiculo deleted successfully');
+    /**
+     * Registra una acción en la bitácora usando el modelo
+     */
+    private function registrarBitacora($accion, $detalle, $ip)
+    {
+        try {
+            Bitacora::create([
+                'id_user' => Auth::id(),
+                'ip' => $ip,
+                'accion' => $accion . ' - ' . $detalle,
+            ]);
+        } catch (\Exception $e) {
+            // Respaldo en archivo si falla el modelo
+            $logData = [
+                'timestamp' => now()->toDateTimeString(),
+                'accion' => $accion,
+                'detalle' => $detalle,
+                'ip' => $ip,
+                'error_db' => $e->getMessage()
+            ];
+            
+            file_put_contents(
+                storage_path('logs/bitacora_tipos_vehiculo.log'),
+                json_encode($logData).PHP_EOL,
+                FILE_APPEND
+            );
+        }
     }
 }

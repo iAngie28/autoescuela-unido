@@ -4,7 +4,6 @@
 <div class="flex flex-col min-h-screen">
     <div class="flex flex-1">
 
-
         <!-- Contenido principal -->
         <main class="flex-1 bg-gray-100 text-gray-800 p-6">
             <section class="bg-white-500 text-black py-10 text-center">
@@ -15,6 +14,7 @@
                         <option value="">Todos</option>
                         <option value="programada">Programada</option>
                         <option value="cancelada">Cancelada</option>
+                        <!-- Agregar más estados si es necesario -->
                     </select>
 
                     <a href="{{ route('clases.create') }}" target="_blank">
@@ -25,25 +25,17 @@
                     </a>
                 </div>
 
-                    @if (session('success'))
-                        <div class="bg-green-100 text-green-800 p-4 mb-4">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="bg-red-100 text-red-800 p-4 mb-4">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
-                <!--
-                @if ($message = Session::get('success'))
-                <div class="alert alert-success m-4">
-                    <p>{{ $message }}</p>
-                </div>
+                @if (session('success'))
+                    <div class="bg-green-100 text-green-800 p-4 mb-4">
+                        {{ session('success') }}
+                    </div>
                 @endif
-                 -->
+
+                @if (session('error'))
+                    <div class="bg-red-100 text-red-800 p-4 mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                 <script>
                     function filtrarPorEstado() {
@@ -61,8 +53,6 @@
                     }
                 </script>
 
-
-
                 <!-- Roles Table -->
                 <div class="overflow-x-auto bg-white rounded-lg shadow">
                     <table class="w-full table-auto">
@@ -73,8 +63,8 @@
                                 <th class="py-3 px-3 text-center">Hora Inicio</th>
                                 <th class="py-3 px-3 text-center">Hora Fin</th>
                                 <th class="py-3 px-3 text-center">Estado</th>
-                                <th class="py-3 px-3 text-center">Comentario Instructor</th>
-                                <th class="py-3 px-3 text-center">Reporte</th>
+                                <th class="py-3 px-3 text-center">Observaciones Instructor</th>
+                                <th class="py-3 px-3 text-center">Reporte Estudiante</th>
                                 <th class="py-3 px-3 text-center">Id Paquete</th>
                                 <th class="py-3 px-3 text-center">Id Instructor</th>
                                 <th class="py-3 px-3 text-center">Acciones</th>
@@ -88,30 +78,50 @@
                                 <td class="py-3 px-3 text-center">{{ $clase->hora_inicio}}</td>
                                 <td class="py-3 px-3 text-center">{{  $clase->hora_fin}}</td>
                                 <td class="py-3 px-3 text-center">{{ $clase->estado}}</td>
-                                <td class="py-3 px-3 text-center">{{$clase->comentario_Inst }}</td>
+                                
+                                <!-- Mejora en presentación de observaciones -->
+                                <td class="py-3 px-3">
+                                    <div class="max-w-xs mx-auto">
+                                        <div class="text-left break-words bg-gray-50 p-2 rounded">
+                                            @if($clase->comentario_Inst)
+                                                {{ $clase->comentario_Inst }}
+                                            @else
+                                                <span class="text-gray-400 italic">Sin observaciones</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                
                                 <td class="py-3 px-3 text-center">{{ $clase->reporte_estudiante }}</td>
                                 <td class="py-3 px-3 text-center">{{  $clase->id_paquete }}</td>
                                 <td class="py-3 px-3 text-center">{{ $clase->id_inst }}</td>
 
                                 <td class="py-3 px-3 text-center">
-                                    <div class="flex items-center justify-center space-x-2">
+                                    <div class="flex flex-col items-center justify-center space-y-2">
                                         <a href="{{ route('clases.edit', $clase->id) }}"
-                                            class="text-blue-500 hover:scale-110">📝 Editar</a>
-                                        <form action="{{ route('clases.destroy', $clase->id) }}" method="POST">
+                                            class="text-blue-500 hover:scale-110 hover:text-blue-700">
+                                            📝 Editar
+                                        </a>
+                                        
+                                        <form action="{{ route('clases.destroy', $clase->id) }}" method="POST" class="w-full">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:scale-110" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;">🗑
-                                                Eliminar</button>
+                                            <button type="submit" 
+                                                    class="text-red-500 hover:scale-110 hover:text-red-700 w-full"
+                                                    onclick="return confirm('¿Estás seguro de eliminar esta clase?')">
+                                                🗑 Eliminar
+                                            </button>
                                         </form>
-                                        <form action="{{ route('clases.cancelar', $clase->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button type="submit"
-                                                        class="text-red-500 hover:scale-110 hover:text-red-700"
-                                                        onclick="return confirm('¿Cancelar esta clase?')">
-                                                        ❌ Cancelar
-                                                    </button>
-                                                </form>
+                                        
+                                        <form action="{{ route('clases.cancelar', $clase->id) }}" method="POST" class="w-full">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                class="text-red-500 hover:scale-110 hover:text-red-700 w-full"
+                                                onclick="return confirm('¿Cancelar esta clase?')">
+                                                ❌ Cancelar
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -129,6 +139,4 @@
         </main>
 
     </div>
-
-
 @endsection

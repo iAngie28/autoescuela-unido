@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\VehiculoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VehiculoController extends Controller
 {
@@ -46,10 +49,28 @@ public function index(Request $request): View
      */
     public function store(VehiculoRequest $request): RedirectResponse
     {
-        Vehiculo::create($request->validated());
-
-        return Redirect::route('vehiculos.index')
-            ->with('success', 'Vehiculo created successfully.');
+        DB::beginTransaction();
+        
+        try {
+            $vehiculo = Vehiculo::create($request->validated());
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Creación de vehículo',
+                'Placa: ' . $vehiculo->placa . ' | Modelo: ' . $vehiculo->modelo,
+                $request->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('vehiculos.index')
+                ->with('success', 'Vehículo creado correctamente.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear vehículo: ' . $e->getMessage());
+            return back()->with('error', 'Error al crear vehículo: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -77,16 +98,93 @@ public function index(Request $request): View
      */
     public function update(VehiculoRequest $request, Vehiculo $vehiculo): RedirectResponse
     {
-        $vehiculo->update($request->validated());
-
-        return Redirect::route('vehiculos.index')
-            ->with('success', 'Vehiculo updated successfully');
+        DB::beginTransaction();
+        
+        try {
+            // Guardar datos originales para bitácora
+            $originalData = $vehiculo->getOriginal();
+            
+            $vehiculo->update($request->validated());
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Actualización de vehículo',
+                'ID: ' . $vehiculo->id . 
+                ' | Cambios: ' . json_encode($request->validated()) .
+                ' | Original: ' . json_encode($originalData),
+                $request->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('vehiculos.index')
+                ->with('success', 'Vehículo actualizado correctamente');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar vehículo: ' . $e->getMessage());
+            return back()->with('error', 'Error al actualizar: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id): RedirectResponse
     {
-        $vehiculo = Vehiculo::findOrFail($id);
-    $vehiculo->delete();
-    return redirect()->route('vehiculos.index');
+        DB::beginTransaction();
+        
+        try {
+            $vehiculo = Vehiculo::findOrFail($id);
+            $vehiculoData = $vehiculo->toArray(); // Guardar datos para bitácora
+            
+            $vehiculo->delete();
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Eliminación de vehículo',
+                'ID: ' . $vehiculo->id . ' | Placa: ' . $vehiculo->placa . ' | Modelo: ' . $vehiculo->modelo,
+                request()->ip()
+            );
+            
+            DB::commit();
+            
+            return redirect()->route('vehiculos.index')
+                ->with('success', 'Vehículo eliminado correctamente');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar vehículo: ' . $e->getMessage());
+            return back()->with('error', 'Error al eliminar: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Registra una acción en la bitácora con respaldo en archivo
+     */
+    private function registrarBitacora($accion, $detalle, $ip)
+    {
+        try {
+            // Método 1: Query Builder (más confiable)
+            DB::table('bitacoras')->insert([
+                'id_user' => Auth::id(),
+                'ip' => $ip,
+                'accion' => $accion . ' - ' . $detalle,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        } catch (\Exception $e) {
+            // Método 2: Guardado en archivo como respaldo
+            $logData = [
+                'timestamp' => now()->toDateTimeString(),
+                'accion' => $accion,
+                'detalle' => $detalle,
+                'ip' => $ip,
+                'error_db' => $e->getMessage()
+            ];
+            
+            file_put_contents(
+                storage_path('logs/bitacora_vehiculos.log'),
+                json_encode($logData).PHP_EOL,
+                FILE_APPEND
+            );
+        }
     }
 }

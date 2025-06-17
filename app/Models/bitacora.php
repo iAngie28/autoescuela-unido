@@ -3,42 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User; 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Class bitacora
- *
- * @property $id
- * @property $accion
- * @property $direccion_ip
- * @property $fecha_entrada
- * @property $fecha_salida
- * @property $id_user
- */
 class Bitacora extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $table = 'bitacora';
+    protected $table = 'bitacoras';
+    
     protected $fillable = [
         'id_user',
-        'direccion_ip',
-        'fecha_entrada',
-        'accion',
-        'fecha_salida'];
+        'ip',
+        'accion'
+    ];
 
-        // Convertir automáticamente estos campos a instancias Carbon
-        protected $casts = [
-            'fecha_entrada' => 'datetime',
-            'fecha_salida' => 'datetime',
-        ];
-
-    public function relacionUsuario()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-
+    public $timestamps = true;
 }

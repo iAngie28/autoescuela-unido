@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ClaseRequest;
 use App\Models\Paquete;
 use App\Models\User;
+use App\Models\Bitacora;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -16,6 +19,35 @@ class ClaseController extends Controller
     /**
      * Display a listing of the resource.
      */
+    private function registrarBitacora($accion, $detalle, $ip)
+{
+    try {
+        // Método 1: Query Builder (más confiable)
+        DB::table('bitacoras')->insert([
+            'id_user' => Auth::id(),
+            'ip' => $ip,
+            'accion' => $accion . ' - ' . $detalle,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+    } catch (\Exception $e) {
+        // Método 2: Guardado en archivo como respaldo
+        $logData = [
+            'timestamp' => now()->toDateTimeString(),
+            'accion' => $accion,
+            'detalle' => $detalle,
+            'ip' => $ip,
+            'error_db' => $e->getMessage()
+        ];
+        
+        file_put_contents(
+            storage_path('logs/bitacora_clases.log'),
+            json_encode($logData).PHP_EOL,
+            FILE_APPEND
+        );
+    }
+}
+
     public function index(Request $request): View
     {
         $clases = Clase::paginate();
@@ -52,14 +84,20 @@ class ClaseController extends Controller
 
         return view('clase.clase_est', compact('clases'));
     }
+
     public function clase_inst(Request $request): View
     {
         $user = auth()->user();
 
-        // Validar que el usuario sea tipo instructor
         if ($user->tipo_usuario !== 'I') {
             abort(403, 'Acceso no autorizado');
         }
+
+        // Definir la variable $clases para el instructor
+        $clases = Clase::where('id_inst', $user->id)
+            ->whereIn('estado', ['programada', 'inscrita', 'completada'])
+            ->paginate();
+
         return view('clase.clase_int', compact('clases'));
     }
 
@@ -103,14 +141,25 @@ public function store(ClaseRequest $request): RedirectResponse
     }
 
     // Si no hay conflicto, s
-    Clase::create($request->validated());
-
-    return Redirect::route('clases.index')
-        ->with('success', 'Clase creada correctamente');
+    DB::beginTransaction();
+    try {
+        $clase = Clase::create($request->validated());
+        
+        $this->registrarBitacora(
+            'Creación de clase',
+            'ID: ' . $clase->id . ' | Fecha: ' . $clase->fecha . ' | Instructor: ' . $clase->id_inst,
+            $request->ip()
+        );
+        
+        DB::commit();
+        
+        return Redirect::route('clases.index')
+            ->with('success', 'Clase creada correctamente');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Error al crear clase: ' . $e->getMessage());
+    }
 }
-
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -126,18 +175,18 @@ public function store(ClaseRequest $request): RedirectResponse
     public function cancelarClase($id): RedirectResponse
     {
         try {
-            // 1. Buscar la clase (falla si no existe)
             $clase = Clase::findOrFail($id);
-            // 3. Actualizar estado
-            $clase->update([
-                'estado' => 'cancelada'
-            ]);
-
-            // 4. Redirigir con mensaje de éxito
+            $clase->update(['estado' => 'cancelada']);
+    
+            $this->registrarBitacora(
+                'Cancelación de clase',
+                'ID: ' . $id . ' | Estado: cancelada',
+                request()->ip()
+            );
+    
             return back()->with('success', 'Clase cancelada correctamente.');
         } catch (\Exception $e) {
-            // 5. Manejar errores inesperados
-            return back()->with('error', 'Error al cancelar la clase: ' . $e->getMessage());
+            return back()->with('error', 'Error al cancelar: ' . $e->getMessage());
         }
     }
 
@@ -178,6 +227,11 @@ public function store(ClaseRequest $request): RedirectResponse
             ]);
             }
             
+            $this->registrarBitacora(
+                'Reprogramación de clase',
+                'ID: ' . $id . ' | Nueva fecha: ' . $request->nueva_fecha,
+                request()->ip()
+            );
 
             return back()->with('success', 'Clase reprogramada correctamente');
         } catch (\Exception $e) {
@@ -196,6 +250,12 @@ public function store(ClaseRequest $request): RedirectResponse
                 'estado' => 'inscrita'
             ]);
 
+            $this->registrarBitacora(
+                'Asignación de estudiante',
+                'Clase ID: ' . $id . ' | Estudiante ID: ' . $request->nid_est,
+                request()->ip()
+            );    
+
             return back()->with('success', 'Clase asignada correctamente');
         } catch (\Exception $e) {
             return back()->with('error', 'Error al asignar: ' . $e->getMessage());
@@ -207,14 +267,85 @@ public function store(ClaseRequest $request): RedirectResponse
      */
     public function update(ClaseRequest $request, Clase $clase): RedirectResponse
     {
-        $clase->update($request->validated());
-
-        return back()->with('success', 'Clase updated successfully');
+        try {
+            $clase->update($request->validated());
+            
+            $this->registrarBitacora(
+                'Actualización de clase',
+                'ID: ' . $clase->id . ' | Cambios: ' . json_encode($request->validated()),
+                $request->ip()
+            );
+    
+            return back()->with('success', 'Clase actualizada correctamente');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al actualizar: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id): RedirectResponse
     {
-        Clase::find($id)->delete();
-        return back()->with('success', 'Clase eliminada correctamente.');
+        try {
+            $clase = Clase::find($id);
+            $claseData = $clase->toArray(); // Guardar datos antes de eliminar
+            
+            $clase->delete();
+    
+            $this->registrarBitacora(
+                'Eliminación de clase',
+                'ID: ' . $id . ' | Datos: ' . json_encode($claseData),
+                request()->ip()
+            );
+    
+            return back()->with('success', 'Clase eliminada correctamente.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error al eliminar: ' . $e->getMessage());
+        }
     }
+
+    public function editObservaciones($id): View
+{
+    $clase = Clase::findOrFail($id);
+    $user = Auth::user();
+
+    // Validar que el usuario es el instructor asignado
+    if ($user->tipo_usuario !== 'I' || $clase->id_inst != $user->id) {
+        abort(403, 'No tienes permiso para editar las observaciones de esta clase.');
+    }
+
+    return view('clase.edit_observaciones', compact('clase'));
 }
+
+/**
+ * Actualiza las observaciones en la base de datos
+ */
+public function updateObservaciones(Request $request, $id): RedirectResponse
+{
+    $clase = Clase::findOrFail($id);
+    $user = Auth::user();
+
+    // Validar permisos
+    if ($user->tipo_usuario !== 'I' || $clase->id_inst != $user->id) {
+        abort(403, 'No tienes permiso para editar las observaciones de esta clase.');
+    }
+
+    // Validar longitud máxima según la estructura de BD
+    $request->validate([
+        'comentario_Inst' => 'nullable|string|max:250'
+    ]);
+
+    // Actualizar solo el campo de observaciones
+    $clase->comentario_Inst = $request->comentario_Inst;
+    $clase->save();
+
+    // Registrar en bitácora
+    $this->registrarBitacora(
+        'Actualización de observaciones',
+        'Clase ID: ' . $id . ' | Observación: ' . substr($request->comentario_Inst, 0, 50) . '...',
+        $request->ip()
+    );
+
+    return redirect()->route('clases.clase_inst')
+        ->with('success', 'Observaciones actualizadas correctamente');
+}
+}
+

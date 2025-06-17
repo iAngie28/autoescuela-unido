@@ -4,12 +4,10 @@
     <div class="flex flex-col min-h-screen">
         <div class="flex flex-1">
 
-
             <!-- Contenido principal -->
             <main class="flex-1 bg-gray-100 text-gray-800 p-6">
                 <section class="bg-white-500 text-black py-10 text-center">
                     <h1 class="text-3xl font-bold text-left mb- py-3"> Clases</h1>
-
 
                     @if (session('success'))
                         <div class="bg-green-100 text-green-800 p-4 mb-4">
@@ -34,6 +32,7 @@
                                     <th class="py-3 px-6 text-center">Hora Fin</th>
                                     <th class="py-3 px-6 text-center">Id Instructor</th>
                                     <th class="py-3 px-6 text-center">Estado</th>
+                                    <th class="py-3 px-6 text-center">Observaciones</th> <!-- Nueva columna -->
                                     <th class="py-3 px-6 text-center">Accion</th>
                                 </tr>
                             </thead>
@@ -47,6 +46,19 @@
                                         <td class="py-3 px-6 text-center">{{ $clase->hora_fin }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->id_inst }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->estado }}</td>
+                                        
+                                        <!-- Columna de Observaciones -->
+                                        <td class="py-3 px-6 text-center">
+                                            <div class="max-w-xs mx-auto">
+                                                <div class="text-left break-words bg-gray-50 p-2 rounded">
+                                                    @if($clase->comentario_Inst)
+                                                        {{ $clase->comentario_Inst }}
+                                                    @else
+                                                        <span class="text-gray-400 italic">Sin observaciones</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
 
                                         <td class="py-3 px-3 text-center">
                                             <div class="flex items-center justify-center space-x-2">
@@ -61,7 +73,6 @@
                                                 </form>
                                             </div>
                                         </td>
-
                                     </tr>
                                 @endforeach
                             </tbody>
