@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Forzar inputs y selects siempre claros y modernos */
+input, select, textarea {
+    background-color: #fff !important;
+    color: #222 !important;
+    border-color: #d1d5db !important; /* Tailwind border-gray-300 */
+}

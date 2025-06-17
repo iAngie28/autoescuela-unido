@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
     {
         // Administrador
         DB::table('users')->updateOrInsert(
-            ['email' => 'adm@gmail.com'],
+            ['email' => 'admin@example.com'],
             [
                 'name' => 'Lucía Méndez',
                 'username' => 'lucia.admin',
@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        $adminUser = DB::table('users')->where('email', 'adm@gmail.com')->first();
+        $adminUser = DB::table('users')->where('email', 'admin@example.com')->first();
 
         DB::table('administrador')->updateOrInsert(
             ['id' => $adminUser->id],
@@ -39,12 +39,12 @@ class UserSeeder extends Seeder
 
         // Estudiantes
         $estudiantes = [
-            ['ci' => 9000002, 'name' => 'Sofía Rojas',     'email' => 'sofia.est@gmail.com'],
-            ['ci' => 9000003, 'name' => 'Carlos Pérez',    'email' => 'carlos.est@gmail.com'],
-            ['ci' => 9000004, 'name' => 'María López',     'email' => 'maria.est@gmail.com'],
-            ['ci' => 9000005, 'name' => 'Diego Fernández', 'email' => 'diego.est@gmail.com'],
-            ['ci' => 9000006, 'name' => 'Elena Vargas',    'email' => 'elena.est@gmail.com'],
-            ['ci' => 9000007, 'name' => 'Juan Castillo',   'email' => 'juan.est@gmail.com'],
+            ['ci' => 9000002, 'name' => 'Sofía Rojas',     'email' => 'sofia.est@example.com'],
+            ['ci' => 9000003, 'name' => 'Carlos Pérez',    'email' => 'carlos.est@example.com'],
+            ['ci' => 9000004, 'name' => 'María López',     'email' => 'maria.est@example.com'],
+            ['ci' => 9000005, 'name' => 'Diego Fernández', 'email' => 'diego.est@example.com'],
+            ['ci' => 9000006, 'name' => 'Elena Vargas',    'email' => 'elena.est@example.com'],
+            ['ci' => 9000007, 'name' => 'Juan Castillo',   'email' => 'juan.est@example.com'],
         ];
 
         foreach ($estudiantes as $i => $est) {
@@ -77,9 +77,9 @@ class UserSeeder extends Seeder
 
         // Instructores
         $instructores = [
-            ['ci' => 9000010, 'name' => 'Gabriel Suárez', 'email' => 'gabriel.inst@gmail.com'],
-            ['ci' => 9000011, 'name' => 'Paola Aguilar',  'email' => 'paola.inst@gmail.com'],
-            ['ci' => 9000012, 'name' => 'Luis Moreno',    'email' => 'luis.inst@gmail.com'],
+            ['ci' => 9000010, 'name' => 'Gabriel Suárez', 'email' => 'gabriel.inst@example.com'],
+            ['ci' => 9000011, 'name' => 'Paola Aguilar',  'email' => 'paola.inst@example.com'],
+            ['ci' => 9000012, 'name' => 'Luis Moreno',    'email' => 'luis.inst@example.com'],
         ];
 
         foreach ($instructores as $i => $inst) {
