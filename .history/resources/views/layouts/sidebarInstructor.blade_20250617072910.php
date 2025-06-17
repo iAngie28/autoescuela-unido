@@ -42,18 +42,17 @@
                          Historial de Evaluaciones
                      </a>
                  </li>
-                  
+                  <li class="px-4 cursor-pointer hover:bg-gray-700">
+                     <a class="py-3 flex items-center" href="{{ url('/clases/instructor') }}">
+                         <span class="material-symbols-outlined">auto_transmission</span>
+                         Clases
+                     </a>
+                 </li>
                  <div class="hidden peer-checked:flex flex-col bg-white text-gray-800 mt-1 transition-all duration-300">
                     <a href="{{ url('/clases/instructor') }}" class="block px-4 py-2 hover:bg-gray-200"> Clases </a>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200"> Proximamente </a>
                 </div>
                  <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">SEGUIMIENTO DEL PROGRESO
-                 </li>
-                 <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ url('/clases/instructor') }}">
-                         <span class="material-symbols-outlined">auto_transmission</span>
-                         Clases
-                     </a>
                  </li>
                  <li class="px-4 hover:bg-gray-700">
                      <a href="#" class="py-3 flex items-center">

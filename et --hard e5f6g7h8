@@ -1,0 +1,84 @@
+[33m1324c60[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmerge[m[33m, [m[1;31morigin/merge[m[33m)[m Seeders
+[33m6505318[m Merge de Gustavo en merge - conflictos resueltos
+[33m516afe6[m[33m ([m[1;31morigin/Angie[m[33m, [m[1;32mmain[m[33m, [m[1;32mAngie[m[33m)[m Lpm soy genial
+[33mf66c546[m[33m ([m[1;31morigin/Gustavo[m[33m)[m listo
+[33m3098f05[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Prueba
+[33ma3953da[m Arregle users ahora edita y crea
+[33mb5eb071[m Arregle users ahora edita y crea
+[33m59dce45[m Select agregado a usuarios
+[33m4a587b1[m Se arreglaron los problemas con Asignar estudianes, clase_est y cancelar clase
+[33mf102d65[m Tabla bitacora con minuscula
+[33md24778e[m Bitacora enrutada
+[33ma658d29[m FINAL
+[33m33ac536[m Merge branch 'merge' into Gustavo
+[33m990a06b[m nada
+[33m465bc5f[m mensaje
+[33mc65eb66[m mensaje
+[33mfecdbdf[m[33m ([m[1;32mIsmael[m[33m)[m Merge branch 'merge' into Ismael
+[33md6059ff[m Merge pull request #17 from iAngie28/Angie
+[33m3470742[m AL FIN KRJO
+[33mee9ea94[m Algunas mejoras
+[33me3f6773[m Sidebar Estu e Instruc
+[33m653c97a[m FormularioClase
+[33m668ff9d[m Merge branch 'Re-base' into merge
+[33md6d9581[m Sliderbar Student clase
+[33mce98c83[m Merge branch 'Angie' into merge aggggggggggg if it merges an updated upstream into a topic branch. g ggggggggggggting with '#' will be ignored, and an empty message aborts gggggggggggg.
+[33m97c801b[m Resuelto conflicto de merge
+[33m599f1e1[m Sliderbar vista
+[33m0094d3e[m Merge pull request #15 from iAngie28/Ismael
+[33mef0938c[m[33m ([m[1;31morigin/Re-base[m[33m)[m clase_est
+[33mbb917fc[m Navbar
+[33me6efb04[m Se agrego elimiar y se arreglo pago
+[33m977ef40[m Avancess
+[33md373ec9[m mas avance
+[33m2e486a8[m Avancess
+[33m5b4ea39[m Reprogramar clase funcionando mas cancelar clase adm
+[33mdf936ca[m Merge remote-tracking branch 'origin/merge' into Ismael
+[33m8ed9adc[m Avance
+[33m8651949[m Con documentacion y reptogramar clase enrutado
+[33m231a40c[m Traído archivo desde rama gustavo
+[33mefffa79[m arreglos basicos de estilos
+[33m28a5a7b[m Merge branch 'Angie' into merge
+[33m6e6f0d4[m se agrego el modelo de bitacora
+[33m28eba71[m Merge de cambios de la rama Gustavo en merge (conflictos resueltos)
+[33meed6660[m Merge Ismael/Merge
+[33m3300ce2[m en el select de clase/instructot ya no trae el error de id null
+[33ma4c8a11[m mensaje
+[33mdc0a324[m Delete bitacora
+[33mce5ce33[m ACTU
+[33m371ec7a[m mensaje
+[33m3f06703[m Merge remote-tracking branch 'origin/ismael' into merge
+[33m3fc8c0a[m 22-05
+[33m4acbf6c[m Avances 22-05
+[33m9c1e18a[m Se adapto clase a la plantilla
+[33mb9dfc85[m Se adapto clase a la plantilla
+[33mabf7d40[m Se agrego un select a clases y se corrigieron incompatibilidades en los request
+[33me02b5ca[m Merge = Ismael + Gustavo
+[33mc324767[m Merge branch 'merge' into Gustavo
+[33me233137[m merge ismael
+[33m9a24aa7[m Actualizacion 21-05
+[33mfd369b2[m Avances 20-05
+[33m6c304ad[m Actualizacion front
+[33m2cccbcb[m Agregar nuevo archivo: Gustavo
+[33m0474e90[m Merge pull request #5 from iAngie28/ismael
+[33mbf8b7d0[m Odio xampp
+[33mebdf17d[m A la suerte
+[33m8576bc9[m Merge branch 'Angie' into ismael
+[33m1bd71dc[m vistas de paginas
+[33m3002feb[m enrute clases, le puse un botoncito de volver y ahora lo botones de cada dashboard que no hacen nada recargan la pagina
+[33m6d18dc7[m mensaje
+[33mec3a0f7[m Comprobacion si es Admin
+[33mcf13707[m Act. 23:55
+[33mabb5b99[m Front dead
+[33m3fe36ff[m Merge pull request #3 from iAngie28/Angie
+[33m564b765[m TODOS LOS CRUDS DEL !ER CCICLO LISTOS
+[33mf392c12[m crud inscribe
+[33m7f6df76[m crud examen segip
+[33m380b4bc[m Merge pull request #2 from iAngie28/Angie
+[33m1dc07f1[m elimine unas migraciones raras
+[33m21460f7[m todos los crud funcionando, estan pendientes a crear 2
+[33m69062ba[m log out arreglado
+[33m47b4acb[m log out arreglado
+[33me0ec6ab[m Merge pull request #1 from iAngie28/Angie
+[33m072a257[m prueba
+[33m987a3d2[m[33m ([m[1;31morigin/Manu[m[33m)[m ya al fin ahhhhhhhhhhh pinche ismael

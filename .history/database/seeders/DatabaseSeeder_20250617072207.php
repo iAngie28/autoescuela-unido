@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             ClaseSeeder::class,
             PaqueteSeeder::class,
             TipoVehiculoSeeder::class,
-            VehiculoSeeder::class,
         ]);
     }
 }
