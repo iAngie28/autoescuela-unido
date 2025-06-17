@@ -19,6 +19,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
+use App\Http\Controllers\TomarExamenController;
 //Bitacora
 use App\Models\Bitacora;
 use App\Http\Controllers\BitacoraController;
@@ -29,6 +30,8 @@ use App\Http\Controllers\AdminInstructorController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\RegistrarBitacora;
 use App\Models\Vehiculo;
+
+use App\Http\Livewire\Pages\Auth\Register;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +68,7 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
 
 Route::put('/clases/{id}/cancelar', [ClaseController::class, 'cancelarClase'])
     ->name('clases.cancelar')
-    ->middleware('auth'); 
+    ->middleware('auth');
 
 Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClase'])
     ->name('clases.reprogramar')
@@ -132,6 +135,18 @@ Route::middleware(['auth'])->group(function () {
 
     // Gestión de usuarios
     Route::get('/user', [UserController::class, 'index'])->name('user');
+
+
+    // CASO DE ESTUDIO EVALUAR
+
+     Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
+    Route::get('/examen/{user}/evaluar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.evaluar');
+    Route::post('/examen/{user}/guardar', [TomarExamenController::class, 'guardarEvaluacion'])->name('examen.guardar');
+    Route::get('/examen/{user}/tomar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.tomar');
+    Route::get('/instructor/historial-evaluaciones', [TomarExamenController::class, 'historial'])->name('instructor.historial');
+
+
+
 
 
     // Recursos administrativos
@@ -204,3 +219,14 @@ Route::resources([
     'inscribes' => InscribeController::class,
     'clases' => ClaseController::class,
 ]);
+
+    //sidebar mis evaluaciones
+// Listado de evaluaciones
+Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones'])
+    ->name('estudiante.mis-evaluaciones')
+    ->middleware('auth');
+
+// Detalle de una evaluación específica (YA EXISTE)
+Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verEvaluacion'])
+    ->name('estudiante.ver-evaluacion');
+    

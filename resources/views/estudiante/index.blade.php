@@ -30,7 +30,7 @@
                                 <thead class="thead">
                                     <tr>
                                         <th>No</th>
-                                        
+
 									<th >Fecha Reg</th>
 
                                         <th></th>
@@ -40,7 +40,7 @@
                                     @foreach ($estudiantes as $estudiante)
                                         <tr>
                                             <td>{{ ++$i }}</td>
-                                            
+
 										<td >{{ $estudiante->fecha_reg }}</td>
 
                                             <td>
