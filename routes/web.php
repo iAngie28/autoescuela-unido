@@ -189,4 +189,13 @@ Route::resources([
     'clases' => ClaseController::class,
 ]);
 
+    //sidebar mis evaluaciones
+// Listado de evaluaciones
+Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones'])
+    ->name('estudiante.mis-evaluaciones')
+    ->middleware('auth');
 
+// Detalle de una evaluación específica (YA EXISTE)
+Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verEvaluacion'])
+    ->name('estudiante.ver-evaluacion');
+    

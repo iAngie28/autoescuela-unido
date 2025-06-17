@@ -148,4 +148,17 @@ public function evaluaciones_realizadas()
 {
     return $this->hasMany(Evaluacion::class, 'instructor_id');
 }
+
+/**
+ * Relación: Evaluaciones como estudiante
+ */
+public function evaluacionesComoEstudiante()
+{
+    return $this->hasMany(Evaluacion::class, 'estudiante_id');
+}
+
+
+
+
+
 }
