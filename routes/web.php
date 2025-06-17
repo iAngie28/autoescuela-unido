@@ -21,10 +21,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 //Bitacora
 use App\Models\Bitacora;
+use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\AdminInstructorController;
 
 // Middleware
 use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\RegistrarBitacora;
 use App\Models\Vehiculo;
 
 /*
@@ -36,8 +39,6 @@ use App\Models\Vehiculo;
 Route::view('/', 'welcome');
 Route::view('/about', 'paginas.about')->name('about');
 Route::view('/cursos', 'paginas.cursos')->name('cursos');
-
-
 
 
 /*
@@ -80,9 +81,9 @@ Route::get('/clase-est', [ClaseController::class, 'clase_est'])
     ->middleware('auth')
     ->name('clase.clase-est');
 
-    Route::get('/clase-inst', [ClaseController::class, 'clase_inst'])
+    Route::get('/clases/instructor', [ClaseController::class, 'clase_inst'])
     ->middleware('auth')
-    ->name('clase.clase-inst');
+    ->name('clases.clase_inst');
 
 /* Clases*/
 Route::view('dashboard', 'dashboard')
@@ -96,6 +97,12 @@ Route::view('profile', 'profile')
 Route::get('/register', function () {
     return view('auth.register');
 })->middleware(['auth', IsAdmin::class])->name('register');
+
+Route::get('clases/{id}/edit-observaciones', [ClaseController::class, 'editObservaciones'])
+     ->name('clases.edit_observaciones');
+     
+Route::put('clases/{id}/update-observaciones', [ClaseController::class, 'updateObservaciones'])
+     ->name('clases.update_observaciones');
 
 require __DIR__.'/auth.php';
 
@@ -121,7 +128,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tipo-vehiculo', TipoVehiculoController::class);
     Route::resource('vehiculo', VehiculoController::class);
     Route::resource('admin-instructor', AdminInstructorController::class);
-
+    Route::resource('users', UserController::class);
 
 });
 
@@ -131,17 +138,21 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/login', function () {
-    $user = Auth::user();
-    return redirect()->route('dashboard');
-})->name('login');
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+});
 
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/');
-})->name('logout');
+Route::middleware('auth')->group(function () {
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+});
 
 
+//Bitacora
+Route::middleware(['auth'])->group(function () {
+    Route::get('/bitacora', [BitacoraController::class, 'index'])->name('bitacora.index');
+    Route::get('/bitacora/{id}', [BitacoraController::class, 'show'])->name('bitacora.show');
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -162,25 +173,13 @@ Route::get('/calendar/events', function () {
     return response()->json($events);
 })->name('calendar.events');
 
-//
-
-
-Route::get('/bitacora', function () {
-    if (!Auth::check()) {
-        return redirect()->route('login');
-    }
-
-    // Usar el nuevo nombre de relación
-    $registros = Bitacora::with('relacionUsuario')->latest()->paginate(10);
-
-    return view('bitacora.index', compact('registros'));
-})->name('bitacora.index')->middleware('auth');
 
 // Recursos (CRUD) sin middleware adicional
 Route::resources([
     'rols' => RolController::class,
     'notificaciones' => NotificacioneController::class,
     'users' => UserController::class,
+    'usuarios' => UserController::class,
     'administradors' => AdministradorController::class,
     'estudiantes' => EstudianteController::class,
     'instructors' => InstructorController::class,
@@ -194,5 +193,3 @@ Route::resources([
     'inscribes' => InscribeController::class,
     'clases' => ClaseController::class,
 ]);
-
-

@@ -27,7 +27,6 @@ class User extends Authenticatable
         'direccion',
         'fecha_registro',
         'ci',
-        'password',
         'tipo_usuario',
         'id_rol',
     ];
@@ -135,6 +134,36 @@ class User extends Authenticatable
             $usuario->administrador?->delete();
             $usuario->estudiante?->delete();
             $usuario->instructor?->delete();
+        });
+
+        static::updated(function ($usuario) {
+        // Verificar si el id_rol fue cambiado
+        if ($usuario->isDirty('id_rol')) {
+            // Eliminar perfiles antiguos
+            $usuario->administrador?->delete();
+            $usuario->estudiante?->delete();
+            $usuario->instructor?->delete();
+
+            // Crear el perfil correspondiente al nuevo rol
+            if ($usuario->id_rol == 1) {
+                $usuario->administrador()->create([
+                    'id' => $usuario->id,
+                    'turno' => 'mañana'
+                ]);
+            }
+            if ($usuario->id_rol == 2) {
+                $usuario->estudiante()->create([
+                    'id' => $usuario->id,
+                    'fecha_nacimiento' => now()
+                ]);
+            }
+            if ($usuario->id_rol == 3) {
+                $usuario->instructor()->create([
+                    'id' => $usuario->id,
+                    'categ_licencia' => 'A'
+                ]);
+            }
+        }
         });
     }
 }

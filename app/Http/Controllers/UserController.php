@@ -4,37 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Rol;
 use App\Models\User;
+use App\Models\Bitacora;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
-
-class userController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    /*public function index(Request $request): View
-    {
-        // Capturar el término de búsqueda desde el input
-        $search = $request->input('search');
-
-        // Filtrar usuarios si hay un término de búsqueda
-        $users = User::where('name', 'like', "%$search%")
-                    ->orWhere('email', 'like', "%$search%")
-                    ->paginate();
-
-        return view('user.index', compact('users'))
-            ->with('i', ($request->input('page', 1) - 1) * $users->perPage());
-    }*/
-
     public function index(Request $request): View
     {
-        $query = \App\Models\User::query();
+        $query = User::query();
 
-        // Búsqueda por nombre, email, etc.
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
@@ -42,28 +28,16 @@ class userController extends Controller
             });
         }
 
-        // Filtro por rol
         if ($request->filled('id_rol')) {
             $query->where('id_rol', $request->id_rol);
         }
 
         $users = $query->paginate(10);
-
-        // Pasa la lista de roles al blade
-        $roles = \App\Models\Rol::all();
+        $roles = Rol::all();
 
         return view('user.index', compact('users', 'roles'));
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    /*public function create(): View
-    {
-        $user = new user();
-        return view('user.create', compact('user'));
-    }*/
     public function create(): View
     {
         $user = new User();
@@ -71,54 +45,162 @@ class userController extends Controller
         return view('user.create', compact('user', 'roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(UserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
-
-
-        return Redirect::route('users.index')
-            ->with('success', 'user created successfully.');
+        DB::beginTransaction();
+        
+        try {
+            $data = $request->validated();
+            $data['password'] = Hash::make($request->password);
+            
+            $user = User::create($data);
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Creación de usuario',
+                'ID: ' . $user->id . ' | Nombre: ' . $user->name . ' | Email: ' . $user->email,
+                $request->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('users.index')
+                ->with('success', 'Usuario creado correctamente.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear usuario: ' . $e->getMessage());
+            return back()->with('error', 'Error al crear usuario: ' . $e->getMessage());
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id): View
     {
-        $user = User::find($id);
-
+        $user = User::findOrFail($id);
         return view('user.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id): View
     {
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $roles = Rol::all();
         return view('user.edit', compact('user', 'roles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UserRequest $request, User $user): RedirectResponse
+    public function update(UserRequest $request, User $usuario): RedirectResponse
     {
-        $user->update($request->validated());
-
-        return Redirect::route('users.index')
-            ->with('success', 'user updated successfully');
+        DB::beginTransaction();
+        
+        try {
+            // 1. Validar los datos del formulario
+            $validatedData = $request->validated();
+            
+            // 2. Manejo especial de la contraseña
+            if (empty($validatedData['password'])) {
+                // Si no se proporcionó contraseña, mantener la existente
+                unset($validatedData['password']);
+            } else {
+                // Hashear la nueva contraseña
+                $validatedData['password'] = Hash::make($validatedData['password']);
+            }
+            
+            // 3. Guardar email original para bitácora
+            $originalEmail = $usuario->email;
+            
+            // 4. Actualizar el usuario usando fill() y save()
+            $usuario->fill($validatedData);
+            
+            // Verificar si realmente hay cambios
+            if ($usuario->isDirty()) {
+                $usuario->save();
+            } else {
+                // No hay cambios reales
+                return redirect()->route('usuario.index')
+                    ->with('info', 'No se detectaron cambios para actualizar');
+            }
+            
+            // 5. Registrar en bitácora
+            $this->registrarBitacora(
+                'Actualización de usuario',
+                'ID: ' . $usuario->id . 
+                ' | Cambios: ' . json_encode($usuario->getChanges()) .
+                ' | Email original: ' . $originalEmail . 
+                ' | Nuevo email: ' . $usuario->email,
+                $request->ip()
+            );
+            
+            DB::commit();
+            
+            return redirect()->route('usuario.index')
+                ->with('success', 'Usuario actualizado correctamente.');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar usuario: ' . $e->getMessage());
+            return back()
+                ->withInput()
+                ->with('error', 'Error al actualizar: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id): RedirectResponse
     {
-        User::find($id)->delete();
+        DB::beginTransaction();
+        
+        try {
+            $user = User::findOrFail($id);
+            $userData = $user->toArray(); // Guardar datos para bitácora
+            
+            $user->delete();
+            
+            // Registrar en bitácora
+            $this->registrarBitacora(
+                'Eliminación de usuario',
+                'ID: ' . $user->id . ' | Nombre: ' . $user->name . ' | Email: ' . $user->email,
+                request()->ip()
+            );
+            
+            DB::commit();
+            
+            return Redirect::route('users.index')
+                ->with('success', 'Usuario eliminado correctamente');
+                
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar usuario: ' . $e->getMessage());
+            return back()->with('error', 'Error al eliminar: ' . $e->getMessage());
+        }
+    }
 
-        return Redirect::route('users.index')
-            ->with('success', 'user deleted successfully');
+    /**
+     * Registra una acción en la bitácora con respaldo en archivo
+     */
+    private function registrarBitacora($accion, $detalle, $ip)
+    {
+        try {
+            // Método 1: Query Builder (más confiable)
+            DB::table('bitacoras')->insert([
+                'id_user' => Auth::id(),
+                'ip' => $ip,
+                'accion' => $accion . ' - ' . $detalle,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        } catch (\Exception $e) {
+            // Método 2: Guardado en archivo como respaldo
+            $logData = [
+                'timestamp' => now()->toDateTimeString(),
+                'accion' => $accion,
+                'detalle' => $detalle,
+                'ip' => $ip,
+                'error_db' => $e->getMessage()
+            ];
+            
+            file_put_contents(
+                storage_path('logs/bitacora_usuarios.log'),
+                json_encode($logData).PHP_EOL,
+                FILE_APPEND
+            );
+        }
     }
 }

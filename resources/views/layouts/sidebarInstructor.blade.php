@@ -59,7 +59,7 @@
                 </svg>
 
                 <div class="hidden peer-checked:flex flex-col bg-white text-gray-800 mt-1 transition-all duration-300">
-                    <a href="{{ url('/clase-inst') }}" class="block px-4 py-2 hover:bg-gray-200"> Clases </a>
+                    <a href="{{ url('/clases/instructor') }}" class="block px-4 py-2 hover:bg-gray-200"> Clases </a>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200"> Proximamente </a>
                 </div>
             </div>

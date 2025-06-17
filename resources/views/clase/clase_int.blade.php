@@ -4,12 +4,10 @@
     <div class="flex flex-col min-h-screen">
         <div class="flex flex-1">
 
-
             <!-- Contenido principal -->
             <main class="flex-1 bg-gray-100 text-gray-800 p-6">
                 <section class="bg-white-500 text-black py-10 text-center">
                     <h1 class="text-3xl font-bold text-left mb- py-3"> Clases</h1>
-
 
                     @if (session('success'))
                         <div class="bg-green-100 text-green-800 p-4 mb-4">
@@ -34,6 +32,7 @@
                                     <th class="py-3 px-6 text-center">Hora Fin</th>
                                     <th class="py-3 px-6 text-center">Id Instructor</th>
                                     <th class="py-3 px-6 text-center">Estado</th>
+                                    <th class="py-3 px-6 text-center">Observaciones</th> <!-- Columna nueva -->
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 text-sm">
@@ -46,6 +45,17 @@
                                         <td class="py-3 px-6 text-center">{{ $clase->hora_fin }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->id_inst }}</td>
                                         <td class="py-3 px-6 text-center">{{ $clase->estado }}</td>
+                                        <td class="py-3 px-6 text-center">
+                                            <div class="mb-2 min-w-[200px] max-w-[300px] mx-auto">
+                                                <div class="text-left break-words">
+                                                    {{ $clase->comentario_Inst ?? 'Sin observaciones' }}
+                                                </div>
+                                            </div>
+                                            <a href="{{ route('clases.edit_observaciones', $clase->id) }}" 
+                                               class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
+                                                Editar
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

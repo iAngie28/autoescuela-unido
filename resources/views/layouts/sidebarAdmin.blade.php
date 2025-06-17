@@ -1,4 +1,4 @@
-         <div
+<div
              class="py-3 mt-2 text-2xl uppercase text-center tracking-widest bg-gray-900 border-b-2 border-gray-800 mb-2 flex items-center">
              <img class="rounded-lg" alt="Ismael image" src="https://pagedone.io/asset/uploads/1701235464.png" />
              <div class="text-right">
@@ -35,7 +35,7 @@
                      </a>
                  </li>
                  <li class="px-4 cursor-pointer hover:bg-gray-700">
-                     <a class="py-3 flex items-center" href="{{ route('register') }}" target="_blank">
+                     <a class="py-3 flex items-center" href="{{ route('users.create') }}" target="_blank">
                          <span class="material-symbols-outlined">person_add</span>
 
                          Registrar Usuarios
