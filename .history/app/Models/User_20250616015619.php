@@ -135,8 +135,8 @@ class User extends Authenticatable
             $usuario->estudiante?->delete();
             $usuario->instructor?->delete();
         });
-
-        /*static::updated(function ($usuario) {
+        
+        static::updated(function ($usuario) {
         // Verificar si el id_rol fue cambiado
         if ($usuario->isDirty('id_rol')) {
             // Eliminar perfiles antiguos
@@ -164,6 +164,6 @@ class User extends Authenticatable
                 ]);
             }
         }
-    });*/
+    });
     }
 }
