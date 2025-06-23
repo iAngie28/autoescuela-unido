@@ -67,51 +67,60 @@
 
   {{-- Script de JavaScript para manejar la compra --}}
   <script>
-    async function buyCourse(button) {
-      const courseName = button.getAttribute('data-course-name');
-      const coursePrice = parseFloat(button.getAttribute('data-course-price'));
-      const courseDescription = button.getAttribute('data-course-description');
+  async function buyCourse(button) {
+    const courseName = button.getAttribute('data-course-name');
+    const coursePrice = parseFloat(button.getAttribute('data-course-price'));
+    const courseDescription = button.getAttribute('data-course-description');
 
-      // Deshabilitar el botón para evitar clics múltiples
-      button.disabled = true;
-      button.textContent = 'Procesando...';
-
-      try {
-        const response = await fetch('/mock/qr-payments', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-          },
-          body: JSON.stringify({
-            amount: coursePrice,
-            description: courseName + ': ' + courseDescription, // Combinar nombre y descripción
-            client_name: 'Compra de Curso: ' + courseName
-          })
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Error al iniciar el cobro QR.');
-        }
-
-        const data = await response.json();
-        const transactionId = data.id;
-
-        // Abrir la nueva pestaña
-        const qrDisplayUrl = `/qr-payment-display/${transactionId}`; // Ruta definida en web.php
-        window.open(qrDisplayUrl, '_blank', 'width=600,height=700,resizable=yes,scrollbars=yes');
-
-      } catch (error) {
-        console.error('Error al procesar la compra:', error);
-        alert('Hubo un error al procesar tu compra: ' + error.message);
-      } finally {
-        // Re-habilitar el botón
-        button.disabled = false;
-        button.textContent = 'Comprar Paquete';
-      }
+    // Mostrar confirmación antes de continuar
+    const confirmar = window.confirm(
+      `¿Deseas continuar con el pago del paquete "${courseName}" por Bs. ${coursePrice.toFixed(2)}?`
+    );
+    if (!confirmar) {
+      // Si el usuario cancela, no hace nada
+      return;
     }
-  </script>
+
+    // Deshabilitar el botón para evitar clics múltiples
+    button.disabled = true;
+    button.textContent = 'Procesando...';
+
+    try {
+      const response = await fetch('/mock/qr-payments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+          amount: coursePrice,
+          description: courseName + ': ' + courseDescription,
+          client_name: 'Compra de Curso: ' + courseName
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al iniciar el cobro QR.');
+      }
+
+      const data = await response.json();
+      const transactionId = data.id;
+
+      // Abrir la nueva pestaña
+      const qrDisplayUrl = `/qr-payment-display/${transactionId}`;
+      window.open(qrDisplayUrl, '_blank', 'width=600,height=700,resizable=yes,scrollbars=yes');
+
+    } catch (error) {
+      console.error('Error al procesar la compra:', error);
+      alert('Hubo un error al procesar tu compra: ' + error.message);
+    } finally {
+      // Re-habilitar el botón
+      button.disabled = false;
+      button.textContent = 'Comprar Paquete';
+    }
+  }
+</script>
 </body>
 
 @endsection
