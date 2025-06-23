@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('evaluacions', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('estudiante_id')->constrained('users')->onDelete('cascade'); // FK con Users (Estudiante)
-         $table->foreignId('instructor_id')->nullable()->constrained('users')->onDelete('set null'); // FK con Users (Instructor)
+        $table->foreignId('estudiante_id')->constrained('users')->onDelete('cascade');
+         $table->foreignId('instructor_id')->nullable()->constrained('users')->onDelete('set null');
         $table->enum('estacionamiento', ['Excelente', 'Bueno', 'Regular']);
         $table->enum('zigzag', ['Excelente', 'Bueno', 'Regular']);
         $table->enum('retroceso', ['Excelente', 'Bueno', 'Regular']);

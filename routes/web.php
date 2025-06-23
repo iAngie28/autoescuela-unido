@@ -20,6 +20,7 @@ use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\TomarExamenController;
+use App\Http\Controllers\QrTransactionController;
 //Bitacora
 use App\Models\Bitacora;
 use App\Http\Controllers\BitacoraController;
@@ -33,17 +34,41 @@ use App\Models\Vehiculo;
 
 use App\Http\Livewire\Pages\Auth\Register;
 
+
+// PAGOS CON QR
+
+
+use App\Http\Controllers\MockQrPaymentController;
+use App\Http\Controllers\QrDisplayController; // Asegúrate de importar este controlador
+
+
 /*
 |--------------------------------------------------------------------------
 | Rutas Públicas
 |--------------------------------------------------------------------------
 */
-
 Route::view('/', 'welcome');
 Route::view('/about', 'paginas.about')->name('about');
-Route::view('/cursos', 'paginas.cursos')->name('cursos');
+Route::view('/cursos', 'paginas.cursos')->name('cursos.info');
 
+// Esta es la ruta para la página de Cursos con funcionalidad de PAGO QR.
 
+Route::get('/cursos-de-pago', function () {
+    return view('pagoQr.pagoqr');
+})->name('coursesPay.index');
+
+// Rutas de la API Mock para pagos QR (Estas ya están bien en la sección pública)
+Route::prefix('mock')->group(function () {
+    Route::post('/qr-payments', [MockQrPaymentController::class, 'createQrPayment']);
+    Route::get('/qr-payments/{id}', [MockQrPaymentController::class, 'getQrPaymentStatus']);
+    Route::post('/qr-payments/{id}/simulate-success', [MockQrPaymentController::class, 'simulateSuccess']);
+    Route::post('/qr-payments/{id}/simulate-failure', [MockQrPaymentController::class, 'simulateFailure']);
+});
+
+// Ruta para mostrar la página del QR en la nueva pestaña
+Route::get('/qr-payment-display/{id}', [QrDisplayController::class, 'show'])->name('qr.display');
+
+Route::get('/mis-pagos', [QrTransactionController::class, 'misPagos'])->name('estudiante.mis-pagos');
 /*
 |--------------------------------------------------------------------------
 | Rutas de Autenticación
@@ -54,15 +79,15 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
     ->middleware('auth')
     ->name('clase.reprogramar');
 
-    Route::get('/asignar_clase', [ClaseController::class, 'asingar_estudiante_clase'])
+Route::get('/asignar_clase', [ClaseController::class, 'asingar_estudiante_clase'])
     ->middleware('auth')
     ->name('clase.asignar_clase');
 
-    Route::get('/asignar_vehiculo', [InstructorController::class, 'asingar_vehiculo_instructor'])
+Route::get('/asignar_vehiculo', [InstructorController::class, 'asingar_vehiculo_instructor'])
     ->middleware('auth')
     ->name('instructores.asignar_vehiculo');
 
-    Route::put('/instructor/{id}/asignar_vehiculo', [InstructorController::class, 'asignar_vehiculo'])
+Route::put('/instructor/{id}/asignar_vehiculo', [InstructorController::class, 'asignar_vehiculo'])
     ->name('instructor.asignar_vehiculo')
     ->middleware('auth');
 
@@ -74,7 +99,7 @@ Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClas
     ->name('clases.reprogramar')
     ->middleware('auth');
 
-    Route::put('/clases/{id}/asignar_clase', [ClaseController::class, 'asignar_clase'])
+Route::put('/clases/{id}/asignar_clase', [ClaseController::class, 'asignar_clase'])
     ->name('clases.asignar_clase')
     ->middleware('auth');
 
@@ -84,7 +109,7 @@ Route::get('/clase-est', [ClaseController::class, 'clase_est'])
     ->middleware('auth')
     ->name('clase.clase-est');
 
-    Route::get('/clases/instructor', [ClaseController::class, 'clase_inst'])
+Route::get('/clases/instructor', [ClaseController::class, 'clase_inst'])
     ->middleware('auth')
     ->name('clases.clase_inst');
 
@@ -102,18 +127,18 @@ Route::get('/register', function () {
 })->middleware(['auth', IsAdmin::class])->name('register');
 
 Route::get('clases/{id}/edit-observaciones', [ClaseController::class, 'editObservaciones'])
-     ->name('clases.edit_observaciones');
-     
+    ->name('clases.edit_observaciones');
+
 Route::put('clases/{id}/update-observaciones', [ClaseController::class, 'updateObservaciones'])
-     ->name('clases.update_observaciones');
+    ->name('clases.update_observaciones');
 
 /* Inscribir*/
 Route::get('/grupo-examen/asignar-estudiante', [GrupoExamanController::class, 'asignarEstudiante'])
     ->middleware(['auth', IsAdmin::class])
     ->name('grupo-examen.asignar-estudiante');
 
-    
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';
 
 Route::post('/inscribir-grupo', [GrupoExamanController::class, 'inscribir_grupo'])->name('inscribir_grupo');
 Route::post('/grupo-examen/{id}/exportar-excel', [GrupoExamanController::class, 'exportarExcel'])
@@ -139,7 +164,7 @@ Route::middleware(['auth'])->group(function () {
 
     // CASO DE ESTUDIO EVALUAR
 
-     Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
+    Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
     Route::get('/examen/{user}/evaluar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.evaluar');
     Route::post('/examen/{user}/guardar', [TomarExamenController::class, 'guardarEvaluacion'])->name('examen.guardar');
     Route::get('/examen/{user}/tomar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.tomar');
@@ -155,7 +180,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vehiculo', VehiculoController::class);
     Route::resource('admin-instructor', AdminInstructorController::class);
     Route::resource('users', UserController::class);
-
 });
 
 /*
@@ -221,7 +245,7 @@ Route::resources([
     'clases' => ClaseController::class,
 ]);
 
-    //sidebar mis evaluaciones
+//sidebar mis evaluaciones
 // Listado de evaluaciones
 Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones'])
     ->name('estudiante.mis-evaluaciones')
@@ -230,7 +254,7 @@ Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones']
 // Detalle de una evaluación específica (YA EXISTE)
 Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verEvaluacion'])
     ->name('estudiante.ver-evaluacion');
-    
+
 //inscribir
 // Ruta GET para mostrar el formulario de inscripción
 Route::get('/pagos/{pago}/inscribir', [PagoController::class, 'inscribir'])->name('pagos.inscribir');
