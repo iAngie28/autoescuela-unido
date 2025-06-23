@@ -32,7 +32,8 @@
                                     <th class="py-3 px-6 text-center">Hora Fin</th>
                                     <th class="py-3 px-6 text-center">Id Instructor</th>
                                     <th class="py-3 px-6 text-center">Estado</th>
-                                    <th class="py-3 px-6 text-center">Observaciones</th> <!-- Columna nueva -->
+                                    <th class="py-3 px-6 text-center">Observaciones</th>
+                                    <th class="py-3 px-6 text-center">Reporte Estudiante</th> <!-- Nueva columna -->
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 text-sm">
@@ -55,6 +56,19 @@
                                                class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
                                                 Editar
                                             </a>
+                                        </td>
+                                        
+                                        <!-- Columna de Reporte Estudiante -->
+                                        <td class="py-3 px-6 text-center">
+                                            <div class="max-w-xs mx-auto">
+                                                <div class="text-left break-words bg-gray-50 p-2 rounded">
+                                                    @if($clase->reporte_estudiante)
+                                                        {{ $clase->reporte_estudiante }}
+                                                    @else
+                                                        <span class="text-gray-400 italic">Sin reporte</span>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

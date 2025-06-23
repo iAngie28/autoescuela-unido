@@ -54,15 +54,15 @@ Route::get('/clase-reprogramar', [ClaseController::class, 'reprogramar'])
     ->middleware('auth')
     ->name('clase.reprogramar');
 
-    Route::get('/asignar_clase', [ClaseController::class, 'asingar_estudiante_clase'])
+Route::get('/asignar_clase', [ClaseController::class, 'asingar_estudiante_clase'])
     ->middleware('auth')
     ->name('clase.asignar_clase');
 
-    Route::get('/asignar_vehiculo', [InstructorController::class, 'asingar_vehiculo_instructor'])
+Route::get('/asignar_vehiculo', [InstructorController::class, 'asingar_vehiculo_instructor'])
     ->middleware('auth')
     ->name('instructores.asignar_vehiculo');
 
-    Route::put('/instructor/{id}/asignar_vehiculo', [InstructorController::class, 'asignar_vehiculo'])
+Route::put('/instructor/{id}/asignar_vehiculo', [InstructorController::class, 'asignar_vehiculo'])
     ->name('instructor.asignar_vehiculo')
     ->middleware('auth');
 
@@ -74,19 +74,35 @@ Route::put('/clases/{id}/reprogramar', [ClaseController::class, 'reprogramarClas
     ->name('clases.reprogramar')
     ->middleware('auth');
 
-    Route::put('/clases/{id}/asignar_clase', [ClaseController::class, 'asignar_clase'])
+Route::put('/clases/{id}/asignar_clase', [ClaseController::class, 'asignar_clase'])
     ->name('clases.asignar_clase')
     ->middleware('auth');
 
 Route::delete('clases/{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');
 
-Route::get('/clase-est', [ClaseController::class, 'clase_est'])
+Route::get('/clases/estudiante', [ClaseController::class, 'clase_est'])
     ->middleware('auth')
-    ->name('clase.clase-est');
+    ->name('clases.clase_est'); // Nombre corregido
 
-    Route::get('/clases/instructor', [ClaseController::class, 'clase_inst'])
+Route::get('/clases/instructor', [ClaseController::class, 'clase_inst'])
     ->middleware('auth')
     ->name('clases.clase_inst');
+
+/* Observaciones Instructores */
+Route::get('clases/{id}/edit-observaciones', [ClaseController::class, 'editObservaciones'])
+     ->name('clases.edit_observaciones');
+     
+Route::put('clases/{id}/update-observaciones', [ClaseController::class, 'updateObservaciones'])
+     ->name('clases.update_observaciones');
+
+/* Reportes de Incidentes por Estudiantes */
+Route::get('clases/{id}/edit-reporte-estudiante', [ClaseController::class, 'editReporteEstudiante'])
+    ->middleware('auth')
+    ->name('clases.edit_reporte_estudiante');
+    
+Route::put('clases/{id}/update-reporte-estudiante', [ClaseController::class, 'updateReporteEstudiante'])
+    ->middleware('auth')
+    ->name('clases.update_reporte_estudiante');
 
 /* Clases*/
 Route::view('dashboard', 'dashboard')
@@ -100,12 +116,6 @@ Route::view('profile', 'profile')
 Route::get('/register', function () {
     return view('auth.register');
 })->middleware(['auth', IsAdmin::class])->name('register');
-
-Route::get('clases/{id}/edit-observaciones', [ClaseController::class, 'editObservaciones'])
-     ->name('clases.edit_observaciones');
-     
-Route::put('clases/{id}/update-observaciones', [ClaseController::class, 'updateObservaciones'])
-     ->name('clases.update_observaciones');
 
 /* Inscribir*/
 Route::get('/grupo-examen/asignar-estudiante', [GrupoExamanController::class, 'asignarEstudiante'])
@@ -138,16 +148,11 @@ Route::middleware(['auth'])->group(function () {
 
 
     // CASO DE ESTUDIO EVALUAR
-
-     Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
+    Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
     Route::get('/examen/{user}/evaluar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.evaluar');
     Route::post('/examen/{user}/guardar', [TomarExamenController::class, 'guardarEvaluacion'])->name('examen.guardar');
     Route::get('/examen/{user}/tomar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.tomar');
     Route::get('/instructor/historial-evaluaciones', [TomarExamenController::class, 'historial'])->name('instructor.historial');
-
-
-
-
 
     // Recursos administrativos
     Route::resource('rol', RolController::class);
@@ -221,7 +226,7 @@ Route::resources([
     'clases' => ClaseController::class,
 ]);
 
-    //sidebar mis evaluaciones
+//sidebar mis evaluaciones
 // Listado de evaluaciones
 Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones'])
     ->name('estudiante.mis-evaluaciones')

@@ -386,4 +386,50 @@ public function asingar_estudiante_clase(Request $request): View
         return redirect()->route('clases.clase_inst')
             ->with('success', 'Observaciones actualizadas correctamente');
     }
+
+    public function editReporteEstudiante($id): View
+{
+    $clase = Clase::findOrFail($id);
+    $user = Auth::user();
+
+    // Validar que el usuario es el estudiante asignado
+    if ($user->tipo_usuario !== 'E' || $clase->id_est != $user->id) {
+        abort(403, 'No tienes permiso para reportar incidentes en esta clase.');
+    }
+
+    return view('clase.edit_reporte_estudiante', compact('clase'));
+}
+
+/**
+ * Actualiza el reporte del estudiante en la base de datos
+ */
+public function updateReporteEstudiante(Request $request, $id): RedirectResponse
+{
+    $clase = Clase::findOrFail($id);
+    $user = Auth::user();
+
+    // Validar permisos
+    if ($user->tipo_usuario !== 'E' || $clase->id_est != $user->id) {
+        abort(403, 'No tienes permiso para reportar incidentes en esta clase.');
+    }
+
+    // Validar longitud máxima según la estructura de BD
+    $request->validate([
+        'reporte_estudiante' => 'nullable|string|max:100'
+    ]);
+
+    // Actualizar solo el campo de reporte_estudiante
+    $clase->reporte_estudiante = $request->reporte_estudiante;
+    $clase->save();
+
+    // Registrar en bitácora
+    $this->registrarBitacora(
+        'Reporte de estudiante actualizado',
+        'Clase ID: ' . $id . ' | Reporte: ' . substr($request->reporte_estudiante, 0, 20) . '...',
+        $request->ip()
+    );
+
+    return redirect()->route('clases.clase_est')
+        ->with('success', 'Reporte actualizado correctamente');
+}
 }
