@@ -9,6 +9,8 @@ use App\Http\Requests\ClaseRequest;
 use App\Models\Paquete;
 use App\Models\User;
 use App\Models\Bitacora;
+use App\Models\Notificacione;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -178,6 +180,27 @@ public function store(ClaseRequest $request): RedirectResponse
             $clase = Clase::findOrFail($id);
             $clase->update(['estado' => 'cancelada']);
     
+                // Notificar al estudiante
+            if (!is_null($clase->id_est)) {
+                Notificacione::create([
+                    'mensaje' => 'Tu clase del ' . $clase->fecha . ' fue cancelada. Espera reprogramación.',
+                    'tipo' => 'Clase',
+                    'fecha' => now(),
+                    'user_id' => $clase->id_est,
+                    'leido' => false
+                ]);
+            }
+                // Notificar al instructor
+            if (!is_null($clase->id_inst)) {
+            Notificacione::create([
+                'mensaje' => 'La clase del ' . $clase->fecha . ' fue cancelada.',
+                'tipo' => 'Clase',
+                'fecha' => now(),
+                'user_id' => $clase->id_inst,
+                'leido' => false
+            ]);
+        }
+
             $this->registrarBitacora(
                 'Cancelación de clase',
                 'ID: ' . $id . ' | Estado: cancelada',
@@ -226,6 +249,28 @@ public function store(ClaseRequest $request): RedirectResponse
                 'estado' => 'programada'
             ]);
             }
+
+            // Notificar al estudiante
+            if (!is_null($clase->id_est)) {
+                Notificacione::create([
+                    'mensaje' => 'Tu clase fue reprogramada para el ' . $request->nueva_fecha . '.',
+                    'tipo' => 'Clase',
+                    'fecha' => now(),
+                    'user_id' => $clase->id_est,
+                    'leido' => false
+                ]);
+            }
+
+            // Notificar al instructor
+            if (!is_null($clase->id_inst)) {
+                Notificacione::create([
+                    'mensaje' => 'Una clase fue reprogramada para el ' . $request->nueva_fecha . '.',
+                    'tipo' => 'Clase',
+                    'fecha' => now(),
+                    'user_id' => $clase->id_inst,
+                    'leido' => false
+                ]);
+            }
             
             $this->registrarBitacora(
                 'Reprogramación de clase',
@@ -249,6 +294,17 @@ public function store(ClaseRequest $request): RedirectResponse
                 'id_est' => $request->nid_est,
                 'estado' => 'inscrita'
             ]);
+
+            // Notificar al estudiante
+            Notificacione::create([
+                'mensaje' => 'Se te ha asignado una clase para el ' . $clase->fecha . '.',
+                'tipo' => 'Clase',
+                'fecha' => now(),
+                'user_id' => $request->nid_est,
+                'leido' => false
+            ]);
+
+
 
             $this->registrarBitacora(
                 'Asignación de estudiante',

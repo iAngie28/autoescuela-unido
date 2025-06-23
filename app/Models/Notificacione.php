@@ -3,40 +3,47 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Class Notificacione
- *
- * @property $id
- * @property $mensaje
- * @property $tipo
- * @property $fecha
- * @property $created_at
- * @property $updated_at
- *
- * @property NotiEnviada[] $notiEnviadas
- * @package App
- * @mixin \Illuminate\Database\Eloquent\Builder
- */
 class Notificacione extends Model
+
 {
-    
+
     protected $perPage = 20;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = ['mensaje', 'tipo', 'fecha'];
+    protected $fillable = [
+        'mensaje', 
+        'tipo', 
+        'fecha',
+        'user_id',
+        'leido'
+    ];
 
+    protected $casts = [
+        'fecha' => 'datetime',
+        'leido' => 'boolean'
+    ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Usuario destinatario de la notificación
      */
-    public function notiEnviadas()
+    public function user(): BelongsTo
     {
-        return $this->hasMany(\App\Models\NotiEnviada::class, 'id', 'id_not');
+        return $this->belongsTo(User::class);
     }
+
     
+    public function scopeNoLeidas($query)
+    {
+        return $query->where('leido', false);
+    }
+
+    /**
+     * Scope para notificaciones de un usuario
+     */
+    public function scopeDeUsuario($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
 }

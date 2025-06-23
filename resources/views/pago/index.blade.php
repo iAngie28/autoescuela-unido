@@ -1,74 +1,115 @@
-@extends('layouts.guest-bootstrap')
-    @section('content')
-    <div class="container-fluid mt-5">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
+@extends('layouts.app')
 
-                            <span id="card_title">
-                                {{ __('Pagos') }}
-                            </span>
+@section('content')
+    <div class="flex flex-col min-h-screen">
+        <div class="flex flex-1">
+            <main class="flex-1 bg-gray-100 text-gray-800 p-6">
 
-                             <div class="float-right">
-                                <a href="{{ route('pagos.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create New') }}
-                                </a>
-                              </div>
-                        </div>
+                {{-- ========== FORMULARIO DE NUEVO PAGO (reutilizado) ========== --}}
+                <section class="bg-white text-black p-6 rounded-lg shadow mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">Registrar Nuevo Pago</h2>
+
+                    <form method="POST" action="{{ route('pagos.store') }}" enctype="multipart/form-data">
+                        @csrf
+                        @include('pago.form')
+                    </form>
+                </section>
+
+                {{-- ========== MENSAJE DE ÉXITO ========== --}}
+                @if (session('success'))
+                    <div class="bg-green-100 text-green-800 p-4 mb-4">
+                        {{ session('success') }}
                     </div>
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success m-4">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
+                @endif
 
-                    <div class="card-body bg-white">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead class="thead">
-                                    <tr>
-                                        <th>No</th>
-                                        
-									<th >Monto</th>
-									<th >Fecha</th>
-									<th >Descuento</th>
-									<th >Id Est</th>
-									<th >Id Adm</th>
+                @if (session('error'))
+                    <div class="bg-red-100 text-red-800 p-4 mb-4">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
-                                        <th></th>
+                {{-- ========== TABLA DE PAGOS ========== --}}
+                <section class="bg-white text-black py-6 px-4 rounded-lg shadow">
+                    <div class="flex items-center justify-between mb-6">
+                        <h1 class="text-3xl font-bold">Pagos Registrados</h1>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto">
+                            <thead>
+                                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                                    <th class="py-3 px-6 text-center">ID</th>
+                                    <th class="py-3 px-6 text-center">Fecha</th>
+                                    <th class="py-3 px-6 text-center">Detalle</th>
+                                    <th class="py-3 px-6 text-center">Monto</th>
+                                    <th class="py-3 px-6 text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-600 text-sm">
+                                @foreach ($pagos as $pago)
+                                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                        <td class="py-3 px-6 text-center">{{ $pago->id }}</td>
+                                        <td class="py-3 px-6 text-center">{{ $pago->fecha }}</td>
+                                        <td class="py-3 px-6 text-center">{{ $pago->detalle }}</td>
+                                        <td class="py-3 px-6 text-center">{{ $pago->monto }} Bs</td>
+                                        <td class="py-3 px-2 text-right">
+                                            <div class="flex items-end justify-end space-x-4">
+                                                <div class="flex flex-col items-center">
+                                                    <span>👁</span>
+                                                    <a href="{{ route('pagos.show', $pago->id) }}"
+                                                        class="text-blue-500 text-sm">Detalles</a>
+                                                </div>
+                                                @if ($pago->estado !== 'anulado')
+                                                    @if ($pago->estado === 'Finalizado')
+                                                        {{-- Solo mostrar botón de anular --}}
+                                                        <div class="flex flex-col items-center">
+                                                            <span>↩️</span>
+                                                            <form action="{{ route('pagos.anular', $pago->id) }}"
+                                                                method="POST"
+                                                                onsubmit="return confirm('¿Seguro que deseas anular este pago?');">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button type="submit"
+                                                                    class="text-red-500 text-sm">Anular</button>
+                                                            </form>
+                                                        </div>
+                                                    @else
+                                                        {{-- Mostrar ambos botones --}}
+                                                        <div class="flex flex-col items-center">
+                                                            <span>✏</span>
+                                                            <a href="{{ route('pagos.inscribir', $pago->id) }}"
+                                                                class="text-green-500 text-sm">Inscribir</a>
+                                                        </div>
+
+                                                        <div class="flex flex-col items-center">
+                                                            <span>↩️</span>
+                                                            <form action="{{ route('pagos.anular', $pago->id) }}"
+                                                                method="POST"
+                                                                onsubmit="return confirm('¿Seguro que deseas anular este pago?');">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button type="submit"
+                                                                    class="text-red-500 text-sm">Anular</button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                @endif
+
+
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($pagos as $pago)
-                                        <tr>
-                                            <td>{{ ++$i }}</td>
-                                            
-										<td >{{ $pago->monto }}</td>
-										<td >{{ $pago->fecha }}</td>
-										<td >{{ $pago->descuento }}</td>
-										<td >{{ $pago->id_est }}</td>
-										<td >{{ $pago->id_adm }}</td>
-
-                                            <td>
-                                                <form action="{{ route('pagos.destroy', $pago->id) }}" method="POST">
-                                                    <a class="btn btn-sm btn-primary " href="{{ route('pagos.show', $pago->id) }}"><i class="fa fa-fw fa-eye"></i> {{ __('Show') }}</a>
-                                                    <a class="btn btn-sm btn-success" href="{{ route('pagos.edit', $pago->id) }}"><i class="fa fa-fw fa-edit"></i> {{ __('Edit') }}</a>
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirm('Are you sure to delete?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> {{ __('Delete') }}</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                </div>
-                {!! $pagos->withQueryString()->links() !!}
-            </div>
+
+                    {{-- Paginación --}}
+                    <div class="mt-6">
+                        {{ $pagos->withQueryString()->links() }}
+                    </div>
+                </section>
+            </main>
         </div>
     </div>
 @endsection

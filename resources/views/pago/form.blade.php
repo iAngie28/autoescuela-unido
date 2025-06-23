@@ -1,45 +1,169 @@
-<div class="row padding-1 p-1">
+<div class="row p-1">
     <div class="col-md-12">
-
-        <div class="form-group mb-2 mb20">
-            <label for="monto" class="form-label">{{ __('Monto') }}</label>
-            <input type="text" name="monto" class="form-control @error('monto') is-invalid @enderror"
-                value="{{ old('monto', $pago?->monto) }}" id="monto" placeholder="Monto">
-            {!! $errors->first('monto', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+        <!-- Select de Estudiante -->
+        <div class="mb-3">
+            <label for="id_est" class="form-label">Estudiante</label>
+            <select name="id_est" id="id_est" class="form-select @error('id_est') is-invalid @enderror">
+                <option value="">Seleccione un estudiante</option>
+                @foreach ($usuariosEstudiantes as $usuario)
+                    @if ($usuario->estudiante)
+                        <option value="{{ $usuario->estudiante->id }}">
+                            {{ $usuario->name }}
+                        </option>
+                    @endif
+                @endforeach
+            </select>
         </div>
-        <div class="form-group mb-2 mb20">
-            <label for="descuento" class="form-label">{{ __('Descuento') }}</label>
-            <input type="text" name="descuento" class="form-control @error('descuento') is-invalid @enderror"
-                value="{{ old('descuento', $pago?->descuento) }}" id="descuento" placeholder="Descuento">
-            {!! $errors->first('descuento', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+
+        <!-- Tipo de pago -->
+        <div class="mb-3">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de pago</label>
+            <div id="tipo-pago-opciones" class="flex items-center gap-4">
+                <label for="pago_paquete"
+                    class="radio-label inline-flex items-center px-4 py-2 border rounded cursor-pointer text-gray-700 border-gray-300 transition">
+                    <input type="radio" name="tipo_pago" id="pago_paquete" value="paquete" class="hidden">
+                    Paquete
+                </label>
+                <label for="pago_grupo"
+                    class="radio-label inline-flex items-center px-4 py-2 border rounded cursor-pointer text-gray-700 border-gray-300 transition">
+                    <input type="radio" name="tipo_pago" id="pago_grupo" value="grupo" class="hidden">
+                    Grupo
+                </label>
+            </div>
         </div>
-        <select name="id_est" id="id_est" class="form-select @error('id_est') is-invalid @enderror">
-            <option value="">Seleccione un estudiante</option>
-            @foreach ($usuariosEstudiantes as $usuario)
-                @if ($usuario->estudiante)
-                    <option value="{{ $usuario->estudiante->id }}"
-                        {{ old('id_est', $pago->id_est ?? '') == $usuario->estudiante->id ? 'selected' : '' }}>
-                        {{ $usuario->name }}
+
+        <!-- Select de Paquetes -->
+        <div class="mb-3 hidden" id="select_paquete">
+            <label for="paquete_id" class="form-label">Seleccione un paquete</label>
+            <select name="paquete_id" id="paquete_id" class="form-select">
+                <option value="">Seleccione un paquete</option>
+                @foreach ($paquetes as $paquete)
+                    <option value="{{ $paquete->id }}" data-monto="{{ $paquete->costo }}">
+                        {{ $paquete->cant_class }}
                     </option>
-                @endif
-            @endforeach
+                @endforeach
+            </select>
+        </div>
 
-        </select>
-        <select name="id_adm" id="id_adm" class="form-select @error('id_adm') is-invalid @enderror">
-            <option value="">Seleccione un administrador</option>
-            @foreach ($usuariosAdministrador as $usuario)
-                @if ($usuario->administrador)
-                    <option value="{{ $usuario->administrador->id }}"
-                        {{ old('id_adm', $pago->id_adm ?? '') == $usuario->administrador->id ? 'selected' : '' }}>
-                        {{ $usuario->name }}
+        <!-- Select de Categorías -->
+        <div class="mb-3 hidden" id="select_grupo">
+            <label for="categoria_id" class="form-label">Seleccione una categoría</label>
+            <select name="categoria_id" id="categoria_id" class="form-select">
+                <option value="">Seleccione una categoría</option>
+                @foreach ($categorias as $categoria)
+                    <option value="{{ $categoria->id }}" data-monto="{{ $categoria->costo }}">
+                        {{ $categoria->nombre }}
                     </option>
-                @endif
-            @endforeach
+                @endforeach
+            </select>
+        </div>
 
-        </select>
+        <!-- Descuento -->
+        <div class="mb-3">
+            <label for="descuento" class="form-label">Descuento</label>
+            <input type="number" name="descuento" id="descuento" value="0" class="form-control w-32"
+                min="0" step="1">
+        </div>
 
-    </div>
-    <div class="col-md-12 mt20 mt-2">
-        <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+
+        <!-- Monto visible con label arriba y ambos alineados a la derecha -->
+        <div class="mb-3 text-right">
+            <label for="monto_real" class="form-label block">Monto</label>
+            <p id="monto"
+                class="text-lg font-semibold text-gray-800 bg-gray-100 border rounded px-3 py-2 inline-block">
+                Bs 0.00
+            </p>
+        </div>
+
+        <!-- Monto real (oculto para el backend) -->
+        <input type="hidden" name="monto" id="monto_real" value="0">
+
+
+        <!-- Botón -->
+        <div class="mt-3">
+            <button type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition duration-200">
+                Registrar pago
+            </button>
+        </div>
+
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioPaquete = document.getElementById('pago_paquete');
+        const radioGrupo = document.getElementById('pago_grupo');
+        const selectPaquete = document.getElementById('select_paquete');
+        const selectGrupo = document.getElementById('select_grupo');
+        const paqueteSelect = document.getElementById('paquete_id');
+        const categoriaSelect = document.getElementById('categoria_id');
+        const descuentoInput = document.getElementById('descuento');
+        const montoTexto = document.getElementById('monto');
+        const radioLabels = document.querySelectorAll('.radio-label');
+
+        let baseMonto = 0;
+
+        function actualizarMonto() {
+            const descuento = parseFloat(descuentoInput.value) || 0;
+            const finalMonto = Math.max(0, baseMonto - descuento);
+            montoTexto.textContent = `Bs ${finalMonto.toFixed(2)}`;
+
+            // Actualiza el hidden input
+            document.getElementById('monto_real').value = finalMonto.toFixed(2);
+        }
+
+
+        function resetMonto() {
+            baseMonto = 0;
+            actualizarMonto();
+        }
+
+        function toggleSelects() {
+            if (radioPaquete.checked) {
+                selectPaquete.classList.remove('hidden');
+                selectGrupo.classList.add('hidden');
+                categoriaSelect.value = '';
+            } else if (radioGrupo.checked) {
+                selectGrupo.classList.remove('hidden');
+                selectPaquete.classList.add('hidden');
+                paqueteSelect.value = '';
+            } else {
+                selectPaquete.classList.add('hidden');
+                selectGrupo.classList.add('hidden');
+                paqueteSelect.value = '';
+                categoriaSelect.value = '';
+            }
+            resetMonto();
+
+            radioLabels.forEach(label => {
+                label.classList.remove('bg-gray-800', 'border-gray-400', 'text-white');
+                label.classList.add('border-gray-300', 'text-gray-700');
+            });
+            if (radioPaquete.checked) {
+                document.querySelector('label[for="pago_paquete"]').classList.add('bg-gray-800', 'border-gray-400', 'text-white');
+            }
+            if (radioGrupo.checked) {
+                document.querySelector('label[for="pago_grupo"]').classList.add('bg-gray-800', 'border-gray-400', 'text-white');
+            }
+        }
+
+        radioPaquete.addEventListener('change', toggleSelects);
+        radioGrupo.addEventListener('change', toggleSelects);
+
+        paqueteSelect.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            baseMonto = parseFloat(selected.getAttribute('data-monto')) || 0;
+            actualizarMonto();
+        });
+
+        categoriaSelect.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            baseMonto = parseFloat(selected.getAttribute('data-monto')) || 0;
+            actualizarMonto();
+        });
+
+        descuentoInput.addEventListener('input', actualizarMonto);
+
+        toggleSelects(); // inicializar
+    });
+</script>
