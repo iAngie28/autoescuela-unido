@@ -157,6 +157,7 @@
                 <span class="material-symbols-outlined">
                     storage
                 </span>
+
                 Paquetes
             </a>
         </li>
@@ -165,6 +166,7 @@
                 <span class="material-symbols-outlined">
                     storage
                 </span>
+
                 Categorias
             </a>
         </li>

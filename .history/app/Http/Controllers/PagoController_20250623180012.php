@@ -86,7 +86,7 @@ class PagoController extends Controller
         $validated['detalle'] = $detalle;
         // Crear pago
         Pago::create($validated);
-        
+
         return Redirect::route('pagos.index')
             ->with('success', 'Pago creado exitosamente.');
     }

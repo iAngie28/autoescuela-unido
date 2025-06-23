@@ -262,11 +262,10 @@ public function asingar_estudiante_clase(Request $request): View
 {
     try {
         $request->validate([
-            'id_pago' => 'required|exists:pagos,id'
-        ], [
-            'id_pago.required' => 'Debe seleccionar un pago válido.',
+            'id_pago' => 'required|exists:pagos,id',
+            'nid_est' => 'required|exists:estudiantes,id'
         ]);
-
+        
         $clase = Clase::findOrFail($id);
 
         // Asignar clase

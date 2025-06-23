@@ -157,13 +157,14 @@
                 <span class="material-symbols-outlined">
                     storage
                 </span>
+
                 Paquetes
             </a>
         </li>
-        <li class="px-4 cursor-pointer hover:bg-gray-700">
-            <a class="py-3 flex items-center" href="/examen-categoria-aspiras">
+        <li class="px-4 hover:bg-gray-700">
+            <a href="/examen-categoria-aspiras" class="py-3 flex items-center">
                 <span class="material-symbols-outlined">
-                    storage
+                    payments
                 </span>
                 Categorias
             </a>
