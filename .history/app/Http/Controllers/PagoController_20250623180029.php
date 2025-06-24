@@ -25,7 +25,7 @@ class PagoController extends Controller
      */
     public function index(Request $request): View
     {
-        $pagos = Pago::latest()->paginate();
+        $pagos = Pago::paginate();
         $pago = new Pago();
         $usuariosEstudiantes = User::where('id_rol', 2)->get();
 
@@ -276,22 +276,5 @@ class PagoController extends Controller
 
         return Redirect::route('pagos.index')
             ->with('success', 'Pago deleted successfully');
-    }
-
-    public function pago_est(Request $request): View
-    {
-        $user = auth()->user();
-
-        // Validar que el usuario sea tipo estudiante
-        if ($user->tipo_usuario !== 'E') {
-            abort(403, 'Acceso no autorizado');
-        }
-
-        // Obtener solo clases programadas del estudiante actual
-        $pagos = Pago::where('id_est', $user->id)
-            ->latest()
-            ->paginate(10);
-
-        return view('pago.pago_est', compact('pagos'));
     }
 }

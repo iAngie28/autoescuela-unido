@@ -10,8 +10,6 @@ use App\Models\Paquete;
 use App\Models\User;
 use App\Models\Bitacora;
 use App\Models\Pago;
-use App\Models\Notificacione;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -198,27 +196,6 @@ public function asingar_estudiante_clase(Request $request): View
         try {
             $clase = Clase::findOrFail($id);
             $clase->update(['estado' => 'cancelada']);
-    
-                // Notificar al estudiante
-            if (!is_null($clase->id_est)) {
-                Notificacione::create([
-                    'mensaje' => 'Tu clase del ' . $clase->fecha . ' fue cancelada. Espera reprogramación.',
-                    'tipo' => 'Clase',
-                    'fecha' => now(),
-                    'user_id' => $clase->id_est,
-                    'leido' => false
-                ]);
-            }
-                // Notificar al instructor
-            if (!is_null($clase->id_inst)) {
-            Notificacione::create([
-                'mensaje' => 'La clase del ' . $clase->fecha . ' fue cancelada.',
-                'tipo' => 'Clase',
-                'fecha' => now(),
-                'user_id' => $clase->id_inst,
-                'leido' => false
-            ]);
-        }
 
             $this->registrarBitacora(
                 'Cancelación de clase',
@@ -269,28 +246,6 @@ public function asingar_estudiante_clase(Request $request): View
                 ]);
             }
 
-            // Notificar al estudiante
-            if (!is_null($clase->id_est)) {
-                Notificacione::create([
-                    'mensaje' => 'Tu clase fue reprogramada para el ' . $request->nueva_fecha . '.',
-                    'tipo' => 'Clase',
-                    'fecha' => now(),
-                    'user_id' => $clase->id_est,
-                    'leido' => false
-                ]);
-            }
-
-            // Notificar al instructor
-            if (!is_null($clase->id_inst)) {
-                Notificacione::create([
-                    'mensaje' => 'Una clase fue reprogramada para el ' . $request->nueva_fecha . '.',
-                    'tipo' => 'Clase',
-                    'fecha' => now(),
-                    'user_id' => $clase->id_inst,
-                    'leido' => false
-                ]);
-            }
-            
             $this->registrarBitacora(
                 'Reprogramación de clase',
                 'ID: ' . $id . ' | Nueva fecha: ' . $request->nueva_fecha,
@@ -324,22 +279,6 @@ public function asingar_estudiante_clase(Request $request): View
         // Verificar si debe marcarse el pago como Finalizado
         if ($request->filled('id_pago')) {
             $pago = Pago::find($request->id_pago);
-            // Notificar al estudiante
-            Notificacione::create([
-                'mensaje' => 'Se te ha asignado una clase para el ' . $clase->fecha . '.',
-                'tipo' => 'Clase',
-                'fecha' => now(),
-                'user_id' => $request->nid_est,
-                'leido' => false
-            ]);
-
-
-
-            $this->registrarBitacora(
-                'Asignación de estudiante',
-                'Clase ID: ' . $id . ' | Estudiante ID: ' . $request->nid_est,
-                request()->ip()
-            );    
 
             // Extraer número desde el detalle (ej: "Pago de 5 clases ...")
             preg_match('/(\d+)/', $pago->detalle, $matches);
@@ -453,50 +392,4 @@ public function asingar_estudiante_clase(Request $request): View
         return redirect()->route('clases.clase_inst')
             ->with('success', 'Observaciones actualizadas correctamente');
     }
-
-    public function editReporteEstudiante($id): View
-{
-    $clase = Clase::findOrFail($id);
-    $user = Auth::user();
-
-    // Validar que el usuario es el estudiante asignado
-    if ($user->tipo_usuario !== 'E' || $clase->id_est != $user->id) {
-        abort(403, 'No tienes permiso para reportar incidentes en esta clase.');
-    }
-
-    return view('clase.edit_reporte_estudiante', compact('clase'));
-}
-
-/**
- * Actualiza el reporte del estudiante en la base de datos
- */
-public function updateReporteEstudiante(Request $request, $id): RedirectResponse
-{
-    $clase = Clase::findOrFail($id);
-    $user = Auth::user();
-
-    // Validar permisos
-    if ($user->tipo_usuario !== 'E' || $clase->id_est != $user->id) {
-        abort(403, 'No tienes permiso para reportar incidentes en esta clase.');
-    }
-
-    // Validar longitud máxima según la estructura de BD
-    $request->validate([
-        'reporte_estudiante' => 'nullable|string|max:100'
-    ]);
-
-    // Actualizar solo el campo de reporte_estudiante
-    $clase->reporte_estudiante = $request->reporte_estudiante;
-    $clase->save();
-
-    // Registrar en bitácora
-    $this->registrarBitacora(
-        'Reporte de estudiante actualizado',
-        'Clase ID: ' . $id . ' | Reporte: ' . substr($request->reporte_estudiante, 0, 20) . '...',
-        $request->ip()
-    );
-
-    return redirect()->route('clases.clase_est')
-        ->with('success', 'Reporte actualizado correctamente');
-}
 }

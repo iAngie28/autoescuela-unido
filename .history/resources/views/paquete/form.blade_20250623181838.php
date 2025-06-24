@@ -11,13 +11,12 @@
 <div class="mb-4">
     <label for="capacidad_est" class="block font-semibold mb-1">Capacidad de Estudiantes</label>
     <input type="text" name="capacidad_est" id="capacidad_est"
-        value="{{ old('capacidad_est', $paquete?->capacidad_est ?? 1) }}"
+        value="{{ old('capacidad_est', $paquete?->capacidad_est) }}"
         class="w-full px-4 py-2 rounded-md focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition @error('capacidad_est') border-red-500 @enderror"
         style="background-color: #293241; color: #f1f1f1; border: 1px solid #222b38;"
         placeholder="Capacidad de estudiantes">
     @error('capacidad_est') <p class="text-red-400 text-sm mt-1">{{ $message }}</p> @enderror
 </div>
-
 
 <div class="mb-6">
     <label for="costo" class="block font-semibold mb-1">Costo</label>

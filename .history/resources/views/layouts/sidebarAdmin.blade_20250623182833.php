@@ -136,19 +136,14 @@
         </li>
         <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">PAGOS Y NOTIFICACIONES
         </li>
-                 
-                    <!-- sidebar-admin.blade.php -->
-                <li class="px-4 hover:bg-gray-700">
-                <a href="{{ route('notificaciones.index') }}" class="py-3 flex items-center">
-                    <span class="material-symbols-outlined mr-3">notifications</span>
-                    <span>Notificaciones</span>
-                    @if($notiNoLeidas ?? 0 > 0)
-                        <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {{ $notiNoLeidas }}
-                        </span>
-                    @endif
-                </a>
-                </li>
+        <li class="px-4 hover:bg-gray-700">
+            <a href="#" class="py-3 flex items-center">
+                <span class="material-symbols-outlined">
+                    notifications
+                </span>
+                Notificaciones
+            </a>
+        </li>
         <li class="px-4 hover:bg-gray-700">
             <a href="/pagos" class="py-3 flex items-center">
                 <span class="material-symbols-outlined">
@@ -162,6 +157,7 @@
                 <span class="material-symbols-outlined">
                     storage
                 </span>
+
                 Paquetes
             </a>
         </li>
@@ -170,6 +166,7 @@
                 <span class="material-symbols-outlined">
                     storage
                 </span>
+
                 Categorias
             </a>
         </li>

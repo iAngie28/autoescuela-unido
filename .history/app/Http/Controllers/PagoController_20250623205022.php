@@ -292,6 +292,6 @@ class PagoController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('pago.pago_est', compact('pagos'));
+        return view('pagos.pago_est', compact('pagos'));
     }
 }
