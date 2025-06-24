@@ -77,7 +77,6 @@ class NotificacioneController extends Controller
      */
     public function marcarComoLeida(Notificacione $notificacione): RedirectResponse
     {
-        $this->authorize('update', $notificacione);
 
         $notificacione->update(['leido' => true]);
 
