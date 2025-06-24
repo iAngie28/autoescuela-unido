@@ -17,6 +17,7 @@ use App\Models\ExamenCategoriaAspira;
 use App\Models\ExamenSegip;
 use App\Models\GrupoExaman;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notificacione;
 
 class PagoController extends Controller
 {
@@ -86,7 +87,18 @@ class PagoController extends Controller
         $validated['detalle'] = $detalle;
         // Crear pago
         Pago::create($validated);
-        
+
+            // Notificar al estudiante --jhenny
+           
+   
+        Notificacione::create([
+            'mensaje' => 'Tu pago de ' . $validated['monto'] . ' Bs por ' . strtolower($glosa) . ' ha sido registrado exitosamente.',
+            'tipo' => 'Pago',
+            'fecha' => now(),
+            'user_id' => $estudiante->id,
+            'leido' => false
+        ]);
+
         return Redirect::route('pagos.index')
             ->with('success', 'Pago creado exitosamente.');
     }

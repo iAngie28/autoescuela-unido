@@ -1,7 +1,8 @@
 <div class="flex flex-col w-64 bg-gray-800 transition-all duration-300 ease-in-out h-full">
     <div class="flex flex-col flex-1 overflow-y-auto">
         <nav class="flex-1 px-2 py-4 bg-gray-800">
-            <a href="{{ url('/estudiante/dashboard') }}" class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700 group">
+            <a href="{{ url('/estudiante/dashboard') }}"
+                class="flex items-center px-4 py-2 text-white hover:bg-gray-700 group">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 group-hover:transform group-hover:rotate-90"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -12,7 +13,7 @@
             <!-- GESTIONAR USUARIOS -->
             <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">ADMINISTRAR USUARIOS
             </li>
-            <a href="#" class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700 group">
+            <a href="#" class="flex items-center px-4 py-2 text-white hover:bg-gray-700 group">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="group-hover:hidden h-6 w-6 mr-2">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -26,12 +27,9 @@
                 Editar Perfil
             </a>
 
-            <!-- GESTIONAR INSCRIPCION CON SUB-MENÚ -->
-            <div class="mb-2 relative group">
-                <input type="checkbox" id="messages-toggle" class="hidden peer">
-
-                <label for="messages-toggle"
-                    class="px-12 py-2 text-xs flex items-center uppercase tracking-wider text-gray-500 font-bold flex">
+            <!-- GESTIONAR INSCRIPCIÓN SIN SUB-MENÚ -->
+            <div class="mb-2 relative">
+                <label class="px-12 py-2 text-xs flex items-center uppercase tracking-wider text-gray-500 font-bold">
                     GESTIONAR INSCRIPCIÓN
                 </label>
 
@@ -63,6 +61,8 @@
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200"> Proximamente </a>
                 </div>
 
+                <a href="{{ url('/clase-est') }}" class="block px-4 py-2 hover:bg-gray-200 text-white">Clases</a>
+                <a href="{{ route('coursesPay.index') }}" class="block px-4 py-2 hover:bg-gray-200 text-white">Pagar Clases</a>
             </div>
 
 
@@ -70,7 +70,8 @@
 
             <li class="px-4 py-2 text-xs uppercase tracking-wider text-gray-500 font-bold">SEGUIMIENTO DEL PROGRESO
             </li>
-            <a href="{{ route('estudiante.mis-evaluaciones') }}" class="flex items-center px-4 py-2 mt-2 text-gray-100 hover:bg-gray-700 group">
+            <a href="{{ route('estudiante.mis-evaluaciones') }}"
+                class="flex items-center px-4 py-2 mt-2 text-white hover:bg-gray-700 group">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="h-6 w-6 mr-2 group-hover:hidden">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -110,7 +111,7 @@
             </a>
 
             <!-- Ítem de Pagos -->
-            <a href="{{ route('pagos.index') }}" class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700 group">
+            <a href="/mis-pagos" class="flex items-center px-4 py-2 text-gray-100 hover:bg-gray-700 group">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="h-6 w-6 mr-2 group-hover:hidden">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -121,7 +122,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                Mis Pagos
+                Pagos Efectivo
             </a>
            
                 <!-- submenu de PAGOS Y NOTIFICACIONES -->
@@ -129,6 +130,11 @@
                     <a href="/mis-pagos" class="block px-4 py-2 hover:bg-gray-200"> Pagos</a>
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200">Notificaciones</a>
                 </div>
+
+            <!-- PAGOS Y NOTIFICACIONES SIN SUB-MENÚ -->
+            <div class="mb-2 relative">
+                <a href="{{ route('estudiante.mis-pagos') }}" class="block px-4 py-2 hover:bg-gray-200 text-white">Pagos en linea</a>
+              
             </div>
 
         </nav>

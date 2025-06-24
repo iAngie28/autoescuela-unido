@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User; // <-- Agrega esto
+use App\Models\User;
 use App\Models\Evaluacion;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class TomarExamenController extends Controller
 {
@@ -15,7 +18,7 @@ class TomarExamenController extends Controller
             $query->where('nombre', 'Estudiante');
         })->get();
 
-        return view('tomarExamen.index', compact('user', 'estudiantes')); // Asegúrate de incluir 'estudiantes'
+        return view('tomarExamen.index', compact('user', 'estudiantes'));
     }
 
     public function guardarEvaluacion(Request $request, $userId)
@@ -29,7 +32,7 @@ class TomarExamenController extends Controller
 
         Evaluacion::create([
             'estudiante_id' => $userId,
-            'instructor_id' => auth()->user()->id,
+            'instructor_id' => Auth::id(),
             'estacionamiento' => $request->input('estacionamiento'),
             'zigzag' => $request->input('zigzag'),
             'retroceso' => $request->input('retroceso'),

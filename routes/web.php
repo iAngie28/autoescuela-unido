@@ -33,6 +33,11 @@ use App\Models\Vehiculo;
 
 use App\Http\Livewire\Pages\Auth\Register;
 
+// PAGOS CON QR
+use App\Http\Controllers\MockQrPaymentController;
+use App\Http\Controllers\QrTransactionController;
+use App\Http\Controllers\QrDisplayController; // Asegúrate de importar este controlador
+
 /*
 |--------------------------------------------------------------------------
 | Rutas Públicas
@@ -42,6 +47,25 @@ use App\Http\Livewire\Pages\Auth\Register;
 Route::view('/', 'welcome');
 Route::view('/about', 'paginas.about')->name('about');
 Route::view('/cursos', 'paginas.cursos')->name('cursos');
+
+// Esta es la ruta para la página de Cursos con funcionalidad de PAGO QR.
+
+Route::get('/cursos-de-pago', function () {
+    return view('pagoQr.pagoqr');
+})->name('coursesPay.index');
+
+// Rutas de la API Mock para pagos QR (Estas ya están bien en la sección pública)
+Route::prefix('mock')->group(function () {
+    Route::post('/qr-payments', [MockQrPaymentController::class, 'createQrPayment']);
+    Route::get('/qr-payments/{id}', [MockQrPaymentController::class, 'getQrPaymentStatus']);
+    Route::post('/qr-payments/{id}/simulate-success', [MockQrPaymentController::class, 'simulateSuccess']);
+    Route::post('/qr-payments/{id}/simulate-failure', [MockQrPaymentController::class, 'simulateFailure']);
+});
+
+// Ruta para mostrar la página del QR en la nueva pestaña
+Route::get('/qr-payment-display/{id}', [QrDisplayController::class, 'show'])->name('qr.display');
+
+Route::get('/estudiante/mis-pagos', [QrTransactionController::class, 'misPagos'])->name('estudiante.mis-pagos');
 
 
 /*
