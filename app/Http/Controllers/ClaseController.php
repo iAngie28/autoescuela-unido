@@ -10,6 +10,8 @@ use App\Models\Paquete;
 use App\Models\User;
 use App\Models\Bitacora;
 use App\Models\Pago;
+use App\Models\Notificacione;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -196,6 +198,27 @@ public function asingar_estudiante_clase(Request $request): View
         try {
             $clase = Clase::findOrFail($id);
             $clase->update(['estado' => 'cancelada']);
+    
+                // Notificar al estudiante
+            if (!is_null($clase->id_est)) {
+                Notificacione::create([
+                    'mensaje' => 'Tu clase del ' . $clase->fecha . ' fue cancelada. Espera reprogramación.',
+                    'tipo' => 'Clase',
+                    'fecha' => now(),
+                    'user_id' => $clase->id_est,
+                    'leido' => false
+                ]);
+            }
+                // Notificar al instructor
+            if (!is_null($clase->id_inst)) {
+            Notificacione::create([
+                'mensaje' => 'La clase del ' . $clase->fecha . ' fue cancelada.',
+                'tipo' => 'Clase',
+                'fecha' => now(),
+                'user_id' => $clase->id_inst,
+                'leido' => false
+            ]);
+        }
 
             $this->registrarBitacora(
                 'Cancelación de clase',
@@ -246,6 +269,28 @@ public function asingar_estudiante_clase(Request $request): View
                 ]);
             }
 
+            // Notificar al estudiante
+            if (!is_null($clase->id_est)) {
+                Notificacione::create([
+                    'mensaje' => 'Tu clase fue reprogramada para el ' . $request->nueva_fecha . '.',
+                    'tipo' => 'Clase',
+                    'fecha' => now(),
+                    'user_id' => $clase->id_est,
+                    'leido' => false
+                ]);
+            }
+
+            // Notificar al instructor
+            if (!is_null($clase->id_inst)) {
+                Notificacione::create([
+                    'mensaje' => 'Una clase fue reprogramada para el ' . $request->nueva_fecha . '.',
+                    'tipo' => 'Clase',
+                    'fecha' => now(),
+                    'user_id' => $clase->id_inst,
+                    'leido' => false
+                ]);
+            }
+            
             $this->registrarBitacora(
                 'Reprogramación de clase',
                 'ID: ' . $id . ' | Nueva fecha: ' . $request->nueva_fecha,
@@ -273,6 +318,22 @@ public function asingar_estudiante_clase(Request $request): View
         // Verificar si debe marcarse el pago como Finalizado
         if ($request->filled('id_pago')) {
             $pago = Pago::find($request->id_pago);
+            // Notificar al estudiante
+            Notificacione::create([
+                'mensaje' => 'Se te ha asignado una clase para el ' . $clase->fecha . '.',
+                'tipo' => 'Clase',
+                'fecha' => now(),
+                'user_id' => $request->nid_est,
+                'leido' => false
+            ]);
+
+
+
+            $this->registrarBitacora(
+                'Asignación de estudiante',
+                'Clase ID: ' . $id . ' | Estudiante ID: ' . $request->nid_est,
+                request()->ip()
+            );    
 
             // Extraer número desde el detalle (ej: "Pago de 5 clases ...")
             preg_match('/(\d+)/', $pago->detalle, $matches);

@@ -209,7 +209,6 @@ Route::get('/calendar/events', function () {
 // Recursos (CRUD) sin middleware adicional
 Route::resources([
     'rols' => RolController::class,
-    'notificaciones' => NotificacioneController::class,
     'users' => UserController::class,
     'usuarios' => UserController::class,
     'administradors' => AdministradorController::class,
@@ -232,9 +231,16 @@ Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones']
     ->name('estudiante.mis-evaluaciones')
     ->middleware('auth');
 
-// Detalle de una evaluación específica (YA EXISTE)
+// Detalle de una evaluación específica 
 Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verEvaluacion'])
     ->name('estudiante.ver-evaluacion');
+
+    //sidebar notificaciones 
+// Notificaciones
+Route::middleware('auth')->group(function () {
+    // Ruta básica para ver notificaciones propias
+    Route::get('/mis-notificaciones', [NotificacioneController::class, 'misNotificaciones'])
+        ->name('notificaciones.mias');
     
 //inscribir
 // Ruta GET para mostrar el formulario de inscripción
@@ -243,3 +249,17 @@ Route::get('/pagos/{pago}/inscribir', [PagoController::class, 'inscribir'])->nam
 // Ruta POST para procesar el formulario
 Route::post('/pagos/{pago}/inscribir', [PagoController::class, 'procesarInscripcion'])->name('pagos.procesarInscripcion');
 Route::put('/pagos/{pago}/anular', [PagoController::class, 'anular'])->name('pagos.anular');
+    // Ruta para marcar como leída
+    Route::post('notificaciones/{notificacione}/marcar', [NotificacioneController::class, 'marcarComoLeida'])
+        ->name('notificaciones.marcar');
+    
+    // Rutas CRUD solo para admin
+    Route::group(['middleware' => ['auth']], function() {
+         Route::resource('notificaciones', NotificacioneController::class);
+
+         Route::get('notificaciones/show', [NotificacioneController::class, 'show'])
+        ->name('notificaciones.show');
+    });
+
+    
+});
