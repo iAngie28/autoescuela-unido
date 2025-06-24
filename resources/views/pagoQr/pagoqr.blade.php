@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<!-- VISTA DE PAGOS CON QR -->
 @section('content')
 
 <body class="bg-light-blue dark:bg-dark-blue">
