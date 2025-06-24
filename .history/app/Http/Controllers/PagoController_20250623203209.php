@@ -25,7 +25,7 @@ class PagoController extends Controller
      */
     public function index(Request $request): View
     {
-        $pagos = Pago::latest()->paginate();
+        $pagos = Pago::latest()->paginate(10);
         $pago = new Pago();
         $usuariosEstudiantes = User::where('id_rol', 2)->get();
 
@@ -292,6 +292,6 @@ class PagoController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('pago.pago_est', compact('pagos'));
+        return view('clase.clase_est', compact('clases'));
     }
 }

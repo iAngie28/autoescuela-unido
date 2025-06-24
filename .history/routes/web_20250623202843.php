@@ -234,8 +234,8 @@ Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verE
 //inscribir
 // Ruta GET para mostrar el formulario de inscripción
 Route::get('/pagos/{pago}/inscribir', [PagoController::class, 'inscribir'])->name('pagos.inscribir');
-Route::get('/mis-pagos', [PagoController::class, 'pago_est'])->name('pago.estudiante');
 
 // Ruta POST para procesar el formulario
 Route::post('/pagos/{pago}/inscribir', [PagoController::class, 'procesarInscripcion'])->name('pagos.procesarInscripcion');
 Route::put('/pagos/{pago}/anular', [PagoController::class, 'anular'])->name('pagos.anular');
+Route::get('/mis-pagos', [PagoController::class, 'pago_est'])->name('pago.estudiante');
