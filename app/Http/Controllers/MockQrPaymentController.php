@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class MockQrPaymentController extends Controller
 {
+    #para recibir solicitudes de pago
     public function createQrPayment(Request $request)
     {
         $request->validate([
@@ -41,6 +42,8 @@ class MockQrPaymentController extends Controller
         return response()->json($transaction, 201);
     }
 
+
+    #Consultar estados de pago
     public function getQrPaymentStatus($id)
     {
         $transaction = QrTransaction::find($id);
@@ -52,6 +55,8 @@ class MockQrPaymentController extends Controller
         return response()->json($transaction);
     }
 
+
+    #Simular éxito o fracaso de pago
     public function simulateSuccess($id)
     {
         $transaction = QrTransaction::find($id);

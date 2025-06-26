@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $created_at
  * @property $updated_at
  * @property $id_vehiculo
- * 
+ *
  * @property Usuario $usuario
  * @property Clase[] $clases
  * @property Vehiculo $vehiculo
@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Instructor extends Model
 {
-    
+
     protected $perPage = 20;
 
     /**
@@ -30,7 +30,7 @@ class Instructor extends Model
      * @var array<int, string>
      */
     protected $table = 'instructor';
-    protected $fillable = ['categ_licencia', 'id_vehiculo'];
+    protected $fillable = ['categ_licencia', 'epc', 'id_vehiculo'];
 
 
     /**
@@ -40,7 +40,7 @@ class Instructor extends Model
     {
         return $this->hasOne(\App\Models\User::class, 'id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -56,5 +56,5 @@ class Instructor extends Model
     {
         return $this->belongsTo(\App\Models\Vehiculo::class, 'id_vehiculo', 'id');
     }
-    
+
 }

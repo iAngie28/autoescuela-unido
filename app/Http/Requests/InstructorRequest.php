@@ -23,7 +23,8 @@ class InstructorRequest extends FormRequest
     {
         return [
 			'categ_licencia' => 'required|string|max:255',
-        'id_vehiculo' => 'nullable|integer' 
+            'epc' => 'nullable|string|max:50',
+        'id_vehiculo' => 'nullable|integer'
         ];
     }
 }

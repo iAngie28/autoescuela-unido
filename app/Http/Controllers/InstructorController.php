@@ -43,19 +43,20 @@ class InstructorController extends Controller
         return view('instructores.asignar_vehiculo', compact('nombre', 'vehiculo', 'instructors'));
     }
 
-   
-    public function asignar_vehiculo(Request $request, $id)
+
+public function asignar_vehiculo(Request $request, $id)
 {
     try {
         $instructor = Instructor::findOrFail($id);
 
         $instructor->update([
-            'id_vehiculo' => $request->vehiculo
+            'id_vehiculo' => $request->vehiculo,
+            'epc' => $request->epc
         ]);
 
-        return back()->with('success', 'Vehículo asignado correctamente');
+        return back()->with('success', 'Datos actualizados correctamente');
     } catch (\Exception $e) {
-        return back()->with('error', 'Error al asignar: ' . $e->getMessage());
+        return back()->with('error', 'Error al actualizar: ' . $e->getMessage());
     }
 }
 

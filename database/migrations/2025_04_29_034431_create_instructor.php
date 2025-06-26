@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('instructor', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
             $table->string('categ_licencia', 10);
+            $table->string('epc', 50)->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('id_vehiculo')->nullable();
-            
+
             $table->foreign('id')
             ->references('id')
             ->on('users')
