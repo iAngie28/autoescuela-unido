@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PaqueteSeeder::class,
             TipoVehiculoSeeder::class,
             VehiculoSeeder::class,
+            NotificacioneSeeder::class,
         ]);
     }
 }

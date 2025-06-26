@@ -21,10 +21,20 @@ class NotificacioneRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-			'mensaje' => 'required|string',
-			'tipo' => 'required|string',
-			'fecha' => 'nullable|date',
-        ];
+       
+            $rules = [
+                'mensaje' => ['required', 'string', 'max:255'],
+                'tipo'    => ['required', 'string', 'max:100'],
+                'fecha'   => ['required', 'date'],
+                'leido'   => ['boolean'],
+            ];
+
+            if (auth()->user()->tipo_usuario === 'A') {
+                $rules['user_id'] = ['required', 'exists:users,id'];
+            }
+
+            return $rules;
+        
+
     }
 }

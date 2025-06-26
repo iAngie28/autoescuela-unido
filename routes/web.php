@@ -20,7 +20,6 @@ use App\Http\Controllers\TipoVehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\TomarExamenController;
-use App\Http\Controllers\QrTransactionController;
 //Bitacora
 use App\Models\Bitacora;
 use App\Http\Controllers\BitacoraController;
@@ -34,22 +33,20 @@ use App\Models\Vehiculo;
 
 use App\Http\Livewire\Pages\Auth\Register;
 
-
 // PAGOS CON QR
-
-
 use App\Http\Controllers\MockQrPaymentController;
+use App\Http\Controllers\QrTransactionController;
 use App\Http\Controllers\QrDisplayController; // Asegúrate de importar este controlador
-
 
 /*
 |--------------------------------------------------------------------------
 | Rutas Públicas
 |--------------------------------------------------------------------------
 */
+
 Route::view('/', 'welcome');
 Route::view('/about', 'paginas.about')->name('about');
-Route::view('/cursos', 'paginas.cursos')->name('cursos.info');
+Route::view('/cursos', 'paginas.cursos')->name('cursos');
 
 // Esta es la ruta para la página de Cursos con funcionalidad de PAGO QR.
 
@@ -68,7 +65,9 @@ Route::prefix('mock')->group(function () {
 // Ruta para mostrar la página del QR en la nueva pestaña
 Route::get('/qr-payment-display/{id}', [QrDisplayController::class, 'show'])->name('qr.display');
 
-Route::get('/mis-pagos', [QrTransactionController::class, 'misPagos'])->name('estudiante.mis-pagos');
+Route::get('/estudiante/mis-pagos', [QrTransactionController::class, 'misPagos'])->name('estudiante.mis-pagos');
+
+
 /*
 |--------------------------------------------------------------------------
 | Rutas de Autenticación
@@ -105,13 +104,29 @@ Route::put('/clases/{id}/asignar_clase', [ClaseController::class, 'asignar_clase
 
 Route::delete('clases/{clase}', [ClaseController::class, 'destroy'])->name('clases.destroy');
 
-Route::get('/clase-est', [ClaseController::class, 'clase_est'])
+Route::get('/clases/estudiante', [ClaseController::class, 'clase_est'])
     ->middleware('auth')
-    ->name('clase.clase-est');
+    ->name('clases.clase_est'); // Nombre corregido
 
 Route::get('/clases/instructor', [ClaseController::class, 'clase_inst'])
     ->middleware('auth')
     ->name('clases.clase_inst');
+
+/* Observaciones Instructores */
+Route::get('clases/{id}/edit-observaciones', [ClaseController::class, 'editObservaciones'])
+     ->name('clases.edit_observaciones');
+     
+Route::put('clases/{id}/update-observaciones', [ClaseController::class, 'updateObservaciones'])
+     ->name('clases.update_observaciones');
+
+/* Reportes de Incidentes por Estudiantes */
+Route::get('clases/{id}/edit-reporte-estudiante', [ClaseController::class, 'editReporteEstudiante'])
+    ->middleware('auth')
+    ->name('clases.edit_reporte_estudiante');
+    
+Route::put('clases/{id}/update-reporte-estudiante', [ClaseController::class, 'updateReporteEstudiante'])
+    ->middleware('auth')
+    ->name('clases.update_reporte_estudiante');
 
 /* Clases*/
 Route::view('dashboard', 'dashboard')
@@ -126,19 +141,13 @@ Route::get('/register', function () {
     return view('auth.register');
 })->middleware(['auth', IsAdmin::class])->name('register');
 
-Route::get('clases/{id}/edit-observaciones', [ClaseController::class, 'editObservaciones'])
-    ->name('clases.edit_observaciones');
-
-Route::put('clases/{id}/update-observaciones', [ClaseController::class, 'updateObservaciones'])
-    ->name('clases.update_observaciones');
-
 /* Inscribir*/
 Route::get('/grupo-examen/asignar-estudiante', [GrupoExamanController::class, 'asignarEstudiante'])
     ->middleware(['auth', IsAdmin::class])
     ->name('grupo-examen.asignar-estudiante');
 
-
-require __DIR__ . '/auth.php';
+    
+require __DIR__.'/auth.php';
 
 Route::post('/inscribir-grupo', [GrupoExamanController::class, 'inscribir_grupo'])->name('inscribir_grupo');
 Route::post('/grupo-examen/{id}/exportar-excel', [GrupoExamanController::class, 'exportarExcel'])
@@ -163,16 +172,11 @@ Route::middleware(['auth'])->group(function () {
 
 
     // CASO DE ESTUDIO EVALUAR
-
     Route::get('/instructor/students', [EstudianteController::class, 'listForInstructor'])->name('instructor.students');
     Route::get('/examen/{user}/evaluar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.evaluar');
     Route::post('/examen/{user}/guardar', [TomarExamenController::class, 'guardarEvaluacion'])->name('examen.guardar');
     Route::get('/examen/{user}/tomar', [TomarExamenController::class, 'mostrarEvaluacion'])->name('examen.tomar');
     Route::get('/instructor/historial-evaluaciones', [TomarExamenController::class, 'historial'])->name('instructor.historial');
-
-
-
-
 
     // Recursos administrativos
     Route::resource('rol', RolController::class);
@@ -180,6 +184,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('vehiculo', VehiculoController::class);
     Route::resource('admin-instructor', AdminInstructorController::class);
     Route::resource('users', UserController::class);
+
 });
 
 /*
@@ -228,7 +233,6 @@ Route::get('/calendar/events', function () {
 // Recursos (CRUD) sin middleware adicional
 Route::resources([
     'rols' => RolController::class,
-    'notificaciones' => NotificacioneController::class,
     'users' => UserController::class,
     'usuarios' => UserController::class,
     'administradors' => AdministradorController::class,
@@ -251,14 +255,36 @@ Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones']
     ->name('estudiante.mis-evaluaciones')
     ->middleware('auth');
 
-// Detalle de una evaluación específica (YA EXISTE)
+// Detalle de una evaluación específica 
 Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verEvaluacion'])
     ->name('estudiante.ver-evaluacion');
 
+    //sidebar notificaciones 
+// Notificaciones
+Route::middleware('auth')->group(function () {
+    // Ruta básica para ver notificaciones propias
+    Route::get('/mis-notificaciones', [NotificacioneController::class, 'misNotificaciones'])
+        ->name('notificaciones.mias');
+    
 //inscribir
 // Ruta GET para mostrar el formulario de inscripción
 Route::get('/pagos/{pago}/inscribir', [PagoController::class, 'inscribir'])->name('pagos.inscribir');
+Route::get('/mis-pagos', [PagoController::class, 'pago_est'])->name('pago.estudiante');
 
 // Ruta POST para procesar el formulario
 Route::post('/pagos/{pago}/inscribir', [PagoController::class, 'procesarInscripcion'])->name('pagos.procesarInscripcion');
 Route::put('/pagos/{pago}/anular', [PagoController::class, 'anular'])->name('pagos.anular');
+    // Ruta para marcar como leída
+    Route::post('notificaciones/{notificacione}/marcar', [NotificacioneController::class, 'marcarComoLeida'])
+        ->name('notificaciones.marcar');
+    
+    // Rutas CRUD solo para admin
+    Route::group(['middleware' => ['auth']], function() {
+         Route::resource('notificaciones', NotificacioneController::class);
+
+         Route::get('notificaciones/show', [NotificacioneController::class, 'show'])
+        ->name('notificaciones.show');
+    });
+
+    
+});

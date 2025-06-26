@@ -17,6 +17,7 @@ use App\Models\ExamenCategoriaAspira;
 use App\Models\ExamenSegip;
 use App\Models\GrupoExaman;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Notificacione;
 
 class PagoController extends Controller
 {
@@ -25,7 +26,7 @@ class PagoController extends Controller
      */
     public function index(Request $request): View
     {
-        $pagos = Pago::paginate();
+        $pagos = Pago::latest()->paginate();
         $pago = new Pago();
         $usuariosEstudiantes = User::where('id_rol', 2)->get();
 
@@ -87,6 +88,17 @@ class PagoController extends Controller
         // Crear pago
         Pago::create($validated);
 
+            // Notificar al estudiante --jhenny
+           
+   
+        Notificacione::create([
+            'mensaje' => 'Tu pago de ' . $validated['monto'] . ' Bs por ' . strtolower($glosa) . ' ha sido registrado exitosamente.',
+            'tipo' => 'Pago',
+            'fecha' => now(),
+            'user_id' => $estudiante->id,
+            'leido' => false
+        ]);
+
         return Redirect::route('pagos.index')
             ->with('success', 'Pago creado exitosamente.');
     }
@@ -113,7 +125,7 @@ class PagoController extends Controller
                 ->toArray();
 
             // Obtener solo grupos activos a los que NO está inscrito
-            $grupos = \App\Models\GrupoExaman::where('estado', 'activo')
+            $grupos = GrupoExaman::where('estado', 'activo')
                 ->whereNotIn('id', $gruposInscritosIds)
                 ->get();
 
@@ -276,5 +288,22 @@ class PagoController extends Controller
 
         return Redirect::route('pagos.index')
             ->with('success', 'Pago deleted successfully');
+    }
+
+    public function pago_est(Request $request): View
+    {
+        $user = auth()->user();
+
+        // Validar que el usuario sea tipo estudiante
+        if ($user->tipo_usuario !== 'E') {
+            abort(403, 'Acceso no autorizado');
+        }
+
+        // Obtener solo clases programadas del estudiante actual
+        $pagos = Pago::where('id_est', $user->id)
+            ->latest()
+            ->paginate(10);
+
+        return view('pago.pago_est', compact('pagos'));
     }
 }

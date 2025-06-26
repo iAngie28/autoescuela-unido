@@ -79,7 +79,7 @@
                                 <td class="py-3 px-3 text-center">{{  $clase->hora_fin}}</td>
                                 <td class="py-3 px-3 text-center">{{ $clase->estado}}</td>
                                 
-                                <!-- Mejora en presentación de observaciones -->
+                                <!-- Observaciones Instructor -->
                                 <td class="py-3 px-3">
                                     <div class="max-w-xs mx-auto">
                                         <div class="text-left break-words bg-gray-50 p-2 rounded">
@@ -92,7 +92,19 @@
                                     </div>
                                 </td>
                                 
-                                <td class="py-3 px-3 text-center">{{ $clase->reporte_estudiante }}</td>
+                                <!-- Reporte Estudiante -->
+                                <td class="py-3 px-3">
+                                    <div class="max-w-xs mx-auto">
+                                        <div class="text-left break-words bg-gray-50 p-2 rounded">
+                                            @if($clase->reporte_estudiante)
+                                                {{ $clase->reporte_estudiante }}
+                                            @else
+                                                <span class="text-gray-400 italic">Sin reporte</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+                                
                                 <td class="py-3 px-3 text-center">{{  $clase->id_paquete }}</td>
                                 <td class="py-3 px-3 text-center">{{ $clase->id_inst }}</td>
 
