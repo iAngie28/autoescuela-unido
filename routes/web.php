@@ -33,6 +33,11 @@ use App\Models\Vehiculo;
 
 use App\Http\Livewire\Pages\Auth\Register;
 
+// PAGOS CON QR
+use App\Http\Controllers\MockQrPaymentController;
+use App\Http\Controllers\QrTransactionController;
+use App\Http\Controllers\QrDisplayController; // Asegúrate de importar este controlador
+
 /*
 |--------------------------------------------------------------------------
 | Rutas Públicas
@@ -42,6 +47,25 @@ use App\Http\Livewire\Pages\Auth\Register;
 Route::view('/', 'welcome');
 Route::view('/about', 'paginas.about')->name('about');
 Route::view('/cursos', 'paginas.cursos')->name('cursos');
+
+// Esta es la ruta para la página de Cursos con funcionalidad de PAGO QR.
+
+Route::get('/cursos-de-pago', function () {
+    return view('pagoQr.pagoqr');
+})->name('coursesPay.index');
+
+// Rutas de la API Mock para pagos QR (Estas ya están bien en la sección pública)
+Route::prefix('mock')->group(function () {
+    Route::post('/qr-payments', [MockQrPaymentController::class, 'createQrPayment']);
+    Route::get('/qr-payments/{id}', [MockQrPaymentController::class, 'getQrPaymentStatus']);
+    Route::post('/qr-payments/{id}/simulate-success', [MockQrPaymentController::class, 'simulateSuccess']);
+    Route::post('/qr-payments/{id}/simulate-failure', [MockQrPaymentController::class, 'simulateFailure']);
+});
+
+// Ruta para mostrar la página del QR en la nueva pestaña
+Route::get('/qr-payment-display/{id}', [QrDisplayController::class, 'show'])->name('qr.display');
+
+Route::get('/estudiante/mis-pagos', [QrTransactionController::class, 'misPagos'])->name('estudiante.mis-pagos');
 
 
 /*
@@ -209,7 +233,6 @@ Route::get('/calendar/events', function () {
 // Recursos (CRUD) sin middleware adicional
 Route::resources([
     'rols' => RolController::class,
-    'notificaciones' => NotificacioneController::class,
     'users' => UserController::class,
     'usuarios' => UserController::class,
     'administradors' => AdministradorController::class,
@@ -232,14 +255,47 @@ Route::get('/mis-evaluaciones', [EstudianteController::class, 'misEvaluaciones']
     ->name('estudiante.mis-evaluaciones')
     ->middleware('auth');
 
-// Detalle de una evaluación específica (YA EXISTE)
+// Detalle de una evaluación específica 
 Route::get('/mis-evaluaciones/{evaluacion}', [EstudianteController::class, 'verEvaluacion'])
     ->name('estudiante.ver-evaluacion');
+
+    //sidebar notificaciones 
+// Notificaciones
+Route::middleware('auth')->group(function () {
+    // Ruta básica para ver notificaciones propias
+    Route::get('/mis-notificaciones', [NotificacioneController::class, 'misNotificaciones'])
+        ->name('notificaciones.mias');
     
 //inscribir
 // Ruta GET para mostrar el formulario de inscripción
 Route::get('/pagos/{pago}/inscribir', [PagoController::class, 'inscribir'])->name('pagos.inscribir');
+Route::get('/mis-pagos', [PagoController::class, 'pago_est'])->name('pago.estudiante');
 
 // Ruta POST para procesar el formulario
 Route::post('/pagos/{pago}/inscribir', [PagoController::class, 'procesarInscripcion'])->name('pagos.procesarInscripcion');
 Route::put('/pagos/{pago}/anular', [PagoController::class, 'anular'])->name('pagos.anular');
+    // Ruta para marcar como leída
+    Route::post('notificaciones/{notificacione}/marcar', [NotificacioneController::class, 'marcarComoLeida'])
+        ->name('notificaciones.marcar');
+    
+    // Rutas CRUD solo para admin
+    Route::group(['middleware' => ['auth']], function() {
+         Route::resource('notificaciones', NotificacioneController::class);
+
+         Route::get('notificaciones/show', [NotificacioneController::class, 'show'])
+        ->name('notificaciones.show');
+    });
+
+    
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Rutas principales para reporte de fallas
+    Route::resource('reporte-fallas', \App\Http\Controllers\ReporteFallaController::class)
+         ->except(['edit', 'update']);
+    
+    // Ruta específica para cambiar estado - usa exactamente este nombre
+    Route::patch('reporte-fallas/{reporteFalla}/cambiar-estado', 
+        [\App\Http\Controllers\ReporteFallaController::class, 'updateEstado'])
+        ->name('reporte-fallas.cambiar-estado');  // Nombre correcto
+});

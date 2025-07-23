@@ -49,4 +49,8 @@ class Vehiculo extends Model
         return $this->hasMany(\App\Models\Clase::class, 'id', 'id');
     }
     
+    public function reportesFallas()
+    {
+        return $this->hasMany(ReporteFalla::class);
+    }
 }

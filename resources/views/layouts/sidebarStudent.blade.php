@@ -63,6 +63,8 @@
                     <a href="#" class="block px-4 py-2 hover:bg-gray-200"> Proximamente </a>
                 </div>
 
+                <a href="{{ url('/clases/estudiante') }}" class="block px-4 py-2 hover:bg-gray-200 text-white">Clases</a>
+                <a href="{{ route('coursesPay.index') }}" class="block px-4 py-2 hover:bg-gray-200 text-white">Pagar Clases</a>
             </div>
 
 
